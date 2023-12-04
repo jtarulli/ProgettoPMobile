@@ -22,8 +22,6 @@ class StoricoActivity : AppCompatActivity() {
                 arrow1.setImageResource(R.drawable.ic_arrow_down)
             }
         }
-
         // Altre gestioni delle frecce e dei layout per le altre formazioni...
-
     }
 }
