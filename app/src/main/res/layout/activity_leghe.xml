@@ -1,21 +1,23 @@
-<?xml version="1.0" encoding="utf-8"?>
+<!-- activity_leghe.xml -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp">
+    tools:context=".LegheActivity">
 
     <Button
         android:id="@+id/uniscitiButton"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="UNISCITI A UNA LEGA"
-        android:layout_marginBottom="16dp"/>
+        android:layout_centerInParent="true"/>
 
     <Button
         android:id="@+id/creaLegaButton"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="CREA LA TUA LEGA"
-        android:layout_below="@id/uniscitiButton"/>
-
+        android:layout_below="@id/uniscitiButton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"/>
 </RelativeLayout>

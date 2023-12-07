@@ -1,5 +1,8 @@
+// LegheActivity.kt
 package com.example.progettopm
 
+import CreazioneLegaActivity
+import ElencoLegheActivity
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button

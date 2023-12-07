@@ -1,3 +1,4 @@
+// CreazioneLegaActivity.kt
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
@@ -10,49 +11,33 @@ class CreazioneLegaActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_creazione_lega)
 
-        val pubblicaButton: Button = findViewById(R.id.pubblicaButton)
-        val privataButton: Button = findViewById(R.id.privataButton)
-
-        pubblicaButton.setOnClickListener {
-            val intent = Intent(this, CompilaDatiActivity::class.java)
-            intent.putExtra("tipoLega", "pubblica")
-            startActivity(intent)
-        }
-
-        privataButton.setOnClickListener {
-            val intent = Intent(this, CompilaDatiActivity::class.java)
-            intent.putExtra("tipoLega", "privata")
-            startActivity(intent)
-        }
-    }
-}
-
-class CompilaDatiActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_compila_dati)
-
         val logoButton: Button = findViewById(R.id.logoButton)
         val nomeEditText: EditText = findViewById(R.id.nomeEditText)
         val budgetEditText: EditText = findViewById(R.id.budgetEditText)
         val parolaDOrdineEditText: EditText = findViewById(R.id.parolaDOrdineEditText)
-        val prossimoButton: Button = findViewById(R.id.prossimoButton)
+        val confermaButton: Button = findViewById(R.id.confermaButton)
 
         logoButton.setOnClickListener {
             // Gestione del clic sul pulsante per selezionare il logo
             // ...
         }
 
-        prossimoButton.setOnClickListener {
-            val intent = Intent(this, ConfermaDatiActivity::class.java)
-            intent.putExtra("nome", nomeEditText.text.toString())
-            intent.putExtra("budget", budgetEditText.text.toString())
-            intent.putExtra("parolaDOrdine", parolaDOrdineEditText.text.toString())
+        confermaButton.setOnClickListener {
+            // Gestione del clic sul pulsante di conferma
+            // Recupera i valori inseriti dall'utente
+            val nome = nomeEditText.text.toString()
+            val budget = budgetEditText.text.toString()
+            val parolaDOrdine = parolaDOrdineEditText.text.toString()
+
+            // Esegui il salvataggio dei dati nel database
+            // ...
+
+            // Poi puoi passare alla schermata successiva (CreazioneSquadraActivity)
+            val intent = Intent(this, CreazioneSquadraActivity::class.java)
+            intent.putExtra("nome", nome)
+            intent.putExtra("budget", budget)
+            intent.putExtra("parolaDOrdine", parolaDOrdine)
             startActivity(intent)
         }
     }
-}
-
-class ConfermaDatiActivity {
-
 }
