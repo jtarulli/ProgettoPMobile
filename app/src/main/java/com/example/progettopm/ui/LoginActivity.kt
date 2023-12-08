@@ -1,18 +1,20 @@
 package com.example.progettopm.ui
-
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.progettopm.R
-import com.google.android.gms.tasks.Task
-import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
+    private lateinit var emailEditText: EditText
+    private lateinit var passwordEditText: EditText
+    private lateinit var loginButton: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,21 +23,26 @@ class LoginActivity : AppCompatActivity() {
         // Inizializza Firebase Authentication
         auth = FirebaseAuth.getInstance()
 
-        lateinit var usernameEditText: EditText
-        lateinit var passwordEditText: EditText
-        var loginButton: Button = findViewById(R.id.loginButton)
+        // Inizializza le views
+        emailEditText = findViewById(R.id.emailEditText)
+        passwordEditText = findViewById(R.id.passwordEditText)
+        loginButton = findViewById(R.id.loginButton)
+
         // Evento click sul pulsante di login
         loginButton.setOnClickListener {
-            val username = usernameEditText.text.toString()
+            val email = emailEditText.text.toString()
             val password = passwordEditText.text.toString()
 
-            // Effettua l'autenticazione con username e password
-            auth.signInWithEmailAndPassword("$username@yourdomain.com", password)
-                .addOnCompleteListener(this) { task: Task<AuthResult> ->
+            // Effettua l'autenticazione con email e password
+            auth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
-                        // Login riuscito
-                        val user = auth.currentUser
-                        // Avvia l'attività successiva o esegui altre azioni
+                        // Login riuscito, passa alla HomeActivity
+                        val user: FirebaseUser? = auth.currentUser
+                        Toast.makeText(this, "Login riuscito", Toast.LENGTH_SHORT).show()
+                        val intent = Intent(this, HomeActivity::class.java)
+                        startActivity(intent)
+                        finish()
                     } else {
                         // Login fallito, mostra un messaggio di errore
                         Toast.makeText(this, "Autenticazione fallita", Toast.LENGTH_SHORT).show()

@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">ProgettoPM</string>
+    <string name="login_button_text">Login</string>
+    <string name="email_label_text">Email_Label</string>
+    <string name="password_login">Password_login</string>
 </resources>
