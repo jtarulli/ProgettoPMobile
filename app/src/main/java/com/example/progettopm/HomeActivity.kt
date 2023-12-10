@@ -1,4 +1,6 @@
 package com.example.progettopm
+import GiocatoriActivity
+import StoricoActivity
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
