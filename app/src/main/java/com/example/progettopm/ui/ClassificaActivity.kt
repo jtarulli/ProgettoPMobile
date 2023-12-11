@@ -1,7 +1,8 @@
-package com.example.progettopm
+package com.example.progettopm.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.example.progettopm.R
 
 class ClassificaActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
