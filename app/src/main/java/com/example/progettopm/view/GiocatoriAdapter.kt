@@ -1,4 +1,4 @@
-// GiocatoriAdapter.kt
+package com.example.progettopm.view// com.example.progettopm.view.GiocatoriAdapter.kt
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup

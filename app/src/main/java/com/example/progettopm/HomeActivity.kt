@@ -1,9 +1,10 @@
 package com.example.progettopm
-import GiocatoriActivity
-import StoricoActivity
+import com.example.progettopm.view.GiocatoriActivity
+import com.example.progettopm.view.StoricoActivity
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.example.progettopm.view.ClassificaActivity
 import kotlinx.android.synthetic.main.activity_home.*  // Assicurati di avere un file di layout con nome activity_home.xml che contiene le icone del footer
 
 class HomeActivity : AppCompatActivity() {

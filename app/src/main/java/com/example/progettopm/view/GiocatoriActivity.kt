@@ -1,4 +1,4 @@
-// GiocatoriActivity.kt
+package com.example.progettopm.view// com.example.progettopm.view.GiocatoriActivity.kt
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager

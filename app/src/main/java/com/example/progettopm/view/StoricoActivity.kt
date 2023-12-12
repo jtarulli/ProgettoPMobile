@@ -1,3 +1,5 @@
+package com.example.progettopm.view
+
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView

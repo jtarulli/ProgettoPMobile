@@ -1,5 +1,5 @@
 // LegheActivity.kt
-package com.example.progettopm
+package com.example.progettopm.view
 
 import CreazioneLegaActivity
 import ElencoLegheActivity
@@ -7,6 +7,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
+import com.example.progettopm.R
 
 class LegheActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
