@@ -1,7 +1,5 @@
 // LegheActivity.kt
-package com.example.progettopm.view
-
-import CreazioneLegaActivity
+package com.example.progettopm.ui
 import ElencoLegheActivity
 import android.content.Intent
 import android.os.Bundle

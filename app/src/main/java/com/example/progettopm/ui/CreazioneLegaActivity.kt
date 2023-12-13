@@ -1,4 +1,4 @@
-// CreazioneLegaActivity.kt
+package com.example.progettopm.ui// com.example.progettopm.ui.CreazioneLegaActivity.kt
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
@@ -32,7 +32,7 @@ class CreazioneLegaActivity : AppCompatActivity() {
             // Esegui il salvataggio dei dati nel database
             // ...
 
-            // Poi puoi passare alla schermata successiva (CreazioneSquadraActivity)
+            // Poi puoi passare alla schermata successiva (com.example.progettopm.ui.CreazioneSquadraActivity)
             val intent = Intent(this, CreazioneSquadraActivity::class.java)
             intent.putExtra("nome", nome)
             intent.putExtra("budget", budget)

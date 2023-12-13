@@ -13,11 +13,11 @@ import com.example.progettopm.R
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
 
-class LoginActivity: AppCompatActivity() {
+class RegisterActivity: AppCompatActivity() {
     lateinit var auth: FirebaseAuth
     lateinit var editTextEmail: TextInputEditText
     lateinit var editTextPassword: TextInputEditText
-    lateinit var buttonLog: Button
+    lateinit var buttonReg: Button
     lateinit var progressBar: ProgressBar
     lateinit var textView: TextView
     public override fun onStart() {
@@ -25,21 +25,22 @@ class LoginActivity: AppCompatActivity() {
         // Check if user is signed in (non-null) and update UI accordingly.
         val currentUser = auth.currentUser
         if (currentUser != null) {
-            val intent = Intent(this, RegisterActivity::class.java)
+            val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
             finish()
         }
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.login_activity)
+        setContentView(R.layout.register_activity)
+
 
         editTextEmail= findViewById(R.id.emailEditText)
         editTextPassword = findViewById(R.id.passwordEditText)
-        buttonLog = findViewById(R.id.btn_login)
+        buttonReg = findViewById(R.id.btn_register)
         auth = FirebaseAuth.getInstance()
         progressBar = findViewById(R.id.progressBar)
-        textView = findViewById(R.id.loginNowTextView)
+        textView = findViewById(R.id.registerNowTextView)
 
         textView.setOnClickListener{
             val intent = Intent(this, RegisterActivity::class.java)
@@ -47,7 +48,7 @@ class LoginActivity: AppCompatActivity() {
             finish()
         }
 
-        buttonLog.setOnClickListener {
+        buttonReg.setOnClickListener {
             progressBar.visibility = View.VISIBLE
             val email = editTextEmail.text.toString()
             val password = editTextPassword.text.toString()
@@ -71,6 +72,10 @@ class LoginActivity: AppCompatActivity() {
                             Toast.LENGTH_SHORT,
                         ).show()
 
+                        val intent = Intent(this, MainActivity::class.java)
+                        startActivity(intent)
+                        finish()
+
                     } else {
 
                         Toast.makeText(
@@ -81,27 +86,9 @@ class LoginActivity: AppCompatActivity() {
 
                     }
                 }
-
-            auth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener{ task ->
-                    progressBar.visibility = View.GONE
-                    if (task.isSuccessful) {
-                        Toast.makeText(this, "Autenticazione effettuata", Toast.LENGTH_SHORT).show()
-                            val intent = Intent(this, MainActivity::class.java)
-                            startActivity(intent)
-                            finish()
-
-                    } else {
-                        Toast.makeText(
-                            this,
-                            "Authentication failed.",
-                            Toast.LENGTH_SHORT,
-                        ).show()
-                    }
-                }
         }
 
 
     }
 
-}
+    }

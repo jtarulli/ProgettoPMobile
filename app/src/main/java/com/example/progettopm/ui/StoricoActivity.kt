@@ -1,4 +1,8 @@
+<<<<<<< HEAD:app/src/main/java/com/example/progettopm/view/StoricoActivity.kt
 package com.example.progettopm.view
+=======
+package com.example.progettopm.ui
+>>>>>>> a986c808b3dbf17a8481ff0b217361d4f0a713a0:app/src/main/java/com/example/progettopm/ui/StoricoActivity.kt
 
 import android.os.Bundle
 import android.view.View

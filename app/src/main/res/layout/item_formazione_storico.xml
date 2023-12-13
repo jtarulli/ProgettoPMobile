@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/giornataTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="1° FORMAZIONE"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/punteggioTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Punteggio: 80"
+        android:textSize="16sp"
+        app:layout_constraintStart_toEndOf="@id/giornataTextView"
+        app:layout_constraintTop_toTopOf="@id/giornataTextView"
+        app:layout_constraintMarginStart="16dp" />
+
+    <ImageButton
+        android:id="@+id/espandiButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_baseline_expand_more_24"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Layout per giocatore 1 -->
+    <LinearLayout
+        android:id="@+id/giocatore1Layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/giornataTextView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/fotoGiocatore1ImageView"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/ic_baseline_account_circle_24" />
+
+        <!-- Altri dettagli del giocatore 1 -->
+
+        <ImageButton
+            android:id="@+id/espandiGiocatore1Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_expand_more_24" />
+    </LinearLayout>
+
+    <!-- Ripetere lo stesso layout per gli altri giocatori -->
+
+</androidx.constraintlayout.widget.ConstraintLayout>
