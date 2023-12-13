@@ -158,7 +158,6 @@ class FormazioniStoricoActivity : AppCompatActivity() {
             holder.bind(model)
         }
 
-
         inner class GiocatoreViewHolder(itemView: View) :
             RecyclerView.ViewHolder(itemView) {
 
@@ -222,8 +221,6 @@ class FormazioniStoricoActivity : AppCompatActivity() {
             }
         }
     }
-
-    // ...
 
     inner class BonusAdapter(options: FirestoreRecyclerOptions<BonusGiornata>) :
         FirestoreRecyclerAdapter<BonusGiornata, BonusAdapter.BonusViewHolder>(options) {
