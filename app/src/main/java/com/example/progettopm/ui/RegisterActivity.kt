@@ -9,6 +9,7 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.progettopm.view.MasterActivity
 import com.example.progettopm.R
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
@@ -43,7 +44,7 @@ class RegisterActivity: AppCompatActivity() {
         textView = findViewById(R.id.registerNowTextView)
 
         textView.setOnClickListener{
-            val intent = Intent(this, RegisterActivity::class.java)
+            val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
             finish()
         }
@@ -72,7 +73,7 @@ class RegisterActivity: AppCompatActivity() {
                             Toast.LENGTH_SHORT,
                         ).show()
 
-                        val intent = Intent(this, MainActivity::class.java)
+                        val intent = Intent(this, MasterActivity::class.java)
                         startActivity(intent)
                         finish()
 

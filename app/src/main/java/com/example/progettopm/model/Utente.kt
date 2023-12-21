@@ -6,6 +6,7 @@ data class Utente(
     val cognome: String,
     val ruolo: String,
     val username: String,
+    val email: String,
     val password: String,
     val foto: String
 )

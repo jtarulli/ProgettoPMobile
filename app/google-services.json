@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "863646370748",
+    "project_id": "fantacorner-4fa20",
+    "storage_bucket": "fantacorner-4fa20.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:863646370748:android:12e9ee2b5c527d282779b9",
+        "android_client_info": {
+          "package_name": "com.example.progettopm"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBpt4B1N8441_4CqRHaoBnMDeHbixNf_nM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:863646370748:android:cf80ee369aae696d2779b9",
+        "android_client_info": {
+          "package_name": "pm.esame.fantacorner"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBpt4B1N8441_4CqRHaoBnMDeHbixNf_nM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

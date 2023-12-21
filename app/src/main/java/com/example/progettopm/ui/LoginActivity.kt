@@ -9,6 +9,7 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.progettopm.view.MasterActivity
 import com.example.progettopm.R
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
@@ -25,7 +26,7 @@ class LoginActivity: AppCompatActivity() {
         // Check if user is signed in (non-null) and update UI accordingly.
         val currentUser = auth.currentUser
         if (currentUser != null) {
-            val intent = Intent(this, RegisterActivity::class.java)
+            val intent = Intent(this, MasterActivity::class.java)
             startActivity(intent)
             finish()
         }
@@ -62,32 +63,13 @@ class LoginActivity: AppCompatActivity() {
                 Toast.makeText(this, "Enter password", Toast.LENGTH_SHORT).show()
                 finish()
             }
-            auth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        Toast.makeText(
-                            this,
-                            "Registrazione effettuata con successo",
-                            Toast.LENGTH_SHORT,
-                        ).show()
-
-                    } else {
-
-                        Toast.makeText(
-                            this,
-                            "Registrazione FALLITA",
-                            Toast.LENGTH_SHORT,
-                        ).show()
-
-                    }
-                }
 
             auth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener{ task ->
                     progressBar.visibility = View.GONE
                     if (task.isSuccessful) {
                         Toast.makeText(this, "Autenticazione effettuata", Toast.LENGTH_SHORT).show()
-                            val intent = Intent(this, MainActivity::class.java)
+                            val intent = Intent(this, MasterActivity::class.java)
                             startActivity(intent)
                             finish()
 

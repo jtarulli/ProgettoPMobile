@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CreazioneSquadraActivity">
+    tools:context="ui.CreazioneSquadraActivity">
 
     <Button
         android:id="@+id/logoButton"
@@ -14,7 +14,7 @@
         android:layout_centerVertical="true"/>
 
     <EditText
-        android:id="@+id/nomeEditText"
+        android:id="@+id/nomeSquadraEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/logoButton"
@@ -22,11 +22,11 @@
         android:hint="Nome Squadra"/>
 
     <Button
-        android:id="@+id/confermaButton"
+        android:id="@+id/confermaCreazioneButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Conferma"
-        android:layout_below="@id/nomeEditText"
+        android:layout_below="@id/nomeSquadraEditText"
         android:layout_marginTop="16dp"
         android:layout_centerHorizontal="true"/>
 </RelativeLayout>

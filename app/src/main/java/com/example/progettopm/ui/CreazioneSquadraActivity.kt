@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
+import com.example.progettopm.view.MasterActivity
 import com.example.progettopm.R
 
 class CreazioneSquadraActivity : AppCompatActivity() {
@@ -12,8 +13,8 @@ class CreazioneSquadraActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_creazione_squadra)
 
-        val editTextNomeSquadra = findViewById<EditText>(R.id.editTextNomeSquadra)
-        val buttonConfermaCreazione = findViewById<Button>(R.id.buttonConfermaCreazione)
+        val editTextNomeSquadra: EditText = findViewById(R.id.nomeSquadraEditText)
+        val buttonConfermaCreazione: Button = findViewById(R.id.confermaCreazioneButton)
 
         buttonConfermaCreazione.setOnClickListener {
             val nomeSquadra = editTextNomeSquadra.text.toString().trim()
@@ -40,7 +41,7 @@ class CreazioneSquadraActivity : AppCompatActivity() {
     }
 
     private fun startHomeActivity(idSquadra: Int) {
-        val intent = Intent(this, HomeActivity::class.java)
+        val intent = Intent(this, MasterActivity::class.java)
         intent.putExtra("ID_SQUADRA", idSquadra)
         startActivity(intent)
         finish() // Opzionale: chiudi questa activity in modo che l'utente non possa tornare indietro
