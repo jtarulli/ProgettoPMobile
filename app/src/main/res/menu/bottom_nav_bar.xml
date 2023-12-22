@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/home_nav_bar"
+        android:icon="@drawable/home_icon"
+        android:title="Home"/>
+    <item
+        android:id="@+id/storico_nav_bar"
+        android:title="Storico"
+        android:icon="@drawable/storico_icon"/>
+    <item
+        android:id="@+id/giocatori_nav_bar"
+        android:title="Giocatori"
+        android:icon="@drawable/people_icon"/>
+    <item
+        android:id="@+id/classifica_nav_bar"
+        android:title="Classifica"
+        android:icon="@drawable/classifica_icon"/>
+</menu>
