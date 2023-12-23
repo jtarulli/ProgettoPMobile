@@ -1,15 +1,33 @@
-<?xml version="1.0" encoding="utf-8"?>
+<!-- res/layout/fragment_home.xml -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_height="match_parent"
-    android:layout_width="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <TextView
+    <Button
+        android:id="@+id/uniscitiButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textStyle="bold"
-        android:textSize="30dp"
-        android:text="HOMEPAGE"
-        android:layout_centerInParent="true">
-    </TextView>
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
+        android:text="Unisciti a una lega" />
+
+    <Button
+        android:id="@+id/creaLegaButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/uniscitiButton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
+        android:text="Crea la tua lega" />
+
+    <TextView
+        android:id="@+id/nomeLegaTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/creaLegaButton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
+        android:text=""
+        android:visibility="gone" />
 
 </RelativeLayout>

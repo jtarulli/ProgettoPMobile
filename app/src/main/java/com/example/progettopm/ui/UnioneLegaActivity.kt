@@ -17,7 +17,7 @@ import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 
-class CreazioneLegaActivity : AppCompatActivity() {
+class UnioneLegaActivity : AppCompatActivity() {
 
     private lateinit var uriLogo: Uri
 

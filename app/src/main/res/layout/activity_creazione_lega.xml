@@ -1,20 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="ui.CreazioneLegaActivity">
+    android:layout_height="match_parent">
 
+    <ImageView
+        android:id="@+id/logoLegaImageView"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/ic_launcher_foreground"
+        android:contentDescription="Logo Lega" />
 
     <Button
         android:id="@+id/logoButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="Seleziona Logo" />
-
-
+        android:layout_below="@id/logoLegaImageView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
+        android:text="Scegli Logo" />
 
     <EditText
         android:id="@+id/nomeEditText"
@@ -22,7 +27,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/logoButton"
         android:layout_marginTop="16dp"
-        android:hint="Nome Lega"/>
+        android:hint="Nome Lega" />
 
     <EditText
         android:id="@+id/budgetEditText"
@@ -30,34 +35,33 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/nomeEditText"
         android:layout_marginTop="16dp"
-        android:hint="Budget"/>
+        android:inputType="numberDecimal"
+        android:hint="Budget" />
 
     <EditText
-        android:id="@+id/parolaDOrdineEditText"
+        android:id="@+id/giocatoriPerSquadraEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/budgetEditText"
         android:layout_marginTop="16dp"
-        android:hint="Parola d'Ordine"/>
+        android:inputType="number"
+        android:hint="Giocatori per Squadra" />
+
+    <EditText
+        android:id="@+id/numeroGiornateEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/giocatoriPerSquadraEditText"
+        android:layout_marginTop="16dp"
+        android:inputType="number"
+        android:hint="Numero Giornate" />
 
     <Button
         android:id="@+id/confermaButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Conferma"
-        android:layout_below="@id/parolaDOrdineEditText"
+        android:layout_below="@id/numeroGiornateEditText"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="16dp"
-        android:layout_centerHorizontal="true"/>
-
-    <ImageView
-        android:id="@+id/logoLegaImageView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/logoButton"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="162dp"
-        android:layout_marginBottom="52dp"
-        android:scaleType="center"
-        tools:src="@tools:sample/avatars" />
-
+        android:text="Conferma" />
 </RelativeLayout>
