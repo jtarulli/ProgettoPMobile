@@ -26,7 +26,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
         pulsanteUnisciti = view.findViewById(R.id.uniscitiButton)
         pulsanteCreaLega = view.findViewById(R.id.creaLegaButton)
-        //textViewNomeLega = view.findViewById(R.id.nomeLegaTextView)
+        textViewNomeLega = view.findViewById(R.id.nomeLegaTextView)
 
         // Ottieni l'ID utente corrente da Firebase Authentication
         val idUtente = FirebaseAuth.getInstance().currentUser?.uid
@@ -89,6 +89,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private fun visualizzaHomeNoLega() {
         // Mostra i pulsanti di "Unisciti a una lega" e "Crea la tua lega"
+
         pulsanteUnisciti.visibility = View.VISIBLE
         pulsanteCreaLega.visibility = View.VISIBLE
 

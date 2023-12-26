@@ -1,5 +1,7 @@
 package com.example.progettopm.model
+
 import com.google.firebase.firestore.DocumentReference
+
 data class Utente(
     val id: Int,
     val nome: String,
@@ -8,5 +10,6 @@ data class Utente(
     val username: String,
     val email: String,
     val password: String,
-    val foto: String
+    val foto: String,
+    val leghe: Array<DocumentReference>,  // Usa DocumentReference come tipo per leghe
 )

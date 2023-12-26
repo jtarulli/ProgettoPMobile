@@ -1,0 +1,43 @@
+<!-- Puoi personalizzare il layout dell'elemento della RecyclerView -->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/logoLegaImageView"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:src="@drawable/placeholder_logo"
+        android:scaleType="centerCrop"
+        android:layout_marginEnd="16dp"/>
+
+    <TextView
+        android:id="@+id/nomeLegaTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:layout_toEndOf="@id/logoLegaImageView"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"/>
+
+    <TextView
+        android:id="@+id/budgetLegaTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:layout_below="@id/nomeLegaTextView"
+        android:layout_toEndOf="@id/logoLegaImageView"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="8dp"/>
+
+    <Button
+        android:id="@+id/uniscitiButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Unisciti"
+        android:layout_below="@id/budgetLegaTextView"
+        android:layout_toEndOf="@id/logoLegaImageView"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"/>
+</RelativeLayout>

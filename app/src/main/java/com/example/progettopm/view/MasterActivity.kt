@@ -2,6 +2,8 @@ package com.example.progettopm.view
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
+import android.view.Menu
 import android.view.MenuItem
 import android.widget.TextView
 import android.widget.Toast
@@ -27,6 +29,8 @@ class MasterActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMasterBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        replaceFragment(HomeFragment())
 
         //Navigation View
         val drawerLayout: DrawerLayout = findViewById(R.id.drawerLayout_master)
@@ -68,17 +72,30 @@ class MasterActivity : AppCompatActivity() {
 
         //Navigation Bar
         binding.navBarMaster.setOnItemSelectedListener { menuItem ->
+            Log.d("MasterActivity", "setOnItemSelectedListener called")
             when (menuItem.itemId) {
-                R.id.home_nav_bar -> replaceFragment(HomeFragment())
-                R.id.storico_nav_bar -> replaceFragment(StoricoFragment())
-                R.id.classifica_nav_bar -> replaceFragment(ClassificaFragment())
-                R.id.giocatori_nav_bar -> replaceFragment(GiocatoriFragment())
+                R.id.home_nav_bar -> {
+                    Log.d("MasterActivity", "Home selected")
+                    replaceFragment(HomeFragment())
+                }
+                R.id.storico_nav_bar -> {
+                    Log.d("MasterActivity", "Storico selected")
+                    replaceFragment(StoricoFragment())
+                }
+                R.id.classifica_nav_bar -> {
+                    Log.d("MasterActivity", "Classifica selected")
+                    replaceFragment(ClassificaFragment())
+                }
+                R.id.giocatori_nav_bar -> {
+                    Log.d("MasterActivity", "Giocatori selected")
+                    replaceFragment(GiocatoriFragment())
+                }
             }
             true
         }
+
+
     }
-
-
     //Funzioni
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (toggle.onOptionsItemSelected(item)) {
@@ -88,9 +105,16 @@ class MasterActivity : AppCompatActivity() {
     }
 
     private fun replaceFragment(fragment: Fragment) {
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.fragmentContainer, fragment)
-            .commit()
+        val fragmentManager = supportFragmentManager
+        val fragmentTransaction = fragmentManager.beginTransaction()
+        fragmentTransaction.replace(R.id.fragmentContainer,fragment)
+        fragmentTransaction.commit()
+        Log.d("MasterActivity", "replaceFragment called")
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.bottom_nav_bar, menu)
+        return true
     }
 
     private fun changeActivity(nomeActivity: Class<*>) {

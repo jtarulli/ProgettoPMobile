@@ -11,8 +11,9 @@ import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.example.progettopm.R
-import com.example.progettopm.fragments.HomeFragment
+import com.example.progettopm.view.MasterActivity
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
@@ -50,15 +51,13 @@ class CreazioneLegaActivity : AppCompatActivity() {
         }
 
         confermaButton.setOnClickListener {
-            // Gestione del clic sul pulsante di conferma
-
             // Recupera i valori inseriti dall'utente
-            val nome = nomeEditText.text.toString()
-            val budget = budgetEditText.text.toString().toIntOrNull()
-            val giocatoriPerSquadra = giocatoriPerSquadraEditText.text.toString().toIntOrNull()
-            val numeroGiornate = numeroGiornateEditText.text.toString().toIntOrNull()
+            val nome = nomeEditText.text.toString().trim()
+            val budget = budgetEditText.text.toString().trim().toIntOrNull()
+            val giocatoriPerSquadra = giocatoriPerSquadraEditText.text.toString().trim().toIntOrNull()
+            val numeroGiornate = numeroGiornateEditText.text.toString().trim().toIntOrNull()
 
-            // Verifica che i campi obbligatori siano stati compilati
+            // Verifica che tutti i campi siano stati compilati
             if (nome.isEmpty() || budget == null || giocatoriPerSquadra == null || numeroGiornate == null) {
                 Toast.makeText(this, "Compila tutti i campi", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
@@ -67,9 +66,12 @@ class CreazioneLegaActivity : AppCompatActivity() {
             // Salvataggio dei dati nel database
             saveLeagueToDatabase(nome, budget, giocatoriPerSquadra, numeroGiornate)
 
-            // Passa alla schermata successiva (HomeFragment)
-            val intent = Intent(this, HomeFragment::class.java)
+            // Torna alla schermata principale (MasterActivity) che contiene HomeFragment
+            val intent = Intent(this, MasterActivity::class.java)
             startActivity(intent)
+
+            // Chiudi l'attività corrente
+            finish()
         }
     }
 
@@ -81,8 +83,11 @@ class CreazioneLegaActivity : AppCompatActivity() {
     ) {
         val userId = FirebaseAuth.getInstance().currentUser?.uid
 
+        // Riferimento alla raccolta 'leghe' nel Firestore
+        val legheCollection = FirebaseFirestore.getInstance().collection("leghe")
+
         // Creazione di un nuovo documento nella raccolta 'leghe'
-        val leagueDocument = FirebaseFirestore.getInstance().collection("leghe").document()
+        val leagueDocument = legheCollection.document()
 
         // Creazione di un oggetto mappa con i dati della lega
         val leagueData = hashMapOf(

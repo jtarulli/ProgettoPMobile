@@ -32,8 +32,21 @@
             android:exported="true">
         </activity>
 
-    <activity android:name=".view.MasterActivity"
+        <activity android:name=".ui.CreazioneLegaActivity"
+            android:theme="@style/Theme.Material3.Light.NoActionBar"
+            android:exported="false">
+        </activity>
+
+        <activity android:name=".ui.UnioneLegaActivity"
+            android:theme="@style/Theme.Material3.Light.NoActionBar"
+            android:exported="false">
+        </activity>
+
+
+        <activity android:name=".view.MasterActivity"
         android:exported="true">
+
+
 
     </activity>
     </application>
