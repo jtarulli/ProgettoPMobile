@@ -35,9 +35,9 @@
         android:id="@+id/uniscitiButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Unisciti"
         android:layout_below="@id/budgetLegaTextView"
+        android:layout_marginStart="213dp"
+        android:layout_marginTop="-35dp"
         android:layout_toEndOf="@id/logoLegaImageView"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"/>
+        android:text="Unisciti" />
 </RelativeLayout>

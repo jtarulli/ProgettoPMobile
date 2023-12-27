@@ -3,13 +3,12 @@ package com.example.progettopm.model
 import com.google.firebase.firestore.DocumentReference
 
 data class Utente(
-    val id: Int,
+    val id: String,  // Cambiato da Int a String
     val nome: String,
     val cognome: String,
     val ruolo: String,
-    val username: String,
     val email: String,
     val password: String,
     val foto: String,
-    val leghe: Array<DocumentReference>,  // Usa DocumentReference come tipo per leghe
+    val leghe: List<DocumentReference>  // Cambiato da Array a List
 )

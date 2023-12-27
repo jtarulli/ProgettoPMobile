@@ -59,18 +59,18 @@ class UnioneLegaActivity : AppCompatActivity() {
         val userId = FirebaseAuth.getInstance().currentUser?.uid
 
         if (userId != null) {
-            // Aggiungi la lega all'array 'leghe' dell'utente
+            // Aggiungi l'ID della lega all'array 'leghe' dell'utente
             val utenteReference = FirebaseFirestore.getInstance().collection("utenti").document(userId)
-
-            // Aggiungi la reference della lega all'array 'leghe' dell'utente
-            utenteReference.update("leghe", FieldValue.arrayUnion(lega.reference))
-                .addOnSuccessListener {
-                    Toast.makeText(this, "Ti sei unito a ${lega.nome}", Toast.LENGTH_SHORT).show()
-                }
-                .addOnFailureListener {
-                    Toast.makeText(this, "Errore durante l'aggiunta alla lega", Toast.LENGTH_SHORT).show()
-                }
+            // Aggiungi l'ID della lega all'array 'leghe' dell'utente
+            //utenteReference.update("leghe", FieldValue.arrayUnion(document.id))
+              //  .addOnSuccessListener {
+              //      Toast.makeText(this, "Ti sei unito a ${lega.nome}", Toast.LENGTH_SHORT).show()
+             //   }
+              //  .addOnFailureListener {
+             //       Toast.makeText(this, "Errore durante l'aggiunta alla lega", Toast.LENGTH_SHORT).show()
+              //  }
         }
     }
+
 
 }
