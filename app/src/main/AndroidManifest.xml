@@ -42,6 +42,10 @@
             android:exported="false">
         </activity>
 
+        <activity android:name=".ui.CreazioneSquadraActivity"
+            android:theme="@style/Theme.Material3.Light.NoActionBar"
+            android:exported="false">
+        </activity>
 
         <activity android:name=".view.MasterActivity"
         android:exported="true">

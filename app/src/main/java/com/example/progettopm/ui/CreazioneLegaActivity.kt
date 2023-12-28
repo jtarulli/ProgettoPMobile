@@ -11,6 +11,7 @@ import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.example.progettopm.R
+import com.example.progettopm.fragments.HomeFragment
 import com.example.progettopm.view.MasterActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentReference
@@ -83,35 +84,59 @@ class CreazioneLegaActivity : AppCompatActivity() {
     ) {
         val userId = FirebaseAuth.getInstance().currentUser?.uid
 
-        // Riferimento alla raccolta 'leghe' nel Firestore
-        val legheCollection = FirebaseFirestore.getInstance().collection("leghe")
+        if (userId != null) {
+            // Riferimento alla raccolta 'leghe' nel Firestore
+            val legheCollection = FirebaseFirestore.getInstance().collection("leghe")
 
-        // Creazione di un nuovo documento nella raccolta 'leghe'
-        val leagueDocument = legheCollection.document()
+            // Creazione di un nuovo documento nella raccolta 'leghe'
+            val leagueDocument = legheCollection.document()
 
-        // Creazione di un oggetto mappa con i dati della lega
-        val leagueData = hashMapOf(
-            "admin" to userId,
-            "nome" to nome,
-            "budget" to budget,
-            "giocatoriPerSquadra" to giocatoriPerSquadra,
-            "numeroGiornate" to numeroGiornate,
-            "logo" to ""
-        )
+            // Creazione di un oggetto mappa con i dati della lega
+            val leagueData = hashMapOf(
+                "admin" to userId,
+                "nome" to nome,
+                "budget" to budget,
+                "giocatoriPerSquadra" to giocatoriPerSquadra,
+                "numeroGiornate" to numeroGiornate,
+                "logo" to ""
+            )
 
-        // Aggiunta del documento lega al Firestore
-        leagueDocument.set(leagueData)
+            // Aggiunta del documento lega al Firestore
+            leagueDocument.set(leagueData)
+                .addOnSuccessListener {
+                    // Aggiungi la reference alla lega appena creata nel campo 'leghe' dell'utente
+                    aggiungiLegaAllUtente(userId, leagueDocument.id)
+                    (this as? HomeFragment.OnDataChangeListener)?.onDataChanged()
+                    Toast.makeText(this, "Lega creata con successo", Toast.LENGTH_SHORT).show()
+                }
+                .addOnFailureListener {
+                    Toast.makeText(this, "Errore durante la creazione della lega", Toast.LENGTH_SHORT)
+                        .show()
+                }
+
+            // Caricamento dell'immagine del logo nel Firebase Storage
+            uploadLogoToStorage(leagueDocument.id)
+        } else {
+            Toast.makeText(this, "Errore durante il recupero dell'utente", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun aggiungiLegaAllUtente(userId: String, leagueId: String) {
+        val utenteRef = FirebaseFirestore.getInstance().collection("utenti").document(userId)
+
+        // Creazione di una reference alla lega
+        val leagueRef = FirebaseFirestore.getInstance().document("leghe/$leagueId")
+
+        // Aggiungi la reference alla lega appena creata nel campo 'leghe' dell'utente
+        utenteRef.update("leghe", FieldValue.arrayUnion(leagueRef))
             .addOnSuccessListener {
-                Toast.makeText(this, "Lega creata con successo", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Lega aggiunta all'utente con successo", Toast.LENGTH_SHORT).show()
             }
             .addOnFailureListener {
-                Toast.makeText(this, "Errore durante la creazione della lega", Toast.LENGTH_SHORT)
-                    .show()
+                Toast.makeText(this, "Errore durante l'aggiunta della lega all'utente", Toast.LENGTH_SHORT).show()
             }
-
-        // Caricamento dell'immagine del logo nel Firebase Storage
-        uploadLogoToStorage(leagueDocument.id)
     }
+
 
     private fun uploadLogoToStorage(leagueId: String) {
         val logoRef = FirebaseStorage.getInstance().reference.child("loghi_leghe").child("$leagueId.jpg")

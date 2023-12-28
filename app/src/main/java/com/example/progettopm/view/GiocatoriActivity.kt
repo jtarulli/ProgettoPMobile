@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.progettopm.R
+import com.example.progettopm.adapters.GiocatoriAdapter
 import com.example.progettopm.model.Giocatore
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query

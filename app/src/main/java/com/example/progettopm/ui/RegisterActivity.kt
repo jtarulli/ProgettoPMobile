@@ -94,7 +94,8 @@ class RegisterActivity : AppCompatActivity() {
                                 email = email,
                                 password = password,
                                 foto = "",  // Lascia vuota, poiché l'immagine è caricata separatamente
-                                leghe = emptyList()  // Inizializza con un elenco vuoto di leghe
+                                leghe = emptyList(),  // Inizializza con un elenco vuoto di leghe
+                                squadre = emptyList()
                             )
 
                             FirebaseFirestore.getInstance().collection("utenti")

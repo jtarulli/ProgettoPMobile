@@ -21,7 +21,7 @@ import com.example.progettopm.ui.LoginActivity
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 
-class MasterActivity : AppCompatActivity() {
+class MasterActivity : AppCompatActivity(), HomeFragment.OnDataChangeListener {
     private lateinit var binding: ActivityMasterBinding
     private lateinit var toggle: ActionBarDrawerToggle
 
@@ -104,13 +104,26 @@ class MasterActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
+    override fun onDataChanged() {
+        // Richiama il metodo per refreshare il fragment
+        val homeFragment = supportFragmentManager.findFragmentByTag("HomeFragmentTag") as? HomeFragment
+        homeFragment?.refreshData()  // Aggiungi questo metodo al tuo HomeFragment
+    }
+
     private fun replaceFragment(fragment: Fragment) {
         val fragmentManager = supportFragmentManager
+        val existingFragment = fragmentManager.findFragmentByTag("HomeFragmentTag")
+        if (existingFragment != null) {
+            fragmentManager.beginTransaction().remove(existingFragment).commit()
+        }
+
         val fragmentTransaction = fragmentManager.beginTransaction()
-        fragmentTransaction.replace(R.id.fragmentContainer,fragment)
+        fragmentTransaction.replace(R.id.fragmentContainer, fragment, "HomeFragmentTag")
         fragmentTransaction.commit()
         Log.d("MasterActivity", "replaceFragment called")
     }
+
+
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.bottom_nav_bar, menu)
