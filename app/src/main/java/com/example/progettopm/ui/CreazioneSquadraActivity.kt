@@ -10,9 +10,9 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.net.toUri
 import com.example.progettopm.R
 import com.example.progettopm.SessionManager
-import com.example.progettopm.fragments.HomeFragment
 import com.example.progettopm.view.MasterActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentReference
@@ -22,7 +22,9 @@ import com.google.firebase.storage.FirebaseStorage
 
 class CreazioneSquadraActivity : AppCompatActivity() {
 
-    private lateinit var uriLogo: Uri
+    private var uriLogo: Uri? = null
+    private val DEFAULT_SQUADRA_LOGO_PATH = "icone_standard/squadra_icona.jpg"
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -96,7 +98,6 @@ class CreazioneSquadraActivity : AppCompatActivity() {
                 .addOnSuccessListener {
                     aggiungiSquadraAllUtente(userId, squadraDocument.id)
                     Toast.makeText(this, "Squadra creata con successo", Toast.LENGTH_SHORT).show()
-                    (this as? HomeFragment.OnDataChangeListener)?.onDataChanged()
                 }
                 .addOnFailureListener {
                     Toast.makeText(this, "Errore durante la creazione della squadra", Toast.LENGTH_SHORT)
@@ -113,17 +114,23 @@ class CreazioneSquadraActivity : AppCompatActivity() {
     private fun uploadLogoToStorage(squadraId: String) {
         val logoRef = FirebaseStorage.getInstance().reference.child("loghi_squadre").child("$squadraId.jpg")
 
-        logoRef.putFile(uriLogo)
-            .addOnSuccessListener {
-                // L'immagine è stata caricata con successo, ora possiamo ottenere l'URL
-                logoRef.downloadUrl.addOnSuccessListener { uri ->
-                    // Aggiorna il campo 'logo' nel documento della squadra con l'URL dell'immagine
-                    updateSquadraLogoUrl(squadraId, uri.toString())
+        // Utilizza l'immagine predefinita se l'utente non ha selezionato un logo
+        if (uriLogo != null) {
+            logoRef.putFile(uriLogo!!)
+                .addOnSuccessListener {
+                    // L'immagine è stata caricata con successo, ora possiamo ottenere l'URL
+                    logoRef.downloadUrl.addOnSuccessListener { uri ->
+                        // Aggiorna il campo 'logo' nel documento della squadra con l'URL dell'immagine
+                        updateSquadraLogoUrl(squadraId, uri.toString())
+                    }
                 }
-            }
-            .addOnFailureListener {
-                Toast.makeText(this, "Errore durante l'upload del logo", Toast.LENGTH_SHORT).show()
-            }
+                .addOnFailureListener {
+                    Toast.makeText(this, "Errore durante l'upload del logo", Toast.LENGTH_SHORT).show()
+                }
+        } else {
+            // Se l'utente non carica alcun logo, utilizza il logo predefinito
+            updateSquadraLogoUrl(squadraId, DEFAULT_SQUADRA_LOGO_PATH)
+        }
     }
 
 
@@ -138,6 +145,13 @@ class CreazioneSquadraActivity : AppCompatActivity() {
             .addOnFailureListener {
                 Toast.makeText(this, "Errore durante l'aggiornamento dell'URL del logo", Toast.LENGTH_SHORT).show()
             }
+    }
+
+    private fun getDefaultLogoUri(): Uri {
+        // URL dell'immagine predefinita
+        val defaultLogoPath = "icone_standard/squadra icona.jpg"
+        val storageRef = FirebaseStorage.getInstance().reference
+        return storageRef.child(defaultLogoPath).toString().toUri()
     }
 
     private fun aggiungiSquadraAllUtente(userId: String, squadraId: String) {
@@ -155,6 +169,4 @@ class CreazioneSquadraActivity : AppCompatActivity() {
                 Toast.makeText(this, "Errore durante l'aggiunta della squadra all'utente", Toast.LENGTH_SHORT).show()
             }
     }
-
-
 }

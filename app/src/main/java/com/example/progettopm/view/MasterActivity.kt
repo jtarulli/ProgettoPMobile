@@ -14,14 +14,14 @@ import androidx.fragment.app.Fragment
 import com.example.progettopm.R
 import com.example.progettopm.databinding.ActivityMasterBinding
 import com.example.progettopm.fragments.ClassificaFragment
-import com.example.progettopm.fragments.GiocatoriFragment
 import com.example.progettopm.fragments.HomeFragment
 import com.example.progettopm.fragments.StoricoFragment
+import com.example.progettopm.ui.GiocatoriFragment
 import com.example.progettopm.ui.LoginActivity
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 
-class MasterActivity : AppCompatActivity(), HomeFragment.OnDataChangeListener {
+class MasterActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMasterBinding
     private lateinit var toggle: ActionBarDrawerToggle
 
@@ -104,26 +104,13 @@ class MasterActivity : AppCompatActivity(), HomeFragment.OnDataChangeListener {
         return super.onOptionsItemSelected(item)
     }
 
-    override fun onDataChanged() {
-        // Richiama il metodo per refreshare il fragment
-        val homeFragment = supportFragmentManager.findFragmentByTag("HomeFragmentTag") as? HomeFragment
-        homeFragment?.refreshData()  // Aggiungi questo metodo al tuo HomeFragment
-    }
-
     private fun replaceFragment(fragment: Fragment) {
         val fragmentManager = supportFragmentManager
-        val existingFragment = fragmentManager.findFragmentByTag("HomeFragmentTag")
-        if (existingFragment != null) {
-            fragmentManager.beginTransaction().remove(existingFragment).commit()
-        }
-
         val fragmentTransaction = fragmentManager.beginTransaction()
-        fragmentTransaction.replace(R.id.fragmentContainer, fragment, "HomeFragmentTag")
+        fragmentTransaction.replace(R.id.fragmentContainer,fragment)
         fragmentTransaction.commit()
         Log.d("MasterActivity", "replaceFragment called")
     }
-
-
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.bottom_nav_bar, menu)

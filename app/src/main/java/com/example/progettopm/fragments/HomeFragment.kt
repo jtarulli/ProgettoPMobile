@@ -65,15 +65,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         }
     }
 
-    fun refreshData() {
-        Log.d("HomeFragment", "refreshData called")
-        // Ricarica i dati dal Firestore
-        val idUtente = FirebaseAuth.getInstance().currentUser?.uid
-        if (idUtente != null) {
-            controllaAppartenenzaLegaUtente(idUtente)
-        }
-    }
-
     private fun controllaAppartenenzaLegaUtente(idUtente: String) {
         // Ottieni il riferimento al documento dell'utente nel Firestore
         val utenteRef = FirebaseFirestore.getInstance().collection("utenti").document(idUtente)
@@ -135,12 +126,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 Toast.makeText(requireContext(), "Errore durante il recupero dei dati dell'utente", Toast.LENGTH_SHORT).show()
             }
     }
-
-    // All'interno di HomeFragment
-    interface OnDataChangeListener {
-        fun onDataChanged()
-    }
-
 
     private fun visualizzaHomeNoLega() {
         pulsanteUnisciti.visibility = View.VISIBLE
