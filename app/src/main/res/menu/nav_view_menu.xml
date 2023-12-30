@@ -7,5 +7,11 @@
     android:title="@string/logout"
     android:icon="@drawable/logout_icon"/>
 
+    <item
+        android:id="@+id/dashboard_admin_lega"
+        android:title="Dashboard Admin di Lega"
+        android:icon="@drawable/people_icon"
+    />
+
 
 </menu>
