@@ -7,9 +7,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import com.example.progettopm.R
+import androidx.navigation.fragment.findNavController
 import com.example.progettopm.ui.CreazioneLegaActivity
 import com.example.progettopm.ui.UnioneLegaActivity
 import com.google.firebase.auth.FirebaseAuth
@@ -49,6 +51,25 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             val intent = Intent(requireContext(), CreazioneLegaActivity::class.java)
             startActivity(intent)
         }
+class HomeFragment : Fragment() {
+    // Al momento della creazione del fragment
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        // Infla il layout per questo fragment
+        val view = inflater.inflate(R.layout.fragment_home, container, false)
+
+        // Trova il bottone nel layout
+        val inserisciFormazioneButton: Button = view.findViewById(R.id.inserisciFormazione_btn)
+        val navController = findNavController()
+        inserisciFormazioneButton.setOnClickListener {
+            // Naviga verso il FormazioneFragment
+            findNavController().navigate(R.id.formazioneFragment)
+        }
+
+        // Restituisci la vista
+        return view
     }
 
     private fun controllaAppartenenzaLegaUtente(idUtente: String) {

@@ -20,6 +20,16 @@
         android:layout_marginTop="16dp"
         android:text="Crea la tua lega" />
 
+
+    <Button
+        android:id="@+id/inserisciFormazione_btn"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_below="@+id/creaLegaButton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
+        android:text="Inserisci formazione" />
+
     <TextView
         android:id="@+id/nomeLegaTextView"
         android:layout_width="wrap_content"
@@ -27,7 +37,7 @@
         android:layout_below="@id/creaLegaButton"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="16dp"
-        android:text=""
+        android:text="Inserisci Formazione"
         android:visibility="gone" />
 
 </RelativeLayout>

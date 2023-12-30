@@ -1,13 +1,13 @@
+package com.example.progettopm.model
+import com.google.firebase.crashlytics.internal.model.CrashlyticsReport.Session.User
 import com.google.firebase.firestore.DocumentReference
 
 data class Formazione(
     val id: Int,
     val giornata: DocumentReference,
-    val portiere: DocumentReference,
-    val difensore: DocumentReference,
-    val laterale_dx: DocumentReference,
-    val laterale_sx: DocumentReference,
-    val attaccante: DocumentReference,
+    val user: User,
     val punteggio: Int,
-    val squadra: DocumentReference
+    val squadra: DocumentReference,
+    val nomeSquadra: String,
+    val giocatoriSchierati: DocumentReference
 )
