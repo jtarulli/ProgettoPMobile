@@ -1,7 +1,9 @@
 package com.example.progettopm.model
 
+import com.google.firebase.firestore.DocumentReference
+
 data class Bonus(
-    val id: String,
-    val valore: Int,
-    val nome: String
+    val valore: Int = 0,
+    val nome: String = "",
+    val lega: DocumentReference? = null,
 )

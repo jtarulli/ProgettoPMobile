@@ -1,0 +1,27 @@
+<!-- item_bonus_giornata.xml -->
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/nomeTipoBonusTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tipo Bonus" />
+
+    <TextView
+        android:id="@+id/quantitaTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Quantità" />
+
+    <TextView
+        android:id="@+id/punteggioBonusTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Punteggio Bonus" />
+
+</LinearLayout>

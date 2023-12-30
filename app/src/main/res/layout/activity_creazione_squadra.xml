@@ -1,33 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="ui.CreazioneSquadraActivity">
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/logoSquadraImageView"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
+        android:contentDescription="Logo Squadra"
+        android:src="@drawable/ic_launcher_foreground" />
 
     <Button
-        android:id="@+id/logoButton"
+        android:id="@+id/logoSquadraButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Seleziona Logo"
+        android:layout_below="@id/logoSquadraImageView"
         android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"/>
+        android:layout_marginTop="16dp"
+        android:text="Scegli Logo" />
 
     <EditText
-        android:id="@+id/nomeSquadraEditText"
+        android:id="@+id/squadraNomeEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/logoButton"
+        android:layout_below="@id/logoSquadraButton"
         android:layout_marginTop="16dp"
-        android:hint="Nome Squadra"/>
+        android:hint="Nome Squadra" />
 
     <Button
-        android:id="@+id/confermaCreazioneButton"
+        android:id="@+id/confermaButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Conferma"
-        android:layout_below="@id/nomeSquadraEditText"
+        android:layout_below="@id/squadraNomeEditText"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="16dp"
-        android:layout_centerHorizontal="true"/>
+        android:text="Conferma" />
 </RelativeLayout>
-

@@ -10,5 +10,6 @@ data class Utente(
     val email: String,
     val password: String,
     val foto: String,
-    val leghe: List<DocumentReference>  // Cambiato da Array a List
+    val leghe: List<DocumentReference>,  // Cambiato da Array a Lis
+    val squadre: List<DocumentReference>
 )

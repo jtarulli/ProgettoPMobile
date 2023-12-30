@@ -1,13 +1,14 @@
 package com.example.progettopm.model
 
-// Giocatore.kt
+import com.google.firebase.firestore.DocumentReference
+
 data class Giocatore(
-    val id: Int,
-    val nome: String,
-    val cognome: String,
-    val squadra: String,
-    val ruolo: String,
-    val valore: Int,
-    val foto: String,
-    val punteggio: Int
+    val id: String = "", // Assicurati di inizializzare o fornire un valore predefinito
+    val nome: String = "",
+    val cognome: String = "",
+    val lega: DocumentReference? = null,
+    val valore: Int = 0,
+    val foto: String = "",
+    var punteggio: Int = 0,
+    var bonusGiornataList: List<DocumentReference> = emptyList()
 )

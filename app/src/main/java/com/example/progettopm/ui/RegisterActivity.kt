@@ -30,7 +30,10 @@ class RegisterActivity : AppCompatActivity() {
     private lateinit var logoButton: Button
     private lateinit var buttonReg: Button
     private lateinit var progressBar: ProgressBar
-    private lateinit var uriLogo: Uri
+    private var uriLogo: Uri? = null
+
+    // Aggiungi questa variabile alla tua classe
+    private val defaultLogoPath = "icone_standard/user_icona.jpg"
 
     // Dichiarazione del result launcher al di fuori del blocco onCreate
     private val galleryImage =
@@ -68,10 +71,7 @@ class RegisterActivity : AppCompatActivity() {
             val nome = nomeEditText.text.toString()
             val cognome = cognomeEditText.text.toString()
 
-            if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password) || TextUtils.isEmpty(nome) || TextUtils.isEmpty(
-                    cognome
-                ) || uriLogo == null
-            ) {
+            if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password) || TextUtils.isEmpty(nome) || TextUtils.isEmpty(cognome)) {
                 Toast.makeText(this, "Compila tutti i campi", Toast.LENGTH_SHORT).show()
                 progressBar.visibility = View.GONE
                 return@setOnClickListener
@@ -93,8 +93,9 @@ class RegisterActivity : AppCompatActivity() {
                                 ruolo = "user",
                                 email = email,
                                 password = password,
-                                foto = "",  // Lascia vuota, poiché l'immagine è caricata separatamente
-                                leghe = emptyList()  // Inizializza con un elenco vuoto di leghe
+                                foto = uriLogo?.toString() ?: getDefaultLogoUrl(),
+                                leghe = emptyList(),
+                                squadre = emptyList()
                             )
 
                             FirebaseFirestore.getInstance().collection("utenti")
@@ -106,11 +107,14 @@ class RegisterActivity : AppCompatActivity() {
                                         this,
                                         "Registrazione effettuata con successo",
                                         Toast.LENGTH_SHORT
-
                                     ).show()
 
-                                    // Carica l'immagine del logo
-                                    uploadLogoToStorage(userId)
+                                    // Carica l'immagine del logo solo se è stata fornita dall'utente
+                                    if (uriLogo != null) {
+                                        uploadLogoToStorage(userId)
+                                    } else {
+                                        goToMasterActivity()
+                                    }
                                 }
                                 .addOnFailureListener {
                                     // Errore nell'aggiungere l'utente al Firestore
@@ -135,7 +139,7 @@ class RegisterActivity : AppCompatActivity() {
         val logoRef =
             FirebaseStorage.getInstance().reference.child("pic_utenti").child("$userId.jpg")
 
-        logoRef.putFile(uriLogo)
+        logoRef.putFile(uriLogo!!)
             .addOnSuccessListener {
                 // Aggiorna il campo 'logo' nel documento dell'utente con l'URL dell'immagine
                 updateUsersLogoUrl(userId, it.metadata?.path)
@@ -159,9 +163,7 @@ class RegisterActivity : AppCompatActivity() {
                         Toast.LENGTH_SHORT
                     ).show()
 
-                    val intent = Intent(this, MasterActivity::class.java)
-                    startActivity(intent)
-                    finish()
+                    goToMasterActivity()
                 }
                 .addOnFailureListener {
                     Toast.makeText(
@@ -172,5 +174,15 @@ class RegisterActivity : AppCompatActivity() {
                     progressBar.visibility = View.GONE
                 }
         }
+    }
+
+    private fun getDefaultLogoUrl(): String {
+        return FirebaseStorage.getInstance().reference.child(defaultLogoPath).toString()
+    }
+
+    private fun goToMasterActivity() {
+        val intent = Intent(this, MasterActivity::class.java)
+        startActivity(intent)
+        finish()
     }
 }

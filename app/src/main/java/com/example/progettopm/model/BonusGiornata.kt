@@ -1,10 +1,13 @@
 package com.example.progettopm.model
+
 import com.google.firebase.firestore.DocumentReference
 
 data class BonusGiornata(
-    val id: String,
-    val giocatore: DocumentReference,
-    val giornata: DocumentReference,
-    val quantita: Int,
-    val tipoBonus: DocumentReference
-)
+    val giocatore: String,
+    val giornata: DocumentReference? = null,
+    val quantita: Int = 0,
+    val tipoBonus: DocumentReference? = null,
+) {
+    // Costruttore senza argomenti richiesto da Firestore
+    constructor() : this("", null, 0, null)
+}

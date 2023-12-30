@@ -14,9 +14,9 @@ import androidx.fragment.app.Fragment
 import com.example.progettopm.R
 import com.example.progettopm.databinding.ActivityMasterBinding
 import com.example.progettopm.fragments.ClassificaFragment
-import com.example.progettopm.fragments.GiocatoriFragment
 import com.example.progettopm.fragments.HomeFragment
 import com.example.progettopm.fragments.StoricoFragment
+import com.example.progettopm.ui.GiocatoriFragment
 import com.example.progettopm.ui.LoginActivity
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth

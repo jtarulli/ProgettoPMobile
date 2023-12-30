@@ -9,6 +9,7 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="16dp"
+        android:visibility="gone"
         android:text="Unisciti a una lega" />
 
     <Button
@@ -18,17 +19,17 @@
         android:layout_below="@id/uniscitiButton"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="16dp"
+        android:visibility="gone"
         android:text="Crea la tua lega" />
 
-
     <Button
-        android:id="@+id/inserisciFormazione_btn"
-        android:layout_height="wrap_content"
+        android:id="@+id/creaSquadraButton"
         android:layout_width="wrap_content"
-        android:layout_below="@+id/creaLegaButton"
+        android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="16dp"
-        android:text="Inserisci formazione" />
+        android:visibility="gone"
+        android:text="Crea la tua squadra" />
 
     <TextView
         android:id="@+id/nomeLegaTextView"
@@ -37,7 +38,18 @@
         android:layout_below="@id/creaLegaButton"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="16dp"
-        android:text="Inserisci Formazione"
+        android:text=""
+        android:visibility="gone" />
+
+    <!-- Aggiungi il TextView per il nome della squadra -->
+    <TextView
+        android:id="@+id/nomeSquadraTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/nomeLegaTextView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
+        android:text=""
         android:visibility="gone" />
 
 </RelativeLayout>

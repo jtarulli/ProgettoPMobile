@@ -13,14 +13,15 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.progettopm.R
 import com.example.progettopm.view.MasterActivity
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 
 class CreazioneLegaActivity : AppCompatActivity() {
 
-    private lateinit var uriLogo: Uri
+    private var uriLogo: Uri? = null
+    private val DEFAULT_LOGO_PATH = "icone_standard/lega_icona.jpg"
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -83,47 +84,84 @@ class CreazioneLegaActivity : AppCompatActivity() {
     ) {
         val userId = FirebaseAuth.getInstance().currentUser?.uid
 
-        // Riferimento alla raccolta 'leghe' nel Firestore
-        val legheCollection = FirebaseFirestore.getInstance().collection("leghe")
+        if (userId != null) {
+            // Riferimento alla raccolta 'leghe' nel Firestore
+            val legheCollection = FirebaseFirestore.getInstance().collection("leghe")
 
-        // Creazione di un nuovo documento nella raccolta 'leghe'
-        val leagueDocument = legheCollection.document()
+            // Creazione di un nuovo documento nella raccolta 'leghe'
+            val leagueDocument = legheCollection.document()
 
-        // Creazione di un oggetto mappa con i dati della lega
-        val leagueData = hashMapOf(
-            "admin" to userId,
-            "nome" to nome,
-            "budget" to budget,
-            "giocatoriPerSquadra" to giocatoriPerSquadra,
-            "numeroGiornate" to numeroGiornate,
-            "logo" to ""
-        )
+            // Creazione di un oggetto mappa con i dati della lega
+            val leagueData = hashMapOf(
+                "admin" to userId,
+                "nome" to nome,
+                "budget" to budget,
+                "giocatoriPerSquadra" to giocatoriPerSquadra,
+                "numeroGiornate" to numeroGiornate,
+                "logo" to "" // Lasciamo vuoto inizialmente
+            )
 
-        // Aggiunta del documento lega al Firestore
-        leagueDocument.set(leagueData)
+            // Aggiunta del documento lega al Firestore
+            leagueDocument.set(leagueData)
+                .addOnSuccessListener {
+                    // Aggiungi la reference alla lega appena creata nel campo 'leghe' dell'utente
+                    aggiungiLegaAllUtente(userId, leagueDocument.id)
+
+                    // Caricamento dell'immagine del logo nel Firebase Storage
+                    if (uriLogo != null) {
+                        uploadLogoToStorage(leagueDocument.id)
+                    } else {
+                        // Se l'utente non carica alcun logo, utilizza il logo predefinito
+                        updateLeagueLogoUrl(leagueDocument.id, DEFAULT_LOGO_PATH)
+                    }
+
+                    Toast.makeText(this, "Lega creata con successo", Toast.LENGTH_SHORT).show()
+                }
+                .addOnFailureListener {
+                    Toast.makeText(this, "Errore durante la creazione della lega", Toast.LENGTH_SHORT)
+                        .show()
+                }
+
+            // Torna alla schermata principale (MasterActivity) che contiene HomeFragment
+            val intent = Intent(this, MasterActivity::class.java)
+            startActivity(intent)
+
+            // Chiudi l'attività corrente
+            finish()
+        } else {
+            Toast.makeText(this, "Errore durante il recupero dell'utente", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun aggiungiLegaAllUtente(userId: String, leagueId: String) {
+        val utenteRef = FirebaseFirestore.getInstance().collection("utenti").document(userId)
+
+        // Creazione di una reference alla lega
+        val leagueRef = FirebaseFirestore.getInstance().document("leghe/$leagueId")
+
+        // Aggiungi la reference alla lega appena creata nel campo 'leghe' dell'utente
+        utenteRef.update("leghe", FieldValue.arrayUnion(leagueRef))
             .addOnSuccessListener {
-                Toast.makeText(this, "Lega creata con successo", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Lega aggiunta all'utente con successo", Toast.LENGTH_SHORT).show()
             }
             .addOnFailureListener {
-                Toast.makeText(this, "Errore durante la creazione della lega", Toast.LENGTH_SHORT)
-                    .show()
+                Toast.makeText(this, "Errore durante l'aggiunta della lega all'utente", Toast.LENGTH_SHORT).show()
             }
-
-        // Caricamento dell'immagine del logo nel Firebase Storage
-        uploadLogoToStorage(leagueDocument.id)
     }
 
     private fun uploadLogoToStorage(leagueId: String) {
-        val logoRef = FirebaseStorage.getInstance().reference.child("loghi_leghe").child("$leagueId.jpg")
+        val logoRef = FirebaseStorage.getInstance().reference.child("icone_standard").child("$leagueId.jpg")
 
-        logoRef.putFile(uriLogo)
-            .addOnSuccessListener {
-                // Aggiorna il campo 'logo' nel documento della lega con l'URL dell'immagine
-                updateLeagueLogoUrl(leagueId, it.metadata?.path)
-            }
-            .addOnFailureListener {
-                Toast.makeText(this, "Errore durante l'upload del logo", Toast.LENGTH_SHORT).show()
-            }
+        uriLogo?.let {
+            logoRef.putFile(it)
+                .addOnSuccessListener {
+                    // Aggiorna il campo 'logo' nel documento della lega con l'URL dell'immagine
+                    updateLeagueLogoUrl(leagueId, it.metadata?.path)
+                }
+                .addOnFailureListener {
+                    Toast.makeText(this, "Errore durante l'upload del logo", Toast.LENGTH_SHORT).show()
+                }
+        }
     }
 
     private fun updateLeagueLogoUrl(leagueId: String, logoPath: String?) {
