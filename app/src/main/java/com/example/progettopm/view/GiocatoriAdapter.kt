@@ -105,7 +105,7 @@ class GiocatoriAdapter :
         }
     }
 
-    private class DiffCallback : DiffUtil.ItemCallback<Giocatore>() {
+    class DiffCallback : DiffUtil.ItemCallback<Giocatore>() {
         override fun areItemsTheSame(oldItem: Giocatore, newItem: Giocatore): Boolean {
             return oldItem.id == newItem.id // Supponendo che ci sia un campo "id" o qualcosa di simile che identifica univocamente il Giocatore
         }

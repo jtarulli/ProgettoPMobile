@@ -6,58 +6,65 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Adapter
-import android.widget.ImageView
-import android.widget.LinearLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.progettopm.R
-import com.example.progettopm.firestore.MyAdapterStorico
 import com.example.progettopm.model.Formazione
-import com.google.firebase.firestore.DocumentChange
-import com.google.firebase.firestore.EventListener
+import com.example.progettopm.view.StoricoAdapter
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.FirebaseFirestoreException
-import com.google.firebase.firestore.QuerySnapshot
-import com.google.firebase.firestore.toObject
 
 class StoricoFragment : Fragment(R.layout.fragment_storico) {
     private lateinit var recyclerView: RecyclerView
+    private lateinit var storicoAdapter: StoricoAdapter
     private lateinit var formazioniArrayList: ArrayList<Formazione>
-    private lateinit var myAdapter: MyAdapterStorico
     private lateinit var db: FirebaseFirestore
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        val view = inflater.inflate(R.layout.fragment_storico, container, false)
+        recyclerView = view.findViewById(R.id.storicoRecycleView)
+        return view
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        recyclerView = view.findViewById(R.id.storicoRecycleView)
-        recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        recyclerView.setHasFixedSize(true)
-
-        formazioniArrayList = arrayListOf()
-        myAdapter = MyAdapterStorico(formazioniArrayList)
-        recyclerView.adapter = myAdapter
-
-        EventChangeListener()
+        setupRecyclerView()
+        loadGiocatoriData()
     }
 
-    private fun EventChangeListener() {
-        db = FirebaseFirestore.getInstance()
-        db.collection("Formazioni").addSnapshotListener(object: EventListener<QuerySnapshot> {
-            override fun onEvent(value: QuerySnapshot?, error: FirebaseFirestoreException?) {
-                if (error != null) {
-                    Log.e("Firestore error", error.message.toString())
-                    return
+    private fun setupRecyclerView() {
+        storicoAdapter = StoricoAdapter()
+        recyclerView.apply {
+            layoutManager = LinearLayoutManager(activity)
+            //adapter = StoricoAdapter
+        }
+    }
+
+    private fun loadGiocatoriData() {
+        val formazioniCollection = db.collection("formazioni")
+
+        formazioniCollection.get()
+            .addOnSuccessListener { documents ->
+                val datiFormazioneList: ArrayList<Formazione> = ArrayList()
+                for (document in documents) {
+                    val nomeSquadra = document.getString("nomeSquadra").toString()
+                    val giornataRef = document.get("giornata") as DocumentReference
+                    val giocatoriSchieratiRef = document.get("giocatoriSchierati") as DocumentReference
+                    val id = document.id
+                    val punteggio = document.getString("punteggio").toString()
+                    val userRef = document.get("user") as DocumentReference
+
+                    val salvaDatiFormazione = Formazione(id, giornataRef, userRef, punteggio, nomeSquadra, giocatoriSchieratiRef)
+                    datiFormazioneList.add(salvaDatiFormazione)
                 }
 
-                for (dc : DocumentChange in value?.documentChanges!!) {
-                    if (dc.type == DocumentChange.Type.ADDED) {
-                        formazioniArrayList.add(dc.document.toObject(Formazione::class.java))
-                    }
-                }
-
-                myAdapter.notifyDataSetChanged()
             }
-
-        })
+            .addOnFailureListener { exception ->
+                Log.w("StoricoFragment", "Errore nel recupero dei dati", exception)
+            }
     }
+
 
 }
