@@ -7,8 +7,6 @@
     android:layout_height="match_parent"
     tools:context=".view.MasterActivity">
 
-
-
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/navBarMaster"
         android:layout_width="0dp"

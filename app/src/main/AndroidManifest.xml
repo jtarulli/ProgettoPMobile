@@ -47,6 +47,11 @@
             android:exported="false">
         </activity>
 
+        <activity android:name=".ui.ModificaLegaActivity"
+            android:theme="@style/Theme.Material3.Light.NoActionBar"
+            android:exported="false">
+        </activity>
+
         <activity android:name=".view.MasterActivity"
         android:exported="true">
 
