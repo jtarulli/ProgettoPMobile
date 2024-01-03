@@ -3,6 +3,8 @@ package com.example.progettopm.view
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.TextView
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -14,11 +16,19 @@ import com.example.progettopm.model.Giocatore
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 
-class SelezioneGiocatoriAdapter(private val giocatoriPerSquadra: Int) :
-    ListAdapter<Giocatore, SelezioneGiocatoriAdapter.GiocatoreViewHolder>(DiffCallback()) {
+class SelezioneGiocatoriAdapter(
+    private val giocatoriPerSquadra: Int,
+    private val giocatoriRimastiTextView: TextView,
+    private var budgetLega: Int,
+    private val budgetRimastoTextView: TextView
+) : ListAdapter<Giocatore, SelezioneGiocatoriAdapter.GiocatoreViewHolder>(DiffCallback()) {
 
-    // Aggiungi un array di booleani per tenere traccia degli ID dei giocatori selezionati
     private val giocatoriSelezionati = mutableSetOf<String>()
+
+    init {
+        giocatoriRimastiTextView.text = giocatoriPerSquadra.toString()
+        budgetRimastoTextView.text = budgetLega.toString()
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GiocatoreViewHolder {
         val binding = ItemSelezioneGiocatoreBinding.inflate(
@@ -29,11 +39,18 @@ class SelezioneGiocatoriAdapter(private val giocatoriPerSquadra: Int) :
         return GiocatoreViewHolder(binding)
     }
 
+    fun setBudget(budget: Int) {
+        budgetLega = budget
+        updateBudgetRimasto()
+    }
+
+    private fun updateBudgetRimasto() {
+        budgetRimastoTextView.text = "Budget rimasto: $budgetLega"
+    }
     override fun onBindViewHolder(holder: GiocatoreViewHolder, position: Int) {
         val giocatore = getItem(position)
         holder.bind(giocatore)
 
-        // Imposta il colore dello sfondo in base alla selezione
         holder.itemView.setBackgroundColor(
             if (giocatoriSelezionati.contains(giocatore.id)) {
                 ContextCompat.getColor(holder.itemView.context, R.color.selezionato)
@@ -62,26 +79,50 @@ class SelezioneGiocatoriAdapter(private val giocatoriPerSquadra: Int) :
 
             binding.valoreTextView.text = giocatore.valore.toString()
 
-            // Aggiungi logica per la selezione del giocatore
             binding.root.setOnClickListener {
-                toggleSelezione(giocatore.id)
+                toggleSelezione(giocatore)
             }
         }
     }
 
-    private fun toggleSelezione(giocatoreId: String) {
-        // Inverti lo stato di selezione quando l'elemento viene cliccato
-        if (giocatoriSelezionati.contains(giocatoreId)) {
-            giocatoriSelezionati.remove(giocatoreId)
+    private fun toggleSelezione(giocatore: Giocatore) {
+        if (giocatoriSelezionati.contains(giocatore.id)) {
+            giocatoriSelezionati.remove(giocatore.id)
+
+            // Aggiorna il budget sottraendo il valore del giocatore deselezionato
+            budgetLega += giocatore.valore
         } else {
-            // Limita il numero di giocatori selezionati alla variabile giocatoriPerSquadra
             if (giocatoriSelezionati.size < giocatoriPerSquadra) {
-                giocatoriSelezionati.add(giocatoreId)
+                if (budgetLega - giocatore.valore >= 0) { // Controlla se il budget è sufficiente
+                    giocatoriSelezionati.add(giocatore.id)
+
+                    // Aggiorna il budget sottraendo il valore del giocatore selezionato
+                    budgetLega -= giocatore.valore
+                } else {
+                    Toast.makeText(
+                        giocatoriRimastiTextView.context,
+                        "Non hai abbastanza budget per selezionare questo giocatore",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             } else {
-                // Puoi aggiungere un avviso o una logica personalizzata se il limite viene superato
+                Toast.makeText(
+                    giocatoriRimastiTextView.context,
+                    "Hai già selezionato il numero massimo di giocatori",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
-        notifyDataSetChanged() // Aggiorna l'adapter per riflettere i cambiamenti
+        // Aggiorna i contatori
+        giocatoriRimastiTextView.text = "Giocatori rimasti:${(giocatoriPerSquadra - giocatoriSelezionati.size).toString()}"
+        val sommaValori = giocatoriSelezionati.sumBy { giocatoreId ->
+            val index = currentList.indexOfFirst { it.id == giocatoreId }
+            currentList[index].valore
+        }
+        budgetRimastoTextView.text = "Budget: $budgetLega"
+
+        notifyDataSetChanged()
+
     }
 
     private class DiffCallback : DiffUtil.ItemCallback<Giocatore>() {

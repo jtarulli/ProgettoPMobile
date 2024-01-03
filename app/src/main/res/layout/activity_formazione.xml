@@ -20,4 +20,24 @@
         android:layout_marginBottom="16dp"
         android:text="Conferma Formazione" />
 
+    <TextView
+        android:id="@+id/giocatoriRimastiTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@id/confermaFormazioneButton"
+        android:layout_marginBottom="8dp"
+        android:text="Giocatori rimasti: ${giocatoriPerSquadra}" />
+
+    <TextView
+        android:id="@+id/budgetRimastoTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/giocatoriRimastiTextView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="8dp"
+        android:text="Budget rimasto: 0" />
+
+
+
 </RelativeLayout>

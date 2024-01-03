@@ -3,6 +3,7 @@ package com.example.progettopm.ui
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,6 +21,9 @@ class FormazioneActivity : AppCompatActivity() {
     private lateinit var confermaFormazioneButton: Button
     private lateinit var recyclerViewGiocatori: RecyclerView
     private lateinit var giocatoriAdapter: SelezioneGiocatoriAdapter
+    private lateinit var giocatoriRimastiTextView: TextView
+    private lateinit var budgetRimastoTextView: TextView
+    private var budgetLega: Int = 0 // Aggiunto il campo budgetLega
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,24 +31,40 @@ class FormazioneActivity : AppCompatActivity() {
 
         confermaFormazioneButton = findViewById(R.id.confermaFormazioneButton)
         recyclerViewGiocatori = findViewById(R.id.recyclerViewGiocatori)
+        giocatoriRimastiTextView = findViewById(R.id.giocatoriRimastiTextView)
+        budgetRimastoTextView = findViewById(R.id.budgetRimastoTextView)
 
         val legaCorrenteId = SessionManager.legaCorrenteId
 
-        // Ottieni la reference alla lega corrente e il valore di 'giocatoriPerSquadra'
         if (legaCorrenteId != null) {
             val legaRef = FirebaseFirestore.getInstance().document("leghe/$legaCorrenteId")
 
             legaRef.get().addOnSuccessListener { legaSnapshot ->
                 val giocatoriPerSquadra = legaSnapshot.getLong("giocatoriPerSquadra") ?: 0
+                val budgetLega = legaSnapshot.getLong("budget") ?: 0
 
-                // Inizializza l'adapter con il valore ottenuto
-                giocatoriAdapter = SelezioneGiocatoriAdapter(giocatoriPerSquadra.toInt())
+                // Inizializza l'adapter con i valori ottenuti
+                giocatoriAdapter = SelezioneGiocatoriAdapter(
+                    giocatoriPerSquadra.toInt(),
+                    giocatoriRimastiTextView,
+                    budgetLega.toInt(),
+                    budgetRimastoTextView
+                )
+
                 recyclerViewGiocatori.layoutManager = LinearLayoutManager(this)
                 recyclerViewGiocatori.adapter = giocatoriAdapter
 
                 // Aggiungi il listener per il click sul pulsante "Conferma Formazione"
                 confermaFormazioneButton.setOnClickListener {
-                    salvaFormazione(legaCorrenteId, giocatoriAdapter.getGiocatoriSelezionati())
+                    if (giocatoriAdapter.getGiocatoriSelezionati().size == giocatoriPerSquadra.toInt()) {
+                        salvaFormazione(legaCorrenteId, giocatoriAdapter.getGiocatoriSelezionati())
+                    } else {
+                        Toast.makeText(
+                            this,
+                            "Finisci di selezionare i tuoi giocatori",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
                 }
 
                 // Continua con il caricamento dei giocatori
@@ -58,6 +78,7 @@ class FormazioneActivity : AppCompatActivity() {
         }
     }
 
+
     private fun showMessaggioSuccesso() {
         // Implementa la visualizzazione di un messaggio di successo, ad esempio con un Toast
         Toast.makeText(this, "Formazione salvata con successo", Toast.LENGTH_SHORT).show()
@@ -69,7 +90,10 @@ class FormazioneActivity : AppCompatActivity() {
             val giocatoriCollection = FirebaseFirestore.getInstance().collection("giocatori")
 
             giocatoriCollection
-                .whereEqualTo("lega", FirebaseFirestore.getInstance().document("leghe/$legaCorrenteId"))
+                .whereEqualTo(
+                    "lega",
+                    FirebaseFirestore.getInstance().document("leghe/$legaCorrenteId")
+                )
                 .get()
                 .addOnSuccessListener { snapshot ->
                     val giocatoriList = mutableListOf<Giocatore>()
@@ -89,11 +113,25 @@ class FormazioneActivity : AppCompatActivity() {
         } else {
             Log.e("FormazioneActivity", "legaCorrenteId is null")
         }
-    }
 
-    private fun salvaFormazione(legaCorrenteId: String?, giocatoriSelezionati: List<DocumentReference>) {
+    }
+    private fun salvaFormazione(
+        legaCorrenteId: String?,
+        giocatoriSelezionati: List<DocumentReference>
+    ) {
         if (legaCorrenteId != null) {
             val punteggioTotale = calcolaPunteggioTotale(giocatoriSelezionati)
+
+            // Controlla se il punteggioTotale è maggiore del budgetLega
+            if (punteggioTotale > budgetLega) {
+                Toast.makeText(
+                    this,
+                    "Il punteggio totale supera il budget della lega",
+                    Toast.LENGTH_SHORT
+                ).show()
+                return
+            }
+
             val formazione = Formazione(
                 giornata = 1,
                 giocatori = giocatoriSelezionati,

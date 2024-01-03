@@ -11,4 +11,6 @@
     <string name="open">Open </string>
     <string name="close">Close</string>
     <string name="format_budget">Budget: %d crediti</string>
+    <string name="giocatori_rimasti">Giocatori rimasti: %d</string>
+    <string name="somma_valori">Somma valori: %d</string>
 </resources>
