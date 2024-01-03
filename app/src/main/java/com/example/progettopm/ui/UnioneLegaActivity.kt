@@ -1,6 +1,5 @@
 package com.example.progettopm.ui
 
-import UnioneLegaAdapter
 import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
@@ -13,6 +12,7 @@ import com.example.progettopm.R
 import com.example.progettopm.fragments.HomeFragment
 import com.example.progettopm.model.Lega
 import com.example.progettopm.view.MasterActivity
+import com.example.progettopm.view.UnioneLegaAdapter
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore

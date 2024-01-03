@@ -1,4 +1,4 @@
-package com.example.progettopm.ui
+package com.example.progettopm.view
 
 import android.util.Log
 import android.view.LayoutInflater

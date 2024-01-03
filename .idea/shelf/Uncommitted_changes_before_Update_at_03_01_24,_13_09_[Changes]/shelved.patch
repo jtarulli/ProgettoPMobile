@@ -1,0 +1,1313 @@
+Index: app/src/main/java/com/example/progettopm/fragments/AdminLegaDashboardFragment.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import android.content.Intent\nimport android.os.Bundle\nimport android.view.LayoutInflater\nimport android.view.View\nimport android.view.ViewGroup\nimport android.widget.Button\nimport androidx.fragment.app.Fragment\nimport com.example.progettopm.R\nimport com.example.progettopm.ui.ModificaLegaActivity\n\nclass AdminLegaDashboardFragment : Fragment() {\n\n    override fun onCreateView(\n        inflater: LayoutInflater, container: ViewGroup?,\n        savedInstanceState: Bundle?\n    ): View? {\n        val view = inflater.inflate(R.layout.fragment_admin_lega_dashboard, container, false)\n\n        // Imposta il titolo della toolbar\n        val toolbar = view.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)\n        toolbar.title = \"Admin Lega Dashboard\"\n\n        // Bottone \"Modifica Lega\"\n        val modificaLegaButton = view.findViewById<Button>(R.id.modificaLegaButton)\n        modificaLegaButton.setOnClickListener {\n            // Avvia l'activity di CreazioneLegaActivity in modalità di modifica\n            val intent = Intent(activity, ModificaLegaActivity::class.java)\n            intent.putExtra(\"MODIFICA_LEGA\", true)\n            startActivity(intent)\n        }\n\n        return view\n    }\n}\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/progettopm/fragments/AdminLegaDashboardFragment.kt b/app/src/main/java/com/example/progettopm/fragments/AdminLegaDashboardFragment.kt
+--- a/app/src/main/java/com/example/progettopm/fragments/AdminLegaDashboardFragment.kt	(revision 14dee519a3afa23c4b7856ef9f52f286b6280337)
++++ b/app/src/main/java/com/example/progettopm/fragments/AdminLegaDashboardFragment.kt	(date 1704125899616)
+@@ -6,6 +6,7 @@
+ import android.widget.Button
+ import androidx.fragment.app.Fragment
+ import com.example.progettopm.R
++import com.example.progettopm.ui.BonusActivity
+ import com.example.progettopm.ui.ModificaLegaActivity
+ 
+ class AdminLegaDashboardFragment : Fragment() {
+@@ -29,6 +30,15 @@
+             startActivity(intent)
+         }
+ 
++        // Bottone "Gestione Bonus"
++        val gestioneBonusButton = view.findViewById<Button>(R.id.gestioneBonusButton)
++        gestioneBonusButton.setOnClickListener {
++            // Avvia l'activity di GestioneBonusActivity
++            val intent = Intent(activity, BonusActivity::class.java)
++            startActivity(intent)
++        }
++
++
+         return view
+     }
+ }
+Index: app/src/main/java/com/example/progettopm/SessionManager.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.progettopm\n\nobject SessionManager {\n    var legaCorrenteId: String? = null\n}\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/progettopm/SessionManager.kt b/app/src/main/java/com/example/progettopm/SessionManager.kt
+--- a/app/src/main/java/com/example/progettopm/SessionManager.kt	(revision 14dee519a3afa23c4b7856ef9f52f286b6280337)
++++ b/app/src/main/java/com/example/progettopm/SessionManager.kt	(date 1704244642626)
+@@ -2,4 +2,6 @@
+ 
+ object SessionManager {
+     var legaCorrenteId: String? = null
++    var squadraCorrenteId: String? = null
++    var giornataCorrenteId: Int? = 0
+ }
+Index: app/src/main/java/com/example/progettopm/model/Lega.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.progettopm.model\n\nimport com.google.firebase.firestore.DocumentReference\n\ndata class Lega(\n    val nome: String,\n    val budget: Int,\n    val logo: String,\n    val admin: String,\n    val numeroGiornate: Int,\n    val giocatoriPerSquadra: Int\n)
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/progettopm/model/Lega.kt b/app/src/main/java/com/example/progettopm/model/Lega.kt
+--- a/app/src/main/java/com/example/progettopm/model/Lega.kt	(revision 14dee519a3afa23c4b7856ef9f52f286b6280337)
++++ b/app/src/main/java/com/example/progettopm/model/Lega.kt	(date 1704212621858)
+@@ -1,7 +1,5 @@
+ package com.example.progettopm.model
+ 
+-import com.google.firebase.firestore.DocumentReference
+-
+ data class Lega(
+     val nome: String,
+     val budget: Int,
+Index: app/src/main/java/com/example/progettopm/view/GiocatoriAdapter.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.progettopm.ui\n\nimport android.view.LayoutInflater\nimport android.view.ViewGroup\nimport androidx.recyclerview.widget.DiffUtil\nimport androidx.recyclerview.widget.LinearLayoutManager\nimport androidx.recyclerview.widget.ListAdapter\nimport androidx.recyclerview.widget.RecyclerView\nimport com.bumptech.glide.Glide\nimport com.example.progettopm.R\nimport com.example.progettopm.databinding.ItemGiocatoreBinding\nimport com.example.progettopm.model.Bonus\nimport com.example.progettopm.model.BonusGiornata\nimport com.example.progettopm.model.Giocatore\nimport com.google.firebase.firestore.DocumentReference\n\nclass GiocatoriAdapter :\n    ListAdapter<Giocatore, GiocatoriAdapter.GiocatoreViewHolder>(DiffCallback()) {\n\n    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GiocatoreViewHolder {\n        val binding = ItemGiocatoreBinding.inflate(LayoutInflater.from(parent.context), parent, false)\n        return GiocatoreViewHolder(binding)\n    }\n\n    override fun onBindViewHolder(holder: GiocatoreViewHolder, position: Int) {\n        val giocatore = getItem(position)\n        holder.bind(giocatore)\n    }\n\n    inner class GiocatoreViewHolder(private val binding: ItemGiocatoreBinding) : RecyclerView.ViewHolder(binding.root) {\n\n        private val bonusAdapter = BonusGiornataAdapter()\n\n        init {\n            binding.recyclerViewBonusGiornata.apply {\n                layoutManager = LinearLayoutManager(context)\n                adapter = bonusAdapter\n            }\n        }\n\n        fun bind(giocatore: Giocatore) {\n            binding.nomeTextView.text = giocatore.nome\n            binding.cognomeTextView.text = giocatore.cognome\n\n            Glide.with(binding.root)\n                .load(giocatore.foto)\n                .placeholder(R.drawable.placeholder_logo)\n                .into(binding.fotoImageView)\n\n            if (giocatore.bonusGiornataList.isNotEmpty()) {\n                bonusAdapter.submitList(giocatore.bonusGiornataList)\n                calculateTotalScore(giocatore.bonusGiornataList) { totalScore ->\n                    binding.punteggioTextView.text = totalScore.toString()\n                }\n            } else {\n                // Se il giocatore non ha bonus giornata, visualizza il punteggio iniziale\n                binding.punteggioTextView.text = giocatore.punteggio.toString()\n            }\n        }\n\n        private fun calculateTotalScore(bonusGiornataList: List<DocumentReference>, callback: (Int) -> Unit) {\n            var runningTotal = 0\n            var remainingCount = bonusGiornataList.size\n\n            if (remainingCount == 0) {\n                callback(runningTotal)\n                return\n            }\n\n            for (bonusRef in bonusGiornataList) {\n                bonusRef.get().addOnSuccessListener { bonusSnapshot ->\n                    val bonusGiornata = bonusSnapshot.toObject(BonusGiornata::class.java)\n                    if (bonusGiornata != null) {\n                        val tipoBonusRef = bonusGiornata.tipoBonus\n\n                        if (tipoBonusRef != null) {\n                            tipoBonusRef.get().addOnSuccessListener { tipoBonusSnapshot ->\n                                val tipoBonus = tipoBonusSnapshot.toObject(Bonus::class.java)\n                                if (tipoBonus != null) {\n                                    val bonusScore = bonusGiornata.quantita * tipoBonus.valore\n                                    runningTotal += bonusScore\n                                }\n                                remainingCount--\n\n                                if (remainingCount == 0) {\n                                    callback(runningTotal)\n                                }\n                            }\n                        } else {\n                            remainingCount--\n\n                            if (remainingCount == 0) {\n                                callback(runningTotal)\n                            }\n                        }\n                    } else {\n                        remainingCount--\n\n                        if (remainingCount == 0) {\n                            callback(runningTotal)\n                        }\n                    }\n                }\n            }\n        }\n    }\n\n    private class DiffCallback : DiffUtil.ItemCallback<Giocatore>() {\n        override fun areItemsTheSame(oldItem: Giocatore, newItem: Giocatore): Boolean {\n            return oldItem.id == newItem.id // Supponendo che ci sia un campo \"id\" o qualcosa di simile che identifica univocamente il Giocatore\n        }\n\n        override fun areContentsTheSame(oldItem: Giocatore, newItem: Giocatore): Boolean {\n            return oldItem == newItem // Questo controlla che tutti i campi siano identici, inclusi punteggio e nome\n        }\n    }\n\n}\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/progettopm/view/GiocatoriAdapter.kt b/app/src/main/java/com/example/progettopm/view/GiocatoriAdapter.kt
+--- a/app/src/main/java/com/example/progettopm/view/GiocatoriAdapter.kt	(revision 14dee519a3afa23c4b7856ef9f52f286b6280337)
++++ b/app/src/main/java/com/example/progettopm/view/GiocatoriAdapter.kt	(date 1704241101937)
+@@ -1,4 +1,4 @@
+-package com.example.progettopm.ui
++package com.example.progettopm.view
+ 
+ import android.view.LayoutInflater
+ import android.view.ViewGroup
+Index: app/src/main/java/com/example/progettopm/ui/FormazioneActivity.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/progettopm/ui/FormazioneActivity.kt b/app/src/main/java/com/example/progettopm/ui/FormazioneActivity.kt
+new file mode 100644
+--- /dev/null	(date 1704243362622)
++++ b/app/src/main/java/com/example/progettopm/ui/FormazioneActivity.kt	(date 1704243362622)
+@@ -0,0 +1,153 @@
++package com.example.progettopm.ui
++
++import android.os.Bundle
++import android.util.Log
++import android.widget.Button
++import androidx.appcompat.app.AppCompatActivity
++import androidx.recyclerview.widget.LinearLayoutManager
++import androidx.recyclerview.widget.RecyclerView
++import com.example.progettopm.R
++import com.example.progettopm.SessionManager
++import com.example.progettopm.model.Formazione
++import com.example.progettopm.model.Giocatore
++import com.example.progettopm.view.SelezioneGiocatoriAdapter
++import com.google.firebase.firestore.DocumentReference
++import com.google.firebase.firestore.FirebaseFirestore
++
++class FormazioneActivity : AppCompatActivity() {
++
++    private lateinit var confermaFormazioneButton: Button
++    private lateinit var recyclerViewGiocatori: RecyclerView
++    private lateinit var giocatoriAdapter: SelezioneGiocatoriAdapter
++
++    override fun onCreate(savedInstanceState: Bundle?) {
++        super.onCreate(savedInstanceState)
++        setContentView(R.layout.activity_formazione)
++
++        confermaFormazioneButton = findViewById(R.id.confermaFormazioneButton)
++        recyclerViewGiocatori = findViewById(R.id.recyclerViewGiocatori)
++
++        val legaCorrenteId = SessionManager.legaCorrenteId
++
++        // Ottieni la reference alla lega corrente e il valore di 'giocatoriPerSquadra'
++        if (legaCorrenteId != null) {
++            val legaRef = FirebaseFirestore.getInstance().document("leghe/$legaCorrenteId")
++
++            legaRef.get().addOnSuccessListener { legaSnapshot ->
++                val giocatoriPerSquadra = legaSnapshot.getLong("giocatoriPerSquadra") ?: 0
++
++                // Inizializza l'adapter con il valore ottenuto
++                giocatoriAdapter = SelezioneGiocatoriAdapter(giocatoriPerSquadra.toInt())
++                recyclerViewGiocatori.layoutManager = LinearLayoutManager(this)
++                recyclerViewGiocatori.adapter = giocatoriAdapter
++
++                // Aggiungi il listener per il click sul pulsante "Conferma Formazione"
++                confermaFormazioneButton.setOnClickListener {
++                    salvaFormazione(legaCorrenteId)
++                }
++
++                // Continua con il caricamento dei giocatori
++                caricaGiocatori(legaCorrenteId)
++            }
++                .addOnFailureListener { exception ->
++                    Log.e("FormazioneActivity", "Error loading lega", exception)
++                }
++        }
++        else {
++            Log.e("FormazioneActivity", "legaCorrenteId is null")
++        }
++    }
++
++    private fun caricaGiocatori(legaCorrenteId: String?) {
++        if (legaCorrenteId != null) {
++            // Continua con il caricamento dei giocatori
++            val giocatoriCollection = FirebaseFirestore.getInstance().collection("giocatori")
++
++            giocatoriCollection
++                .whereEqualTo("lega", FirebaseFirestore.getInstance().document("leghe/$legaCorrenteId"))
++                .get()
++                .addOnSuccessListener { snapshot ->
++                    val giocatoriList = mutableListOf<Giocatore>()
++
++                    for (document in snapshot.documents) {
++                        val giocatore = document.toObject(Giocatore::class.java)
++                        if (giocatore != null) {
++                            giocatoriList.add(giocatore)
++                        }
++                    }
++
++                    giocatoriAdapter.submitList(giocatoriList)
++                }
++                .addOnFailureListener { exception ->
++                    Log.e("FormazioneActivity", "Error loading giocatori", exception)
++                }
++        }
++        else {
++            Log.e("FormazioneActivity", "legaCorrenteId is null")
++        }
++    }
++
++    private fun salvaFormazione(legaCorrenteId: String?) {
++        if (legaCorrenteId != null) {
++            val giocatoriSelezionati = getGiocatoriSelezionati()
++            val punteggioTotale = calcolaPunteggioTotale(giocatoriSelezionati)
++
++            val formazione = Formazione(
++                giornata = 1, // Sostituisci con il numero della giornata corrente
++                giocatori = giocatoriSelezionati,
++                punteggio = punteggioTotale,
++                squadra = FirebaseFirestore.getInstance().document("squadre/${SessionManager.squadraCorrenteId}") // Sostituisci con la reference alla squadra dell'utente
++            )
++
++            FirebaseFirestore.getInstance().collection("formazioni")
++                .add(formazione)
++                .addOnSuccessListener {
++                    finish()
++                }
++                .addOnFailureListener { exception ->
++                    Log.e("FormazioneActivity", "Error saving formazione", exception)
++                }
++        }
++        else {
++            Log.e("FormazioneActivity", "legaCorrenteId is null")
++        }
++    }
++
++    private fun getGiocatoriSelezionati(): List<DocumentReference> {
++        val giocatoriSelezionati = mutableListOf<DocumentReference>()
++
++        for (giocatore in giocatoriAdapter.currentList) {
++            val giocatoreRef = FirebaseFirestore.getInstance().collection("giocatori").document(giocatore.id)
++            giocatoriSelezionati.add(giocatoreRef)
++        }
++
++        return giocatoriSelezionati
++    }
++
++    private fun calcolaPunteggioTotale(giocatori: List<DocumentReference>): Int {
++        var punteggioTotale = 0
++        var remainingCount = giocatori.size
++
++        if (remainingCount == 0) {
++            return punteggioTotale
++        }
++
++        for (giocatoreRef in giocatori) {
++            giocatoreRef.get().addOnSuccessListener { giocatoreDoc ->
++                val punteggioGiocatore = giocatoreDoc.getLong("punteggio") ?: 0
++                punteggioTotale += punteggioGiocatore.toInt()
++
++                remainingCount--
++                if (remainingCount == 0) {
++                    // Callback per informare che il calcolo è completo
++                    // Esempio: updateUI(punteggioTotale)
++                }
++            }
++                .addOnFailureListener { exception ->
++                    Log.e("FormazioneActivity", "Error getting punteggio", exception)
++                }
++        }
++
++        return punteggioTotale
++    }
++}
+Index: app/src/main/res/layout/fragment_admin_lega_dashboard.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><RelativeLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\n    android:layout_width=\"match_parent\"\n    android:layout_height=\"match_parent\">\n\n    <androidx.appcompat.widget.Toolbar\n        android:id=\"@+id/toolbar\"\n        android:layout_width=\"match_parent\"\n        android:layout_height=\"?attr/actionBarSize\"\n        android:background=\"?attr/colorPrimary\"\n        android:elevation=\"4dp\"\n        android:theme=\"?attr/actionBarTheme\" />\n\n    <Button\n        android:id=\"@+id/modificaLegaButton\"\n        android:layout_width=\"wrap_content\"\n        android:layout_height=\"wrap_content\"\n        android:layout_below=\"@id/toolbar\"\n        android:layout_centerHorizontal=\"true\"\n        android:layout_marginTop=\"16dp\"\n        android:text=\"Modifica Lega\" />\n\n    <!-- Aggiungi altri elementi della dashboard qui -->\n\n</RelativeLayout>\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/fragment_admin_lega_dashboard.xml b/app/src/main/res/layout/fragment_admin_lega_dashboard.xml
+--- a/app/src/main/res/layout/fragment_admin_lega_dashboard.xml	(revision 14dee519a3afa23c4b7856ef9f52f286b6280337)
++++ b/app/src/main/res/layout/fragment_admin_lega_dashboard.xml	(date 1704125880206)
+@@ -19,6 +19,14 @@
+         android:layout_marginTop="16dp"
+         android:text="Modifica Lega" />
+ 
+-    <!-- Aggiungi altri elementi della dashboard qui -->
++    <Button
++        android:id="@+id/gestioneBonusButton"
++        android:layout_width="wrap_content"
++        android:layout_height="wrap_content"
++        android:layout_below="@id/modificaLegaButton"
++        android:layout_centerHorizontal="true"
++        android:layout_marginTop="16dp"
++        android:text="Gestione Bonus" />
++
+ 
+ </RelativeLayout>
+Index: app/src/main/java/com/example/progettopm/model/Giornata.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/progettopm/model/Giornata.kt b/app/src/main/java/com/example/progettopm/model/Giornata.kt
+new file mode 100644
+--- /dev/null	(date 1704213142518)
++++ b/app/src/main/java/com/example/progettopm/model/Giornata.kt	(date 1704213142518)
+@@ -0,0 +1,9 @@
++package com.example.progettopm.model
++
++import java.time.Instant
++
++data class Giornata(
++    val id: Int,
++    val inizio: Instant,
++    val fine: Instant
++)
+Index: app/src/main/res/layout/activity_formazione.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/activity_formazione.xml b/app/src/main/res/layout/activity_formazione.xml
+new file mode 100644
+--- /dev/null	(date 1704241541274)
++++ b/app/src/main/res/layout/activity_formazione.xml	(date 1704241541274)
+@@ -0,0 +1,23 @@
++<?xml version="1.0" encoding="utf-8"?>
++<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
++    android:layout_width="match_parent"
++    android:layout_height="match_parent">
++
++    <androidx.recyclerview.widget.RecyclerView
++        android:id="@+id/recyclerViewGiocatori"
++        android:layout_width="match_parent"
++        android:layout_height="match_parent"
++        android:layout_above="@id/confermaFormazioneButton"
++        android:layout_marginBottom="16dp"/>
++
++    <Button
++        android:id="@+id/confermaFormazioneButton"
++        android:layout_width="wrap_content"
++        android:layout_height="wrap_content"
++        android:layout_centerHorizontal="true"
++        android:layout_alignParentBottom="true"
++        android:layout_marginTop="16dp"
++        android:layout_marginBottom="16dp"
++        android:text="Conferma Formazione" />
++
++</RelativeLayout>
+Index: app/src/main/res/layout/fragment_home.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><!-- res/layout/fragment_home.xml -->\n<RelativeLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\n    android:layout_width=\"match_parent\"\n    android:layout_height=\"match_parent\">\n\n    <Button\n        android:id=\"@+id/uniscitiButton\"\n        android:layout_width=\"wrap_content\"\n        android:layout_height=\"wrap_content\"\n        android:layout_centerHorizontal=\"true\"\n        android:layout_marginTop=\"16dp\"\n        android:visibility=\"gone\"\n        android:text=\"Unisciti a una lega\" />\n\n    <Button\n        android:id=\"@+id/creaLegaButton\"\n        android:layout_width=\"wrap_content\"\n        android:layout_height=\"wrap_content\"\n        android:layout_below=\"@id/uniscitiButton\"\n        android:layout_centerHorizontal=\"true\"\n        android:layout_marginTop=\"16dp\"\n        android:visibility=\"gone\"\n        android:text=\"Crea la tua lega\" />\n\n    <Button\n        android:id=\"@+id/creaSquadraButton\"\n        android:layout_width=\"wrap_content\"\n        android:layout_height=\"wrap_content\"\n        android:layout_centerHorizontal=\"true\"\n        android:layout_marginTop=\"16dp\"\n        android:visibility=\"gone\"\n        android:text=\"Crea la tua squadra\" />\n\n    <TextView\n        android:id=\"@+id/nomeLegaTextView\"\n        android:layout_width=\"wrap_content\"\n        android:layout_height=\"wrap_content\"\n        android:layout_below=\"@id/creaLegaButton\"\n        android:layout_centerHorizontal=\"true\"\n        android:layout_marginTop=\"16dp\"\n        android:text=\"\"\n        android:visibility=\"gone\" />\n\n    <!-- Aggiungi il TextView per il nome della squadra -->\n    <TextView\n        android:id=\"@+id/nomeSquadraTextView\"\n        android:layout_width=\"wrap_content\"\n        android:layout_height=\"wrap_content\"\n        android:layout_below=\"@id/nomeLegaTextView\"\n        android:layout_centerHorizontal=\"true\"\n        android:layout_marginTop=\"16dp\"\n        android:text=\"\"\n        android:visibility=\"gone\" />\n\n</RelativeLayout>\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/fragment_home.xml b/app/src/main/res/layout/fragment_home.xml
+--- a/app/src/main/res/layout/fragment_home.xml	(revision 14dee519a3afa23c4b7856ef9f52f286b6280337)
++++ b/app/src/main/res/layout/fragment_home.xml	(date 1704212248649)
+@@ -52,4 +52,15 @@
+         android:text=""
+         android:visibility="gone" />
+ 
++    <Button
++        android:id="@+id/inserisciFormazioneButton"
++        android:layout_width="wrap_content"
++        android:layout_height="wrap_content"
++        android:layout_below="@id/nomeSquadraTextView"
++        android:layout_centerHorizontal="true"
++        android:layout_marginTop="16dp"
++        android:text="Inserisci Formazione"
++        android:visibility="gone" />
++
++
+ </RelativeLayout>
+Index: app/src/main/AndroidManifest.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><manifest xmlns:android=\"http://schemas.android.com/apk/res/android\"\n    xmlns:tools=\"http://schemas.android.com/tools\">\n\n    <uses-permission android:name=\"android.permission.INTERNET\" />\n    <application\n        android:allowBackup=\"true\"\n        android:dataExtractionRules=\"@xml/data_extraction_rules\"\n        android:fullBackupContent=\"@xml/backup_rules\"\n        android:icon=\"@mipmap/ic_launcher\"\n        android:label=\"@string/app_name\"\n        android:supportsRtl=\"true\"\n        android:theme=\"@style/Theme.Material3.Light\"\n        tools:targetApi=\"34\"\n        android:enableOnBackInvokedCallback=\"true\">\n\n        <activity\n            android:name=\".view.MainActivity\"\n            android:exported=\"true\">\n            <intent-filter>\n                <action android:name=\"android.intent.action.MAIN\" />\n                <category android:name=\"android.intent.category.LAUNCHER\" />\n            </intent-filter>\n        </activity>\n\n        <activity android:name=\".ui.RegisterActivity\"\n            android:theme=\"@style/Theme.Material3.Light.NoActionBar\"\n            android:exported=\"false\">\n        </activity>\n\n        <activity android:name=\".ui.LoginActivity\"\n            android:theme=\"@style/Theme.Material3.Light.NoActionBar\"\n            android:exported=\"true\">\n        </activity>\n\n        <activity android:name=\".ui.CreazioneLegaActivity\"\n            android:theme=\"@style/Theme.Material3.Light.NoActionBar\"\n            android:exported=\"false\">\n        </activity>\n\n        <activity android:name=\".ui.UnioneLegaActivity\"\n            android:theme=\"@style/Theme.Material3.Light.NoActionBar\"\n            android:exported=\"false\">\n        </activity>\n\n        <activity android:name=\".ui.CreazioneSquadraActivity\"\n            android:theme=\"@style/Theme.Material3.Light.NoActionBar\"\n            android:exported=\"false\">\n        </activity>\n\n        <activity android:name=\".ui.ModificaLegaActivity\"\n            android:theme=\"@style/Theme.Material3.Light.NoActionBar\"\n            android:exported=\"false\">\n        </activity>\n\n        <activity android:name=\".view.MasterActivity\"\n        android:exported=\"true\">\n\n\n\n    </activity>\n    </application>\n\n</manifest>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/AndroidManifest.xml b/app/src/main/AndroidManifest.xml
+--- a/app/src/main/AndroidManifest.xml	(revision 14dee519a3afa23c4b7856ef9f52f286b6280337)
++++ b/app/src/main/AndroidManifest.xml	(date 1704217326172)
+@@ -52,6 +52,20 @@
+             android:exported="false">
+         </activity>
+ 
++        <activity android:name=".ui.BonusActivity"
++            android:theme="@style/Theme.Material3.Light.NoActionBar"
++            android:exported="false">
++        </activity>
++
++        <activity android:name=".ui.CreaBonusActivity"
++            android:theme="@style/Theme.Material3.Light.NoActionBar"
++            android:exported="false">
++        </activity>
++
++        <activity android:name=".ui.FormazioneActivity"
++            android:theme="@style/Theme.Material3.Light.NoActionBar"
++            android:exported="false">
++        </activity>
+         <activity android:name=".view.MasterActivity"
+         android:exported="true">
+ 
+Index: app/src/main/java/com/example/progettopm/model/Bonus.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.progettopm.model\n\nimport com.google.firebase.firestore.DocumentReference\n\ndata class Bonus(\n    val valore: Int = 0,\n    val nome: String = \"\",\n    val lega: DocumentReference? = null,\n)\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/progettopm/model/Bonus.kt b/app/src/main/java/com/example/progettopm/model/Bonus.kt
+--- a/app/src/main/java/com/example/progettopm/model/Bonus.kt	(revision 14dee519a3afa23c4b7856ef9f52f286b6280337)
++++ b/app/src/main/java/com/example/progettopm/model/Bonus.kt	(date 1704217145677)
+@@ -3,7 +3,9 @@
+ import com.google.firebase.firestore.DocumentReference
+ 
+ data class Bonus(
++    val documentId: String = "",
+     val valore: Int = 0,
+     val nome: String = "",
++    val id: String = "",
+     val lega: DocumentReference? = null,
+ )
+Index: app/src/main/java/com/example/progettopm/fragments/HomeFragment.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.progettopm.fragments\n\nimport android.content.Intent\nimport android.os.Bundle\nimport android.util.Log\nimport androidx.fragment.app.Fragment\nimport android.view.LayoutInflater\nimport android.view.View\nimport android.view.ViewGroup\nimport android.view.animation.AnimationUtils\nimport android.widget.Button\nimport android.widget.TextView\nimport android.widget.Toast\nimport com.example.progettopm.R\nimport com.example.progettopm.SessionManager\nimport com.example.progettopm.ui.CreazioneLegaActivity\nimport com.example.progettopm.ui.CreazioneSquadraActivity\nimport com.example.progettopm.ui.UnioneLegaActivity\nimport com.google.firebase.auth.FirebaseAuth\nimport com.google.firebase.firestore.DocumentReference\nimport com.google.firebase.firestore.FirebaseFirestore\n\nclass HomeFragment : Fragment(R.layout.fragment_home) {\n\n    private lateinit var pulsanteUnisciti: Button\n    private lateinit var pulsanteCreaLega: Button\n    private lateinit var pulsanteCreaSquadra: Button\n    private lateinit var textViewNomeLega: TextView\n    private lateinit var textViewNomeSquadra: TextView\n\n    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {\n        super.onViewCreated(view, savedInstanceState)\n\n        pulsanteUnisciti = view.findViewById(R.id.uniscitiButton)\n        pulsanteCreaLega = view.findViewById(R.id.creaLegaButton)\n        pulsanteCreaSquadra = view.findViewById(R.id.creaSquadraButton)\n        textViewNomeLega = view.findViewById(R.id.nomeLegaTextView)\n        textViewNomeSquadra = view.findViewById(R.id.nomeSquadraTextView)\n\n        // Ottieni l'ID utente corrente da Firebase Authentication\n        val idUtente = FirebaseAuth.getInstance().currentUser?.uid\n\n        // Verifica se l'utente è iscritto a una lega\n        if (idUtente != null) {\n            controllaAppartenenzaLegaUtente(idUtente)\n        }\n\n        // Gestisci il click sul pulsante \"Unisciti a una lega\"\n        pulsanteUnisciti.setOnClickListener {\n            // Avvia l'activity per unirsi a una lega\n            val intent = Intent(requireContext(), UnioneLegaActivity::class.java)\n            startActivity(intent)\n        }\n\n        // Gestisci il click sul pulsante \"Crea la tua lega\"\n        pulsanteCreaLega.setOnClickListener {\n            // Avvia l'activity per creare una lega\n            val intent = Intent(requireContext(), CreazioneLegaActivity::class.java)\n            startActivity(intent)\n        }\n        pulsanteCreaSquadra.setOnClickListener {\n            // Avvia l'activity per unirsi a una lega\n            val intent = Intent(requireContext(), CreazioneSquadraActivity::class.java)\n            startActivity(intent)\n        }\n    }\n\n    private fun controllaAppartenenzaLegaUtente(idUtente: String) {\n        // Ottieni il riferimento al documento dell'utente nel Firestore\n        val utenteRef = FirebaseFirestore.getInstance().collection(\"utenti\").document(idUtente)\n\n        // Leggi i dati dell'utente dal Firestore\n        utenteRef.get()\n            .addOnSuccessListener { documentoUtente ->\n                if (documentoUtente.exists()) {\n                    // Ottieni la reference alla lega corrente\n                    val leghe = documentoUtente.get(\"leghe\") as? List<DocumentReference>\n\n                    if (leghe != null && leghe.isNotEmpty()) {\n                        val nomeLegaRef = leghe[0]\n                        val nomeLegaDocId = nomeLegaRef.id\n                        SessionManager.legaCorrenteId = leghe[0].id\n\n                        // Ottieni il nome della lega dal riferimento del documento\n                        FirebaseFirestore.getInstance().collection(\"leghe\").document(nomeLegaDocId).get()\n                            .addOnSuccessListener { legaDoc ->\n                                if (legaDoc.exists()) {\n                                    val nomeLega = legaDoc.getString(\"nome\")\n\n                                    if (nomeLega != null) {\n                                        // Verifica se l'utente ha una squadra nella lega corrente\n                                        val squadre = documentoUtente.get(\"squadre\") as? List<DocumentReference>\n\n                                        if (squadre != null && squadre.isNotEmpty()) {\n                                            // L'utente ha almeno una squadra\n                                            val nomeSquadraRef = squadre[0]\n\n                                            nomeSquadraRef.get().addOnSuccessListener { squadraDoc ->\n                                                if (squadraDoc.exists()) {\n                                                    val nomeSquadra = squadraDoc.getString(\"nome\")\n                                                    if (nomeSquadra != null) {\n                                                        // L'utente ha creato una squadra\n                                                        visualizzaHomeSquadra(nomeLega, nomeSquadra)\n                                                    }\n                                                }\n                                            }\n                                        } else {\n                                            // L'utente non ha ancora creato una squadra, mostra il pulsante \"Crea Squadra\"\n                                            visualizzaHomeCreaSquadra(nomeLega)\n                                        }\n                                    }\n                                }\n                            }\n                            .addOnFailureListener { eccezione ->\n                                // Gestisci eventuali errori durante la lettura del documento della lega\n                                Toast.makeText(requireContext(), \"Errore durante il recupero dei dati della lega\", Toast.LENGTH_SHORT).show()\n                            }\n                    } else {\n                        // L'utente non è iscritto a nessuna lega\n                        visualizzaHomeNoLega()\n                    }\n                }\n            }\n            .addOnFailureListener { eccezione ->\n                // Gestisci eventuali errori durante la lettura dei dati dal Firestore\n                Toast.makeText(requireContext(), \"Errore durante il recupero dei dati dell'utente\", Toast.LENGTH_SHORT).show()\n            }\n    }\n\n    private fun visualizzaHomeNoLega() {\n        pulsanteUnisciti.visibility = View.VISIBLE\n        pulsanteCreaLega.visibility = View.VISIBLE\n        pulsanteCreaSquadra.visibility = View.GONE\n        textViewNomeLega.visibility = View.GONE\n        textViewNomeSquadra.visibility = View.GONE\n    }\n\n    private fun visualizzaHomeCreaSquadra(nomeLega: String) {\n        pulsanteUnisciti.visibility = View.GONE\n        pulsanteCreaLega.visibility = View.GONE\n        pulsanteCreaSquadra.visibility = View.VISIBLE\n        textViewNomeLega.text = nomeLega\n        textViewNomeLega.visibility = View.VISIBLE\n        textViewNomeSquadra.visibility = View.GONE\n    }\n\n    private fun visualizzaHomeSquadra(nomeLega: String, nomeSquadra: String) {\n        pulsanteUnisciti.visibility = View.GONE\n        pulsanteCreaLega.visibility = View.GONE\n        pulsanteCreaSquadra.visibility = View.GONE\n        textViewNomeLega.text = nomeLega\n        textViewNomeSquadra.text = nomeSquadra\n        textViewNomeLega.visibility = View.VISIBLE\n        textViewNomeSquadra.visibility = View.VISIBLE\n    }\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/progettopm/fragments/HomeFragment.kt b/app/src/main/java/com/example/progettopm/fragments/HomeFragment.kt
+--- a/app/src/main/java/com/example/progettopm/fragments/HomeFragment.kt	(revision 14dee519a3afa23c4b7856ef9f52f286b6280337)
++++ b/app/src/main/java/com/example/progettopm/fragments/HomeFragment.kt	(date 1704238490107)
+@@ -1,24 +1,28 @@
+ package com.example.progettopm.fragments
+ 
++import android.content.Context
+ import android.content.Intent
+ import android.os.Bundle
+ import android.util.Log
+-import androidx.fragment.app.Fragment
+-import android.view.LayoutInflater
+ import android.view.View
+-import android.view.ViewGroup
+-import android.view.animation.AnimationUtils
+ import android.widget.Button
+ import android.widget.TextView
+ import android.widget.Toast
++import androidx.fragment.app.Fragment
+ import com.example.progettopm.R
+ import com.example.progettopm.SessionManager
+ import com.example.progettopm.ui.CreazioneLegaActivity
+ import com.example.progettopm.ui.CreazioneSquadraActivity
++import com.example.progettopm.ui.FormazioneActivity
+ import com.example.progettopm.ui.UnioneLegaActivity
+ import com.google.firebase.auth.FirebaseAuth
++import com.google.firebase.database.annotations.Nullable
+ import com.google.firebase.firestore.DocumentReference
++import com.google.firebase.firestore.DocumentSnapshot
++import com.google.firebase.firestore.EventListener
+ import com.google.firebase.firestore.FirebaseFirestore
++import com.google.firebase.firestore.FirebaseFirestoreException
++
+ 
+ class HomeFragment : Fragment(R.layout.fragment_home) {
+ 
+@@ -28,6 +32,18 @@
+     private lateinit var textViewNomeLega: TextView
+     private lateinit var textViewNomeSquadra: TextView
+ 
++    override fun onAttach(context: Context) {
++        super.onAttach(context)
++
++        // Ottieni l'ID utente corrente da Firebase Authentication
++        val idUtente = FirebaseAuth.getInstance().currentUser?.uid
++
++        // Verifica se l'utente è iscritto a una lega
++        if (idUtente != null) {
++            controllaAppartenenzaLegaUtente(idUtente)
++        }
++    }
++
+     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+         super.onViewCreated(view, savedInstanceState)
+ 
+@@ -70,61 +86,79 @@
+         val utenteRef = FirebaseFirestore.getInstance().collection("utenti").document(idUtente)
+ 
+         // Leggi i dati dell'utente dal Firestore
+-        utenteRef.get()
+-            .addOnSuccessListener { documentoUtente ->
+-                if (documentoUtente.exists()) {
+-                    // Ottieni la reference alla lega corrente
+-                    val leghe = documentoUtente.get("leghe") as? List<DocumentReference>
++        utenteRef.get().addOnSuccessListener { getUserInformation(it) }
++            .addOnFailureListener { eccezione ->
++                // Gestisci eventuali errori durante la lettura dei dati dal Firestore
++                Toast.makeText(requireContext(), "Errore durante il recupero dei dati dell'utente", Toast.LENGTH_SHORT).show()
++            }
++
++        utenteRef.addSnapshotListener(object : EventListener<DocumentSnapshot?> {
++            override fun onEvent(
++                @Nullable snapshot: DocumentSnapshot?,
++                @Nullable e: FirebaseFirestoreException?
++            ) {
++                if (e != null) {
++                    // Gestisci l'errore, se necessario
++                    return
++                }
++                if (snapshot != null && snapshot.exists()) {
++                    Log.d("Snapshot_live_data", "Test")
++                    getUserInformation(snapshot)
++                }
++            }
++        });
++    }
++
++    private fun getUserInformation(documentoUtente: DocumentSnapshot){
++        if (documentoUtente.exists()) {
++            // Ottieni la reference alla lega corrente
++            val leghe = documentoUtente.get("leghe") as? List<DocumentReference>
+ 
+-                    if (leghe != null && leghe.isNotEmpty()) {
+-                        val nomeLegaRef = leghe[0]
+-                        val nomeLegaDocId = nomeLegaRef.id
+-                        SessionManager.legaCorrenteId = leghe[0].id
++            if (leghe != null && leghe.isNotEmpty()) {
++                val nomeLegaRef = leghe[0]
++                val nomeLegaDocId = nomeLegaRef.id
++                SessionManager.legaCorrenteId = leghe[0].id
+ 
+-                        // Ottieni il nome della lega dal riferimento del documento
+-                        FirebaseFirestore.getInstance().collection("leghe").document(nomeLegaDocId).get()
+-                            .addOnSuccessListener { legaDoc ->
+-                                if (legaDoc.exists()) {
+-                                    val nomeLega = legaDoc.getString("nome")
++                // Ottieni il nome della lega dal riferimento del documento
++                FirebaseFirestore.getInstance().collection("leghe").document(nomeLegaDocId).get()
++                    .addOnSuccessListener { legaDoc ->
++                        if (legaDoc.exists()) {
++                            val nomeLega = legaDoc.getString("nome")
+ 
+-                                    if (nomeLega != null) {
+-                                        // Verifica se l'utente ha una squadra nella lega corrente
+-                                        val squadre = documentoUtente.get("squadre") as? List<DocumentReference>
++                            if (nomeLega != null) {
++                                // Verifica se l'utente ha una squadra nella lega corrente
++                                val squadre = documentoUtente.get("squadre") as? List<DocumentReference>
+ 
+-                                        if (squadre != null && squadre.isNotEmpty()) {
+-                                            // L'utente ha almeno una squadra
+-                                            val nomeSquadraRef = squadre[0]
++                                if (squadre != null && squadre.isNotEmpty()) {
++                                    // L'utente ha almeno una squadra
++                                    val nomeSquadraRef = squadre[0]
++                                    SessionManager.legaCorrenteId = squadre[0].id
+ 
+-                                            nomeSquadraRef.get().addOnSuccessListener { squadraDoc ->
+-                                                if (squadraDoc.exists()) {
+-                                                    val nomeSquadra = squadraDoc.getString("nome")
+-                                                    if (nomeSquadra != null) {
+-                                                        // L'utente ha creato una squadra
+-                                                        visualizzaHomeSquadra(nomeLega, nomeSquadra)
+-                                                    }
+-                                                }
+-                                            }
+-                                        } else {
+-                                            // L'utente non ha ancora creato una squadra, mostra il pulsante "Crea Squadra"
+-                                            visualizzaHomeCreaSquadra(nomeLega)
+-                                        }
+-                                    }
+-                                }
+-                            }
+-                            .addOnFailureListener { eccezione ->
+-                                // Gestisci eventuali errori durante la lettura del documento della lega
+-                                Toast.makeText(requireContext(), "Errore durante il recupero dei dati della lega", Toast.LENGTH_SHORT).show()
+-                            }
+-                    } else {
+-                        // L'utente non è iscritto a nessuna lega
+-                        visualizzaHomeNoLega()
+-                    }
+-                }
++                                    nomeSquadraRef.get().addOnSuccessListener { squadraDoc ->
++                                        if (squadraDoc.exists()) {
++                                            val nomeSquadra = squadraDoc.getString("nome")
++                                            if (nomeSquadra != null) {
++                                                // L'utente ha creato una squadra
++                                                visualizzaHomeSquadra(nomeLega, nomeSquadra)
++                                            }
++                                        }
++                                    }
++                                } else {
++                                    // L'utente non ha ancora creato una squadra, mostra il pulsante "Crea Squadra"
++                                    visualizzaHomeCreaSquadra(nomeLega)
++                                }
++                            }
++                        }
++                    }
++                    .addOnFailureListener { eccezione ->
++                        // Gestisci eventuali errori durante la lettura del documento della lega
++                        Toast.makeText(requireContext(), "Errore durante il recupero dei dati della lega", Toast.LENGTH_SHORT).show()
++                    }
++            } else {
++                // L'utente non è iscritto a nessuna lega
++                visualizzaHomeNoLega()
+             }
+-            .addOnFailureListener { eccezione ->
+-                // Gestisci eventuali errori durante la lettura dei dati dal Firestore
+-                Toast.makeText(requireContext(), "Errore durante il recupero dei dati dell'utente", Toast.LENGTH_SHORT).show()
+-            }
++        }
+     }
+ 
+     private fun visualizzaHomeNoLega() {
+@@ -152,5 +186,15 @@
+         textViewNomeSquadra.text = nomeSquadra
+         textViewNomeLega.visibility = View.VISIBLE
+         textViewNomeSquadra.visibility = View.VISIBLE
++
++        val inserisciFormazioneButton = view?.findViewById<Button>(R.id.inserisciFormazioneButton)
++        inserisciFormazioneButton?.visibility = View.VISIBLE
++
++        // Aggiungi il listener per gestire il click sul bottone "Inserisci Formazione"
++        inserisciFormazioneButton?.setOnClickListener {
++            // Avvia l'activity per inserire la formazione
++            val intent = Intent(requireContext(), FormazioneActivity::class.java)
++            startActivity(intent)
++        }
+     }
+-}
+\ No newline at end of file
++}
+Index: app/src/main/java/com/example/progettopm/model/Formazione.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import com.google.firebase.firestore.DocumentReference\n\ndata class Formazione(\n    val id: Int,\n    val giornata: DocumentReference,\n    val portiere: DocumentReference,\n    val difensore: DocumentReference,\n    val laterale_dx: DocumentReference,\n    val laterale_sx: DocumentReference,\n    val attaccante: DocumentReference,\n    val punteggio: Int,\n    val squadra: DocumentReference\n)\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/progettopm/model/Formazione.kt b/app/src/main/java/com/example/progettopm/model/Formazione.kt
+--- a/app/src/main/java/com/example/progettopm/model/Formazione.kt	(revision 14dee519a3afa23c4b7856ef9f52f286b6280337)
++++ b/app/src/main/java/com/example/progettopm/model/Formazione.kt	(date 1704215323513)
+@@ -1,13 +1,10 @@
++package com.example.progettopm.model
++
+ import com.google.firebase.firestore.DocumentReference
+ 
+ data class Formazione(
+-    val id: Int,
+-    val giornata: DocumentReference,
+-    val portiere: DocumentReference,
+-    val difensore: DocumentReference,
+-    val laterale_dx: DocumentReference,
+-    val laterale_sx: DocumentReference,
+-    val attaccante: DocumentReference,
++    val giornata: Int,
++    val giocatori: List<DocumentReference>, //Reference a giocatori
+     val punteggio: Int,
+-    val squadra: DocumentReference
++    val squadra: DocumentReference //Reference a squadra
+ )
+Index: app/src/main/java/com/example/progettopm/ui/BonusActivity.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/progettopm/ui/BonusActivity.kt b/app/src/main/java/com/example/progettopm/ui/BonusActivity.kt
+new file mode 100644
+--- /dev/null	(date 1704127545124)
++++ b/app/src/main/java/com/example/progettopm/ui/BonusActivity.kt	(date 1704127545124)
+@@ -0,0 +1,106 @@
++package com.example.progettopm.ui
++
++import android.content.Context
++import android.content.Intent
++import android.os.Bundle
++import android.util.Log
++import android.widget.Button
++import android.widget.Toast
++import androidx.appcompat.app.AlertDialog
++import androidx.appcompat.app.AppCompatActivity
++import androidx.recyclerview.widget.LinearLayoutManager
++import androidx.recyclerview.widget.RecyclerView
++import com.example.progettopm.R
++import com.example.progettopm.SessionManager
++import com.example.progettopm.model.Bonus
++import com.google.firebase.firestore.FirebaseFirestore
++
++class BonusActivity : AppCompatActivity(), BonusAdapter.BonusAdapterListener {
++
++    private lateinit var bonusAdapter: BonusAdapter
++
++    override fun onCreate(savedInstanceState: Bundle?) {
++        super.onCreate(savedInstanceState)
++        setContentView(R.layout.activity_bonus)
++
++        val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
++        recyclerView.layoutManager = LinearLayoutManager(this)
++        bonusAdapter = BonusAdapter(this)
++        recyclerView.adapter = bonusAdapter
++
++        loadBonusData()
++
++        val creaBonusButton: Button = findViewById(R.id.creaBonusButton)
++        creaBonusButton.setOnClickListener {
++            // Avvia l'activity per la creazione di un nuovo bonus
++            Log.d("BonusActivity", "Creazione Bonus Button Clicked")
++            startActivity(CreaBonusActivity.newIntent(this))
++        }
++    }
++
++    private fun loadBonusData() {
++        // Recupera i bonus dalla raccolta 'bonus' con la reference alla lega corrente
++        val legaReference = SessionManager.legaCorrenteId
++        val bonusCollection = FirebaseFirestore.getInstance().collection("bonus")
++        bonusCollection.whereEqualTo("lega", legaReference)
++            .get()
++            .addOnSuccessListener { documents ->
++                val bonusList = mutableListOf<Bonus>()
++                for (document in documents) {
++                    val bonus = document.toObject(Bonus::class.java)
++                    bonusList.add(bonus)
++                }
++                bonusAdapter.setBonusList(bonusList)
++            }
++            .addOnFailureListener { exception ->
++                Log.e("BonusActivity", "Error loading bonus data: ${exception.message}")
++                // Gestisci eventuali errori durante il recupero dei bonus
++            }
++    }
++
++    override fun onModificaButtonClick(bonus: Bonus) {
++        // Avvia l'activity per la modifica del bonus passando l'oggetto Bonus
++        Log.d("BonusActivity", "Modifica Button Clicked")
++        startActivity(CreaBonusActivity.editIntent(this, bonus))
++    }
++
++    override fun onEliminaButtonClick(bonus: Bonus) {
++        // Mostra un dialog di conferma eliminazione
++        AlertDialog.Builder(this)
++            .setTitle("Conferma eliminazione")
++            .setMessage("Confermi l'eliminazione del bonus?")
++            .setPositiveButton("Conferma") { _, _ ->
++                // Se l'utente conferma, procedi con l'eliminazione
++                Log.d("BonusActivity", "Elimina Button Clicked")
++                eliminaBonus(bonus)
++            }
++            .setNegativeButton("Annulla", null)
++            .show()
++    }
++
++    private fun eliminaBonus(bonus: Bonus) {
++        // Ottieni l'ID del documento Bonus
++        val documentId = bonus.documentId
++
++        // Verifica se l'ID è valido prima di procedere
++        if (documentId.isNotEmpty()) {
++            // Elimina il documento dal Firestore utilizzando l'ID
++            FirebaseFirestore.getInstance().collection("bonus").document(documentId)
++                .delete()
++                .addOnSuccessListener {
++                    // Se l'eliminazione ha successo, aggiorna la lista dei bonus
++                    loadBonusData()
++                    Toast.makeText(this, "Bonus eliminato con successo", Toast.LENGTH_SHORT).show()
++                }
++                .addOnFailureListener {
++                    Log.e("BonusActivity", "Error deleting bonus: ${it.message}")
++                    // In caso di errore nell'eliminazione, gestisci l'errore di conseguenza
++                    Toast.makeText(this, "Errore durante l'eliminazione del bonus", Toast.LENGTH_SHORT)
++                        .show()
++                }
++        } else {
++            // L'ID del documento non è valido, gestisci di conseguenza
++            Toast.makeText(this, "ID del documento non valido", Toast.LENGTH_SHORT).show()
++        }
++    }
++}
+Index: app/src/main/java/com/example/progettopm/fragments/GiocatoriFragment.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>\npackage com.example.progettopm.ui\n\nimport android.os.Bundle\nimport android.util.Log\nimport android.view.LayoutInflater\nimport android.view.View\nimport android.view.ViewGroup\nimport androidx.fragment.app.Fragment\nimport androidx.recyclerview.widget.LinearLayoutManager\nimport androidx.recyclerview.widget.RecyclerView\nimport com.example.progettopm.R\nimport com.example.progettopm.SessionManager\nimport com.example.progettopm.model.Giocatore\nimport com.google.android.gms.tasks.Task\nimport com.google.firebase.firestore.FirebaseFirestore\nimport com.google.firebase.firestore.Query\nimport com.google.firebase.firestore.QuerySnapshot\n\nclass GiocatoriFragment : Fragment() {\n\n    private lateinit var recyclerView: RecyclerView\n    private lateinit var giocatoriAdapter: GiocatoriAdapter\n\n    override fun onCreateView(\n        inflater: LayoutInflater, container: ViewGroup?,\n        savedInstanceState: Bundle?\n    ): View? {\n        val view = inflater.inflate(R.layout.fragment_giocatori, container, false)\n        recyclerView = view.findViewById(R.id.recyclerViewGiocatori)\n        return view\n    }\n\n    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {\n        super.onViewCreated(view, savedInstanceState)\n        setupRecyclerView()\n        loadGiocatoriData()\n    }\n\n    private fun setupRecyclerView() {\n        giocatoriAdapter = GiocatoriAdapter()\n        recyclerView.apply {\n            layoutManager = LinearLayoutManager(activity)\n            adapter = giocatoriAdapter\n        }\n    }\n\n    private fun loadBonusGiornata(giocatoreId: String): Task<QuerySnapshot> {\n        val legaCorrenteId = SessionManager.legaCorrenteId\n        val bonusGiornataRef = FirebaseFirestore.getInstance().collection(\"bonus_giornata\")\n            .whereEqualTo(\"lega\", FirebaseFirestore.getInstance().document(\"leghe/$legaCorrenteId\"))\n            .whereEqualTo(\"giocatore\", giocatoreId)\n\n        return bonusGiornataRef.get()\n    }\n\n    private fun loadGiocatoriData() {\n        val legaCorrenteId = SessionManager.legaCorrenteId\n        if (legaCorrenteId != null) {\n            val giocatoriRef = FirebaseFirestore.getInstance().collection(\"giocatori\")\n                .whereEqualTo(\n                    \"lega\",\n                    FirebaseFirestore.getInstance().document(\"leghe/$legaCorrenteId\")\n                )\n                .orderBy(\"punteggio\", Query.Direction.DESCENDING)\n\n            giocatoriRef.get().addOnSuccessListener { result ->\n                val giocatoriList = mutableListOf<Giocatore>()\n                for (document in result) {\n                    val giocatore = document.toObject(Giocatore::class.java)\n                    giocatoriList.add(giocatore)\n\n                    // Carichiamo i DocumentReference dei BonusGiornata referenziati\n                    val bonusGiornataRef = FirebaseFirestore.getInstance().collection(\"bonus_giornata\")\n                        .whereEqualTo(\"lega\", FirebaseFirestore.getInstance().document(\"leghe/$legaCorrenteId\"))\n                        .whereEqualTo(\"giocatore\", FirebaseFirestore.getInstance().document(\"giocatori/${giocatore.id}\"))\n\n                    bonusGiornataRef.get().addOnSuccessListener { bonusGiornataSnapshot ->\n                        val bonusGiornataList =\n                            bonusGiornataSnapshot.documents.map { it.reference } // manteniamo il tipo come List<DocumentReference>\n                        giocatore.bonusGiornataList = bonusGiornataList\n\n                        // Aggiorniamo la recyclerView solo quando abbiamo caricato tutti i dati\n                        giocatoriAdapter.submitList(giocatoriList)\n                    }\n                }\n            }\n        }\n    }\n\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/progettopm/fragments/GiocatoriFragment.kt b/app/src/main/java/com/example/progettopm/fragments/GiocatoriFragment.kt
+--- a/app/src/main/java/com/example/progettopm/fragments/GiocatoriFragment.kt	(revision 14dee519a3afa23c4b7856ef9f52f286b6280337)
++++ b/app/src/main/java/com/example/progettopm/fragments/GiocatoriFragment.kt	(date 1704241101956)
+@@ -12,6 +12,7 @@
+ import com.example.progettopm.R
+ import com.example.progettopm.SessionManager
+ import com.example.progettopm.model.Giocatore
++import com.example.progettopm.view.GiocatoriAdapter
+ import com.google.android.gms.tasks.Task
+ import com.google.firebase.firestore.FirebaseFirestore
+ import com.google.firebase.firestore.Query
+Index: app/src/main/res/layout/activity_bonus.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/activity_bonus.xml b/app/src/main/res/layout/activity_bonus.xml
+new file mode 100644
+--- /dev/null	(date 1704038919522)
++++ b/app/src/main/res/layout/activity_bonus.xml	(date 1704038919522)
+@@ -0,0 +1,24 @@
++<!-- Layout per l'activity principale BonusActivity -->
++<!-- Contiene la RecyclerView e il pulsante per creare nuovi bonus -->
++
++<RelativeLayout
++    xmlns:android="http://schemas.android.com/apk/res/android"
++    android:layout_width="match_parent"
++    android:layout_height="match_parent">
++
++    <androidx.recyclerview.widget.RecyclerView
++        android:id="@+id/recyclerView"
++        android:layout_width="match_parent"
++        android:layout_height="match_parent"
++        android:padding="16dp"/>
++
++    <Button
++        android:id="@+id/creaBonusButton"
++        android:layout_width="wrap_content"
++        android:layout_height="wrap_content"
++        android:layout_alignParentBottom="true"
++        android:layout_alignParentEnd="true"
++        android:layout_margin="16dp"
++        android:text="Crea Bonus"
++        android:textSize="16sp"/>
++</RelativeLayout>
+Index: app/build.gradle
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>plugins {\n    id 'com.android.application'\n    id 'org.jetbrains.kotlin.android'\n    id 'com.google.gms.google-services'\n    id 'com.google.firebase.crashlytics'\n}\n\nandroid {\n    compileSdk 34\n\n    defaultConfig {\n        applicationId \"com.example.progettopm\"\n        minSdkVersion 31\n        targetSdkVersion 31\n        versionCode 1\n        versionName \"1.0\"\n        testInstrumentationRunner \"androidx.test.runner.AndroidJUnitRunner\"\n        namespace \"com.example.progettopm\"\n    }\n\n    buildTypes {\n        release {\n            minifyEnabled false\n            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'\n        }\n    }\n\n    compileOptions {\n        sourceCompatibility JavaVersion.VERSION_1_8\n        targetCompatibility JavaVersion.VERSION_1_8\n    }\n\n    kotlinOptions {\n        jvmTarget = '1.8'\n    }\n\n    buildFeatures {\n        viewBinding true\n    }\n}\n\ndependencies {\n    implementation 'androidx.core:core-ktx:1.7.0'\n    implementation 'androidx.appcompat:appcompat:1.6.1'\n    implementation 'com.google.android.material:material:1.9.0'\n    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'\n    implementation 'com.google.firebase:firebase-auth-ktx:22.3.0'\n    implementation 'com.google.firebase:firebase-database:20.3.0'\n    implementation 'com.google.firebase:firebase-firestore:24.10.0'\n    implementation 'com.google.firebase:firebase-storage-ktx:20.3.0'\n    implementation 'com.google.firebase:firebase-crashlytics:18.6.0'\n    implementation 'com.google.firebase:firebase-analytics:21.5.0'\n    implementation 'com.google.firebase:firebase-database-ktx:20.3.0'\n    implementation 'androidx.recyclerview:recyclerview:1.3.2'\n    implementation \"androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2\"\n    implementation \"androidx.lifecycle:lifecycle-livedata-ktx:2.6.2\"\n    testImplementation 'junit:junit:4.13.2'\n    androidTestImplementation 'androidx.test.ext:junit:1.1.5'\n    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'\n    implementation 'com.firebaseui:firebase-ui-firestore:8.0.0'\n    implementation 'com.github.bumptech.glide:glide:4.12.0'\n    annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'\n\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/build.gradle b/app/build.gradle
+--- a/app/build.gradle	(revision 14dee519a3afa23c4b7856ef9f52f286b6280337)
++++ b/app/build.gradle	(date 1704236575366)
+@@ -37,6 +37,10 @@
+     buildFeatures {
+         viewBinding true
+     }
++
++    buildFeatures {
++        dataBinding true
++    }
+ }
+ 
+ dependencies {
+Index: app/src/main/java/com/example/progettopm/view/BonusAdapter.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/progettopm/view/BonusAdapter.kt b/app/src/main/java/com/example/progettopm/view/BonusAdapter.kt
+new file mode 100644
+--- /dev/null	(date 1704039495533)
++++ b/app/src/main/java/com/example/progettopm/view/BonusAdapter.kt	(date 1704039495533)
+@@ -0,0 +1,77 @@
++package com.example.progettopm.ui
++
++import android.app.AlertDialog
++import android.view.LayoutInflater
++import android.view.View
++import android.view.ViewGroup
++import android.widget.Button
++import android.widget.EditText
++import android.widget.TextView
++import androidx.recyclerview.widget.RecyclerView
++import com.example.progettopm.R
++import com.example.progettopm.model.Bonus
++
++class BonusAdapter(private val listener: BonusAdapterListener) :
++    RecyclerView.Adapter<BonusAdapter.BonusViewHolder>() {
++
++    private var bonusList: List<Bonus> = emptyList()
++
++    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BonusViewHolder {
++        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_bonus, parent, false)
++        return BonusViewHolder(view)
++    }
++
++    override fun onBindViewHolder(holder: BonusViewHolder, position: Int) {
++        val bonus = bonusList[position]
++        holder.bind(bonus)
++    }
++
++    override fun getItemCount(): Int {
++        return bonusList.size
++    }
++
++    fun setBonusList(bonuses: List<Bonus>) {
++        bonusList = bonuses
++        notifyDataSetChanged()
++    }
++
++    inner class BonusViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
++        private val nomeTextView: TextView = itemView.findViewById(R.id.nomeTextView)
++        private val valoreTextView: TextView = itemView.findViewById(R.id.valoreTextView)
++        private val modificaButton: Button = itemView.findViewById(R.id.modificaButton)
++        private val eliminaButton: Button = itemView.findViewById(R.id.eliminaButton)
++
++        init {
++            modificaButton.setOnClickListener {
++                val bonus = bonusList[adapterPosition]
++                listener.onModificaButtonClick(bonus)
++            }
++
++            eliminaButton.setOnClickListener {
++                val bonus = bonusList[adapterPosition]
++                showEliminaDialog(bonus)
++            }
++        }
++
++        fun bind(bonus: Bonus) {
++            nomeTextView.text = bonus.nome
++            valoreTextView.text = bonus.valore.toString()
++        }
++
++        private fun showEliminaDialog(bonus: Bonus) {
++            AlertDialog.Builder(itemView.context)
++                .setTitle("Conferma eliminazione")
++                .setMessage("Confermi l'eliminazione?")
++                .setPositiveButton("Conferma") { _, _ ->
++                    listener.onEliminaButtonClick(bonus)
++                }
++                .setNegativeButton("Annulla", null)
++                .show()
++        }
++    }
++
++    interface BonusAdapterListener {
++        fun onModificaButtonClick(bonus: Bonus)
++        fun onEliminaButtonClick(bonus: Bonus)
++    }
++}
+Index: app/src/main/res/values/attrs.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/values/attrs.xml b/app/src/main/res/values/attrs.xml
+new file mode 100644
+--- /dev/null	(date 1704237014193)
++++ b/app/src/main/res/values/attrs.xml	(date 1704237014193)
+@@ -0,0 +1,6 @@
++<?xml version="1.0" encoding="utf-8"?>
++<resources>
++    <declare-styleable name="CustomImageView">
++        <attr name="imageUrl" format="string" />
++    </declare-styleable>
++</resources>
+Index: app/src/main/java/com/example/progettopm/view/SelezioneGiocatoriAdapter.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/progettopm/view/SelezioneGiocatoriAdapter.kt b/app/src/main/java/com/example/progettopm/view/SelezioneGiocatoriAdapter.kt
+new file mode 100644
+--- /dev/null	(date 1704241876466)
++++ b/app/src/main/java/com/example/progettopm/view/SelezioneGiocatoriAdapter.kt	(date 1704241876466)
+@@ -0,0 +1,89 @@
++package com.example.progettopm.view
++
++import android.graphics.Color
++import android.view.LayoutInflater
++import android.view.ViewGroup
++import androidx.core.content.ContextCompat
++import androidx.recyclerview.widget.DiffUtil
++import androidx.recyclerview.widget.ListAdapter
++import androidx.recyclerview.widget.RecyclerView
++import com.bumptech.glide.Glide
++import com.example.progettopm.R
++import com.example.progettopm.databinding.ItemSelezioneGiocatoreBinding
++import com.example.progettopm.model.Giocatore
++
++class SelezioneGiocatoriAdapter(private val giocatoriPerSquadra: Int) :
++    ListAdapter<Giocatore, SelezioneGiocatoriAdapter.GiocatoreViewHolder>(DiffCallback()) {
++
++    // Aggiungi un array di booleani per tenere traccia degli ID dei giocatori selezionati
++    private val giocatoriSelezionati = mutableSetOf<String>()
++
++    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GiocatoreViewHolder {
++        val binding = ItemSelezioneGiocatoreBinding.inflate(
++            LayoutInflater.from(parent.context),
++            parent,
++            false
++        )
++        return GiocatoreViewHolder(binding)
++    }
++
++    override fun onBindViewHolder(holder: GiocatoreViewHolder, position: Int) {
++        val giocatore = getItem(position)
++        holder.bind(giocatore)
++
++        // Imposta il colore dello sfondo in base alla selezione
++        holder.itemView.setBackgroundColor(
++            if (giocatoriSelezionati.contains(giocatore.id)) {
++                ContextCompat.getColor(holder.itemView.context, R.color.selezionato)
++            } else {
++                Color.TRANSPARENT
++            }
++        )
++    }
++
++    inner class GiocatoreViewHolder(private val binding: ItemSelezioneGiocatoreBinding) :
++        RecyclerView.ViewHolder(binding.root) {
++
++        fun bind(giocatore: Giocatore) {
++            binding.nomeCognomeTextView.text = "${giocatore.nome} ${giocatore.cognome}"
++
++            Glide.with(binding.root)
++                .load(giocatore.foto)
++                .placeholder(R.drawable.placeholder_logo)
++                .into(binding.fotoImageView)
++
++            binding.valoreTextView.text = giocatore.valore.toString()
++
++            // Aggiungi logica per la selezione del giocatore
++            binding.root.setOnClickListener {
++                toggleSelezione(giocatore.id)
++            }
++        }
++    }
++
++    private fun toggleSelezione(giocatoreId: String) {
++        // Inverti lo stato di selezione quando l'elemento viene cliccato
++        if (giocatoriSelezionati.contains(giocatoreId)) {
++            giocatoriSelezionati.remove(giocatoreId)
++        } else {
++            // Limita il numero di giocatori selezionati alla variabile giocatoriPerSquadra
++            if (giocatoriSelezionati.size < giocatoriPerSquadra) {
++                giocatoriSelezionati.add(giocatoreId)
++            } else {
++                // Puoi aggiungere un avviso o una logica personalizzata se il limite viene superato
++            }
++        }
++        notifyDataSetChanged() // Aggiorna l'adapter per riflettere i cambiamenti
++    }
++
++    private class DiffCallback : DiffUtil.ItemCallback<Giocatore>() {
++        override fun areItemsTheSame(oldItem: Giocatore, newItem: Giocatore): Boolean {
++            return oldItem.id == newItem.id
++        }
++
++        override fun areContentsTheSame(oldItem: Giocatore, newItem: Giocatore): Boolean {
++            return oldItem == newItem
++        }
++    }
++}
++
+Index: app/src/main/res/layout/item_selezione_giocatore.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/item_selezione_giocatore.xml b/app/src/main/res/layout/item_selezione_giocatore.xml
+new file mode 100644
+--- /dev/null	(date 1704244361143)
++++ b/app/src/main/res/layout/item_selezione_giocatore.xml	(date 1704244361143)
+@@ -0,0 +1,39 @@
++<!-- item_selezione_giocatore.xml -->
++<layout xmlns:android="http://schemas.android.com/apk/res/android"
++    xmlns:app="http://schemas.android.com/apk/res-auto"
++    xmlns:tools="http://schemas.android.com/tools">
++
++    <data>
++        <variable
++            name="giocatore"
++            type="com.example.progettopm.model.Giocatore" />
++    </data>
++
++    <LinearLayout
++        android:layout_width="match_parent"
++        android:layout_height="wrap_content"
++        android:orientation="vertical">
++
++        <!-- Aggiungi qui i tuoi elementi del layout e utilizza la variabile 'giocatore' -->
++        <TextView
++            android:id="@+id/nomeCognomeTextView"
++            android:layout_width="wrap_content"
++            android:layout_height="wrap_content"
++            android:text="@{giocatore.nome + ' ' + giocatore.cognome}" />
++
++        <ImageView
++            android:id="@+id/fotoImageView"
++            android:layout_width="wrap_content"
++            android:layout_height="wrap_content"
++            />
++
++        <TextView
++            android:id="@+id/valoreTextView"
++            android:layout_width="wrap_content"
++            android:layout_height="wrap_content"
++            android:text="@{String.valueOf(giocatore.valore)}" />
++
++        <!-- Altri elementi del layout -->
++
++    </LinearLayout>
++</layout>
+Index: app/src/main/java/com/example/progettopm/ui/CreaBonusActivity.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/progettopm/ui/CreaBonusActivity.kt b/app/src/main/java/com/example/progettopm/ui/CreaBonusActivity.kt
+new file mode 100644
+--- /dev/null	(date 1704217196672)
++++ b/app/src/main/java/com/example/progettopm/ui/CreaBonusActivity.kt	(date 1704217196672)
+@@ -0,0 +1,83 @@
++package com.example.progettopm.ui
++
++import android.content.Context
++import android.content.Intent
++import android.os.Bundle
++import android.os.Parcelable
++import android.util.Log
++import android.widget.Button
++import android.widget.EditText
++import androidx.appcompat.app.AppCompatActivity
++import com.example.progettopm.R
++import com.example.progettopm.model.Bonus
++
++class CreaBonusActivity : AppCompatActivity() {
++
++    private lateinit var nomeEditText: EditText
++    private lateinit var valoreEditText: EditText
++    private lateinit var confermaButton: Button
++
++    private var bonus: Bonus? = null
++
++    override fun onCreate(savedInstanceState: Bundle?) {
++        super.onCreate(savedInstanceState)
++        setContentView(R.layout.activity_crea_bonus)
++
++        // Inizializza i componenti UI
++        nomeEditText = findViewById(R.id.editTextNome)
++        valoreEditText = findViewById(R.id.editTextValore)
++        confermaButton = findViewById(R.id.buttonConferma)
++
++        // Recupera l'oggetto Bonus passato dall'intent, se presente
++        // bonus = intent.getParcelableExtra("BONUS")
++
++        // Log per debug
++        Log.d("CreaBonusActivity", "Bonus object received: $bonus")
++
++        // Imposta i valori nei campi di testo se l'oggetto Bonus esiste
++        bonus?.let {
++            nomeEditText.setText(it.nome)
++            valoreEditText.setText(it.valore.toString())
++        }
++
++        // Aggiungi un listener al pulsante Conferma
++        confermaButton.setOnClickListener {
++            confermaModifica()
++        }
++    }
++
++    private fun confermaModifica() {
++        val nome = nomeEditText.text.toString().trim()
++        val valore = valoreEditText.text.toString().toIntOrNull()
++
++        if (nome.isEmpty() || valore == null) {
++            // Gestisci il caso in cui i campi siano vuoti o il valore non sia un numero valido
++            Log.d("CreaBonusActivity", "Invalid input detected")
++            return
++        }
++
++        // Crea un oggetto Bonus con i valori inseriti
++        val nuovoBonus = Bonus(valore = valore, nome = nome)
++
++        // Log per debug
++        Log.d("CreaBonusActivity", "New Bonus object created: $nuovoBonus")
++
++        // Passa il bonus modificato/creato all'activity chiamante utilizzando un Bundle
++        val resultIntent = Intent()
++        resultIntent.putExtra("NUOVO_BONUS", nuovoBonus as Parcelable)
++        setResult(RESULT_OK, resultIntent)
++        finish()
++    }
++
++    companion object {
++        fun newIntent(context: Context): Intent {
++            return Intent(context, CreaBonusActivity::class.java)
++        }
++
++        fun editIntent(context: Context, bonus: Bonus): Intent {
++            val intent = Intent(context, CreaBonusActivity::class.java)
++            // intent.putExtra("BONUS", bonus)
++            return intent
++        }
++    }
++}
+Index: app/src/main/res/layout/item_bonus.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><!-- res/layout/item_bonus.xml -->\n<LinearLayout\n    xmlns:android=\"http://schemas.android.com/apk/res/android\"\n    android:layout_width=\"match_parent\"\n    android:layout_height=\"wrap_content\"\n    android:orientation=\"vertical\"\n    android:padding=\"16dp\">\n\n    <TextView\n        android:id=\"@+id/nomeTipoBonusTextView\"\n        android:layout_width=\"wrap_content\"\n        android:layout_height=\"wrap_content\"\n        android:textSize=\"16sp\"\n        android:textStyle=\"bold\"/>\n\n    <TextView\n        android:id=\"@+id/valoreTipoBonusTextView\"\n        android:layout_width=\"wrap_content\"\n        android:layout_height=\"wrap_content\"\n        android:textSize=\"14sp\"/>\n\n    <TextView\n        android:id=\"@+id/quantitaTextView\"\n        android:layout_width=\"wrap_content\"\n        android:layout_height=\"wrap_content\"\n        android:textSize=\"14sp\"/>\n</LinearLayout>\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/item_bonus.xml b/app/src/main/res/layout/item_bonus.xml
+--- a/app/src/main/res/layout/item_bonus.xml	(revision 14dee519a3afa23c4b7856ef9f52f286b6280337)
++++ b/app/src/main/res/layout/item_bonus.xml	(date 1704039093355)
+@@ -1,4 +1,6 @@
+-<!-- res/layout/item_bonus.xml -->
++<!-- Risorsa XML per l'elemento nella RecyclerView -->
++<!-- Personalizzala a seconda delle tue esigenze -->
++
+ <LinearLayout
+     xmlns:android="http://schemas.android.com/apk/res/android"
+     android:layout_width="match_parent"
+@@ -7,21 +9,40 @@
+     android:padding="16dp">
+ 
+     <TextView
+-        android:id="@+id/nomeTipoBonusTextView"
++        android:id="@+id/nomeTextView"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+-        android:textSize="16sp"
+-        android:textStyle="bold"/>
++        android:text="Nome del Bonus"
++        android:textSize="18sp"
++        android:textStyle="bold" />
+ 
+     <TextView
+-        android:id="@+id/valoreTipoBonusTextView"
++        android:id="@+id/valoreTextView"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+-        android:textSize="14sp"/>
++        android:text="Valore: 0"
++        android:textSize="16sp" />
++
++    <!-- Pulsanti Modifica ed Elimina -->
++    <LinearLayout
++        android:layout_width="match_parent"
++        android:layout_height="wrap_content"
++        android:orientation="horizontal">
++
++        <Button
++            android:id="@+id/modificaButton"
++            android:layout_width="0dp"
++            android:layout_height="wrap_content"
++            android:layout_weight="1"
++            android:text="Modifica"
++            android:textSize="14sp" />
+ 
+-    <TextView
+-        android:id="@+id/quantitaTextView"
+-        android:layout_width="wrap_content"
+-        android:layout_height="wrap_content"
+-        android:textSize="14sp"/>
++        <Button
++            android:id="@+id/eliminaButton"
++            android:layout_width="0dp"
++            android:layout_height="wrap_content"
++            android:layout_weight="1"
++            android:text="Elimina"
++            android:textSize="14sp" />
++    </LinearLayout>
+ </LinearLayout>
+Index: app/src/main/res/layout/activity_crea_bonus.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/activity_crea_bonus.xml b/app/src/main/res/layout/activity_crea_bonus.xml
+new file mode 100644
+--- /dev/null	(date 1704039561280)
++++ b/app/src/main/res/layout/activity_crea_bonus.xml	(date 1704039561280)
+@@ -0,0 +1,27 @@
++<!-- activity_crea_bonus.xml -->
++<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
++    android:layout_width="match_parent"
++    android:layout_height="match_parent">
++
++    <EditText
++        android:id="@+id/editTextNome"
++        android:layout_width="match_parent"
++        android:layout_height="wrap_content"
++        android:hint="Nome del bonus" />
++
++    <EditText
++        android:id="@+id/editTextValore"
++        android:layout_width="match_parent"
++        android:layout_height="wrap_content"
++        android:layout_below="@id/editTextNome"
++        android:layout_marginTop="16dp"
++        android:hint="Valore del bonus" />
++
++    <Button
++        android:id="@+id/buttonConferma"
++        android:layout_width="wrap_content"
++        android:layout_height="wrap_content"
++        android:layout_below="@id/editTextValore"
++        android:layout_marginTop="16dp"
++        android:text="Conferma" />
++</RelativeLayout>
+Index: app/src/main/res/values/colors.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\n<resources>\n    <color name=\"purple_200\">#FFBB86FC</color>\n    <color name=\"purple_500\">#FF6200EE</color>\n    <color name=\"purple_700\">#FF3700B3</color>\n    <color name=\"teal_200\">#FF03DAC5</color>\n    <color name=\"teal_700\">#FF018786</color>\n    <color name=\"black\">#FF000000</color>\n    <color name=\"white\">#FFFFFFFF</color>\n</resources>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/values/colors.xml b/app/src/main/res/values/colors.xml
+--- a/app/src/main/res/values/colors.xml	(revision 14dee519a3afa23c4b7856ef9f52f286b6280337)
++++ b/app/src/main/res/values/colors.xml	(date 1704233933215)
+@@ -7,4 +7,5 @@
+     <color name="teal_700">#FF018786</color>
+     <color name="black">#FF000000</color>
+     <color name="white">#FFFFFFFF</color>
++    <color name="selezionato">#FFD700</color>
+ </resources>
+\ No newline at end of file
+Index: app/src/main/java/com/example/progettopm/view/BonusGiornataAdapter.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.progettopm.ui\n\nimport android.util.Log\nimport android.view.LayoutInflater\nimport android.view.ViewGroup\nimport androidx.recyclerview.widget.DiffUtil\nimport androidx.recyclerview.widget.ListAdapter\nimport androidx.recyclerview.widget.RecyclerView\nimport com.example.progettopm.databinding.ItemBonusGiornataBinding\nimport com.example.progettopm.model.Bonus\nimport com.example.progettopm.model.BonusGiornata\nimport com.google.firebase.firestore.DocumentReference\n\nclass BonusGiornataAdapter : ListAdapter<DocumentReference, BonusGiornataAdapter.BonusGiornataViewHolder>(DiffCallback()) {\n\n    inner class BonusGiornataViewHolder(private val binding: ItemBonusGiornataBinding) : RecyclerView.ViewHolder(binding.root) {\n        fun bind(bonusGiornata: BonusGiornata) {\n            val tipoBonusRef = bonusGiornata.tipoBonus\n            if (tipoBonusRef != null) {\n                Log.d(\"BonusGiornataAdapter\", \"TipoBonusRef is not null\")\n                tipoBonusRef.get().addOnSuccessListener { tipoBonusSnapshot ->\n                    val tipoBonus = tipoBonusSnapshot.toObject(Bonus::class.java)\n                    if (tipoBonus != null) {\n                        Log.d(\"BonusGiornataAdapter\", \"TipoBonus is not null\")\n                        binding.nomeTipoBonusTextView.text = tipoBonus.nome ?: \"Tipo Bonus non disponibile\"\n                        binding.quantitaTextView.text = bonusGiornata.quantita.toString()\n                        binding.punteggioBonusTextView.text = calculateBonusScore(bonusGiornata, tipoBonus).toString()\n                    } else {\n                        // Gestisci il caso in cui non riesci a ottenere l'oggetto Bonus\n                        Log.d(\"BonusGiornataAdapter\", \"TipoBonus is null\")\n                        binding.nomeTipoBonusTextView.text = \"Tipo Bonus non disponibile\"\n                    }\n                }\n            } else {\n                Log.d(\"BonusGiornataAdapter\", \"TipoBonusRef is null\")\n            }\n        }\n\n        private fun calculateBonusScore(bonusGiornata: BonusGiornata, tipoBonus: Bonus): Int {\n            return bonusGiornata.quantita * tipoBonus.valore\n        }\n    }\n\n    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BonusGiornataViewHolder {\n        val binding = ItemBonusGiornataBinding.inflate(LayoutInflater.from(parent.context), parent, false)\n        return BonusGiornataViewHolder(binding)\n    }\n\n    override fun onBindViewHolder(holder: BonusGiornataViewHolder, position: Int) {\n        val bonusGiornataRef = getItem(position)\n        bonusGiornataRef.get().addOnSuccessListener { bonusSnapshot ->\n            val bonusGiornata = bonusSnapshot.toObject(BonusGiornata::class.java)\n            if (bonusGiornata != null) {\n                Log.d(\"BonusGiornataAdapter\", \"Binding BonusGiornata\")\n                holder.bind(bonusGiornata)\n            }\n        }\n    }\n\n    private class DiffCallback : DiffUtil.ItemCallback<DocumentReference>() {\n        override fun areItemsTheSame(oldItem: DocumentReference, newItem: DocumentReference): Boolean {\n            return oldItem.id == newItem.id\n        }\n\n        override fun areContentsTheSame(oldItem: DocumentReference, newItem: DocumentReference): Boolean {\n            // Considera se i contenuti sono gli stessi (non implementato qui)\n            return true\n        }\n    }\n}\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/progettopm/view/BonusGiornataAdapter.kt b/app/src/main/java/com/example/progettopm/view/BonusGiornataAdapter.kt
+--- a/app/src/main/java/com/example/progettopm/view/BonusGiornataAdapter.kt	(revision 14dee519a3afa23c4b7856ef9f52f286b6280337)
++++ b/app/src/main/java/com/example/progettopm/view/BonusGiornataAdapter.kt	(date 1704235110652)
+@@ -1,4 +1,4 @@
+-package com.example.progettopm.ui
++package com.example.progettopm.view
+ 
+ import android.util.Log
+ import android.view.LayoutInflater

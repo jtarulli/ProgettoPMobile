@@ -1,0 +1,39 @@
+<!-- item_selezione_giocatore.xml -->
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="giocatore"
+            type="com.example.progettopm.model.Giocatore" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Aggiungi qui i tuoi elementi del layout e utilizza la variabile 'giocatore' -->
+        <TextView
+            android:id="@+id/nomeCognomeTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{giocatore.nome + ' ' + giocatore.cognome}" />
+
+        <ImageView
+            android:id="@+id/fotoImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
+
+        <TextView
+            android:id="@+id/valoreTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{String.valueOf(giocatore.valore)}" />
+
+        <!-- Altri elementi del layout -->
+
+    </LinearLayout>
+</layout>

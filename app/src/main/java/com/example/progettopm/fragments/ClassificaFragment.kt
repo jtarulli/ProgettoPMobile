@@ -14,7 +14,7 @@ import com.example.progettopm.R
 import com.example.progettopm.SessionManager
 import com.example.progettopm.model.Giocatore
 import com.example.progettopm.model.Squadra
-import com.example.progettopm.ui.GiocatoriAdapter
+import com.example.progettopm.view.GiocatoriAdapter
 import com.example.progettopm.view.ClassificaAdapter
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.CollectionReference

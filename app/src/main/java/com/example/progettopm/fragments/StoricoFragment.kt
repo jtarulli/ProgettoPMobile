@@ -56,8 +56,8 @@ class StoricoFragment : Fragment(R.layout.fragment_storico) {
                     val punteggio = document.getString("punteggio").toString()
                     val userRef = document.get("user") as DocumentReference
 
-                    val salvaDatiFormazione = Formazione(id, giornataRef, userRef, punteggio, nomeSquadra, giocatoriSchieratiRef)
-                    datiFormazioneList.add(salvaDatiFormazione)
+                    //val salvaDatiFormazione = Formazione(id, giornataRef, userRef, punteggio, nomeSquadra, giocatoriSchieratiRef)
+                    //datiFormazioneList.add(salvaDatiFormazione)
                 }
 
             }

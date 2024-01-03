@@ -1,5 +1,6 @@
-package com.example.progettopm.ui
+package com.example.progettopm.view
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -18,11 +19,13 @@ class GiocatoriAdapter :
     ListAdapter<Giocatore, GiocatoriAdapter.GiocatoreViewHolder>(DiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GiocatoreViewHolder {
+        Log.d("GiocatoriAdapter", "sono in onCreateViewHolder")
         val binding = ItemGiocatoreBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return GiocatoreViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: GiocatoreViewHolder, position: Int) {
+        Log.d("GiocatoriAdapter", "sono in onBindViewHolder")
         val giocatore = getItem(position)
         holder.bind(giocatore)
     }
@@ -32,6 +35,7 @@ class GiocatoriAdapter :
         private val bonusAdapter = BonusGiornataAdapter()
 
         init {
+            Log.d("GiocatoriAdapter", "sono in GiocatoreViewHolder nell'init")
             binding.recyclerViewBonusGiornata.apply {
                 layoutManager = LinearLayoutManager(context)
                 adapter = bonusAdapter
@@ -39,6 +43,7 @@ class GiocatoriAdapter :
         }
 
         fun bind(giocatore: Giocatore) {
+            Log.d("GiocatoriAdapter", "sono in GiocatoreViewHolder nel bind")
             binding.nomeTextView.text = giocatore.nome
             binding.cognomeTextView.text = giocatore.cognome
 
@@ -48,6 +53,7 @@ class GiocatoriAdapter :
                 .into(binding.fotoImageView)
 
             if (giocatore.bonusGiornataList.isNotEmpty()) {
+                Log.d("GiocatoriAdapter", "sono in GiocatoreViewHolder nel bind primo if")
                 bonusAdapter.submitList(giocatore.bonusGiornataList)
                 calculateTotalScore(giocatore.bonusGiornataList) { totalScore ->
                     binding.punteggioTextView.text = totalScore.toString()
@@ -59,6 +65,7 @@ class GiocatoriAdapter :
         }
 
         private fun calculateTotalScore(bonusGiornataList: List<DocumentReference>, callback: (Int) -> Unit) {
+            Log.d("GiocatoriAdapter", "sono in calculateTotalScore")
             var runningTotal = 0
             var remainingCount = bonusGiornataList.size
 
@@ -68,6 +75,7 @@ class GiocatoriAdapter :
             }
 
             for (bonusRef in bonusGiornataList) {
+                Log.d("GiocatoriAdapter", "sono in calculateTotalScore primo if")
                 bonusRef.get().addOnSuccessListener { bonusSnapshot ->
                     val bonusGiornata = bonusSnapshot.toObject(BonusGiornata::class.java)
                     if (bonusGiornata != null) {
@@ -107,10 +115,12 @@ class GiocatoriAdapter :
 
     class DiffCallback : DiffUtil.ItemCallback<Giocatore>() {
         override fun areItemsTheSame(oldItem: Giocatore, newItem: Giocatore): Boolean {
+            Log.d("GiocatoriAdapter", "areItemsTheSame")
             return oldItem.id == newItem.id // Supponendo che ci sia un campo "id" o qualcosa di simile che identifica univocamente il Giocatore
         }
 
         override fun areContentsTheSame(oldItem: Giocatore, newItem: Giocatore): Boolean {
+            Log.d("GiocatoriAdapter", "areContentsTheSame")
             return oldItem == newItem // Questo controlla che tutti i campi siano identici, inclusi punteggio e nome
         }
     }
