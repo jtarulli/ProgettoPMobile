@@ -2,6 +2,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.Filter
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
@@ -13,6 +14,12 @@ import com.example.progettopm.model.Lega
 
 class UnioneLegaAdapter(private val onUniscitiClick: (Lega) -> Unit) :
     ListAdapter<Lega, UnioneLegaAdapter.LegaViewHolder>(LegaDiffCallback()) {
+
+    private var legheListFull: List<Lega> = ArrayList()
+
+    init {
+        legheListFull = currentList
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LegaViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -42,6 +49,7 @@ class UnioneLegaAdapter(private val onUniscitiClick: (Lega) -> Unit) :
                 .into(logoImageView)
 
             // Gestisci il clic sul pulsante "Unisciti"
+
             uniscitiButton.setOnClickListener {
                 onUniscitiClick(lega)
             }
@@ -57,4 +65,6 @@ class UnioneLegaAdapter(private val onUniscitiClick: (Lega) -> Unit) :
             return oldItem == newItem
         }
     }
+
+
 }

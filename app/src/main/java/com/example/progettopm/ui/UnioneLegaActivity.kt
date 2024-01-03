@@ -5,6 +5,7 @@ import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.SearchView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,12 +15,14 @@ import com.example.progettopm.fragments.HomeFragment
 import com.example.progettopm.model.Lega
 import com.example.progettopm.view.MasterActivity
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 
 class UnioneLegaActivity : AppCompatActivity() {
 
     private lateinit var legheAdapter: UnioneLegaAdapter
+    val legheList = mutableListOf<Lega>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,6 +40,22 @@ class UnioneLegaActivity : AppCompatActivity() {
 
         // Carica le leghe dalla Firestore e aggiorna l'adapter
         caricaLeghe()
+
+        //search view
+        val searchView = findViewById<SearchView>(R.id.unioneLega_searchView)
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String): Boolean {
+                val filteredLegaList = legheList.filter { lega ->
+                    lega.nome.contains(newText, ignoreCase = true)
+                }
+                legheAdapter.submitList(filteredLegaList)
+                return true
+            }
+        })
     }
 
     private fun caricaLeghe() {
@@ -44,7 +63,7 @@ class UnioneLegaActivity : AppCompatActivity() {
 
         legheCollection.get()
             .addOnSuccessListener { result ->
-                val legheList = mutableListOf<Lega>()
+               // val legheList = mutableListOf<Lega>()
 
                 for (document in result) {
                     // Converti ogni documento in un oggetto Lega
