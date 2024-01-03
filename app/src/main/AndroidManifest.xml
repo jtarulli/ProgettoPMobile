@@ -52,6 +52,20 @@
             android:exported="false">
         </activity>
 
+        <activity android:name=".ui.BonusActivity"
+            android:theme="@style/Theme.Material3.Light.NoActionBar"
+            android:exported="false">
+        </activity>
+
+        <activity android:name=".ui.CreaBonusActivity"
+            android:theme="@style/Theme.Material3.Light.NoActionBar"
+            android:exported="false">
+        </activity>
+
+        <activity android:name=".ui.FormazioneActivity"
+            android:theme="@style/Theme.Material3.Light.NoActionBar"
+            android:exported="false">
+        </activity>
         <activity android:name=".view.MasterActivity"
         android:exported="true">
 

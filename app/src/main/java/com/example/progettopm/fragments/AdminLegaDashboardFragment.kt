@@ -1,3 +1,5 @@
+package com.example.progettopm.fragments
+
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
 import com.example.progettopm.R
+import com.example.progettopm.ui.BonusActivity
 import com.example.progettopm.ui.ModificaLegaActivity
 
 class AdminLegaDashboardFragment : Fragment() {
@@ -28,6 +31,15 @@ class AdminLegaDashboardFragment : Fragment() {
             intent.putExtra("MODIFICA_LEGA", true)
             startActivity(intent)
         }
+
+        // Bottone "Gestione Bonus"
+        val gestioneBonusButton = view.findViewById<Button>(R.id.gestioneBonusButton)
+        gestioneBonusButton.setOnClickListener {
+            // Avvia l'activity di GestioneBonusActivity
+            val intent = Intent(activity, BonusActivity::class.java)
+            startActivity(intent)
+        }
+
 
         return view
     }

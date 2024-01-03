@@ -1,5 +1,4 @@
-
-package com.example.progettopm.ui
+package com.example.progettopm.fragments
 
 import android.os.Bundle
 import android.util.Log
@@ -12,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.progettopm.R
 import com.example.progettopm.SessionManager
 import com.example.progettopm.model.Giocatore
-import com.google.android.gms.tasks.Task
+import com.example.progettopm.view.GiocatoriAdapter
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
@@ -26,66 +25,61 @@ class GiocatoriFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        Log.d("GiocatoriFragment", "onCreateView")
         val view = inflater.inflate(R.layout.fragment_giocatori, container, false)
         recyclerView = view.findViewById(R.id.recyclerViewGiocatori)
         return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        Log.d("GiocatoriFragment", "onViewCreated")
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView()
         loadGiocatoriData()
     }
 
     private fun setupRecyclerView() {
+        Log.d("GiocatoriFragment", "setupRecyclerView")
         giocatoriAdapter = GiocatoriAdapter()
-        recyclerView.apply {
-            layoutManager = LinearLayoutManager(activity)
-            adapter = giocatoriAdapter
-        }
+        recyclerView.layoutManager = LinearLayoutManager(activity)
+        recyclerView.adapter = giocatoriAdapter
     }
 
-    private fun loadBonusGiornata(giocatoreId: String): Task<QuerySnapshot> {
+    private fun loadBonusGiornata(giocatoreId: String): Query {
         val legaCorrenteId = SessionManager.legaCorrenteId
-        val bonusGiornataRef = FirebaseFirestore.getInstance().collection("bonus_giornata")
+        return FirebaseFirestore.getInstance().collection("bonus_giornata")
             .whereEqualTo("lega", FirebaseFirestore.getInstance().document("leghe/$legaCorrenteId"))
             .whereEqualTo("giocatore", giocatoreId)
-
-        return bonusGiornataRef.get()
     }
 
     private fun loadGiocatoriData() {
+        Log.d("GiocatoriFragment", "loadGiocatoriData")
         val legaCorrenteId = SessionManager.legaCorrenteId
+        Log.d("GiocatoriFragment", "loadGiocatoriData id lega $legaCorrenteId")
         if (legaCorrenteId != null) {
             val giocatoriRef = FirebaseFirestore.getInstance().collection("giocatori")
-                .whereEqualTo(
-                    "lega",
-                    FirebaseFirestore.getInstance().document("leghe/$legaCorrenteId")
-                )
+                .whereEqualTo("lega", FirebaseFirestore.getInstance().document("leghe/$legaCorrenteId"))
                 .orderBy("punteggio", Query.Direction.DESCENDING)
 
             giocatoriRef.get().addOnSuccessListener { result ->
                 val giocatoriList = mutableListOf<Giocatore>()
+
                 for (document in result) {
                     val giocatore = document.toObject(Giocatore::class.java)
                     giocatoriList.add(giocatore)
 
-                    // Carichiamo i DocumentReference dei BonusGiornata referenziati
-                    val bonusGiornataRef = FirebaseFirestore.getInstance().collection("bonus_giornata")
-                        .whereEqualTo("lega", FirebaseFirestore.getInstance().document("leghe/$legaCorrenteId"))
-                        .whereEqualTo("giocatore", FirebaseFirestore.getInstance().document("giocatori/${giocatore.id}"))
+                    // Carica i DocumentReference dei BonusGiornata referenziati
+                    val bonusGiornataRef = loadBonusGiornata(giocatore.id)
 
                     bonusGiornataRef.get().addOnSuccessListener { bonusGiornataSnapshot ->
-                        val bonusGiornataList =
-                            bonusGiornataSnapshot.documents.map { it.reference } // manteniamo il tipo come List<DocumentReference>
+                        val bonusGiornataList = bonusGiornataSnapshot.documents.map { it.reference }
                         giocatore.bonusGiornataList = bonusGiornataList
 
-                        // Aggiorniamo la recyclerView solo quando abbiamo caricato tutti i dati
+                        // Aggiorna la recyclerView solo quando sono stati caricati tutti i dati
                         giocatoriAdapter.submitList(giocatoriList)
                     }
                 }
             }
         }
     }
-
 }

@@ -52,4 +52,15 @@
         android:text=""
         android:visibility="gone" />
 
+    <Button
+        android:id="@+id/inserisciFormazioneButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/nomeSquadraTextView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
+        android:text="Inserisci Formazione"
+        android:visibility="gone" />
+
+
 </RelativeLayout>
