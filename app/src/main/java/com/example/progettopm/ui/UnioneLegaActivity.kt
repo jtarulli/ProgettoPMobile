@@ -4,6 +4,7 @@ import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.Button
 import android.widget.SearchView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -56,6 +57,8 @@ class UnioneLegaActivity : AppCompatActivity() {
                 return true
             }
         })
+
+
     }
 
     private fun caricaLeghe() {
@@ -88,22 +91,40 @@ class UnioneLegaActivity : AppCompatActivity() {
         val userDocRef = user?.let { FirebaseFirestore.getInstance().collection("utenti").document(it.uid) }
 
         if (userDocRef != null) {
-            userDocRef.update("leghe", FieldValue.arrayUnion(legaRef))
-                .addOnSuccessListener {
-                    // Aggiornamento riuscito
-                    Toast.makeText(this, "Ti sei unito alla lega ${legaScelta.nome}", Toast.LENGTH_SHORT).show()
+            var unisciti_btn: Button = findViewById(R.id.uniscitiButton)
+            userDocRef.get()
+                .addOnSuccessListener { document ->
+                    if (document.exists()) {
+                        val legheUtente = document.get("leghe") as List<String>?
+                        unisciti_btn.isEnabled = !(legheUtente != null && legheUtente.contains(legaScelta.id))
 
-                    // Se l'aggiornamento ha successo, esegui altre azioni qui
+                        // Cambia il colore del pulsante in base allo stato abilitato/disabilitato
+                        if (!unisciti_btn.isEnabled) {
+                            unisciti_btn.setBackgroundColor(resources.getColor(R.color.bottoneDisabilitatoSfondo))
+                        }
+                    }
                 }
-                .addOnFailureListener { e ->
-                    // Gestione dell'errore durante l'aggiornamento
-                    Log.w(TAG, "Errore durante l'aggiornamento del campo leghe", e)
-                    Toast.makeText(this, "Si è verificato un errore, riprova più tardi", Toast.LENGTH_SHORT).show()
+                .addOnFailureListener { exception ->
+                    Log.d(TAG, "Errore nel recupero dei dati dell'utente: ", exception)
                 }
+        }
+            if (userDocRef != null) {
+                userDocRef.update("leghe", FieldValue.arrayUnion(legaRef))
+                    .addOnSuccessListener {
+                        // Aggiornamento riuscito
+                        Toast.makeText(this, "Ti sei unito alla lega ${legaScelta.nome}", Toast.LENGTH_SHORT).show()
+
+                        // Se l'aggiornamento ha successo, esegui altre azioni qui
+                    }
+                    .addOnFailureListener { e ->
+                        // Gestione dell'errore durante l'aggiornamento
+                        Log.w(TAG, "Errore durante l'aggiornamento del campo leghe", e)
+                        Toast.makeText(this, "Si è verificato un errore, riprova più tardi", Toast.LENGTH_SHORT).show()
+                    }
+            }
         }
     }
 
-}
 
 
 
