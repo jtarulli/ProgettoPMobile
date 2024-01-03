@@ -11,8 +11,8 @@ import com.bumptech.glide.Glide
 import com.example.progettopm.R
 import com.example.progettopm.model.Lega
 
-class LegheAdapter(private val onUniscitiClick: (Lega) -> Unit) :
-    ListAdapter<Lega, LegheAdapter.LegaViewHolder>(LegaDiffCallback()) {
+class UnioneLegaAdapter(private val onUniscitiClick: (Lega) -> Unit) :
+    ListAdapter<Lega, UnioneLegaAdapter.LegaViewHolder>(LegaDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LegaViewHolder {
         val view = LayoutInflater.from(parent.context)

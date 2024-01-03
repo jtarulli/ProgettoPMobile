@@ -7,6 +7,12 @@
     android:orientation="vertical"
     android:padding="16dp">
 
+    <SearchView
+        android:id="@+id/unioneLega_searchView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:queryHint="Cerca Lega..." />
+
     <!-- RecyclerView per visualizzare l'elenco delle leghe -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewLeghe"
