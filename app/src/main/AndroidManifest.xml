@@ -66,10 +66,19 @@
             android:theme="@style/Theme.Material3.Light.NoActionBar"
             android:exported="false">
         </activity>
+
+        <activity android:name=".ui.CalendarioActivity"
+            android:theme="@style/Theme.Material3.Light.NoActionBar"
+            android:exported="false">
+        </activity>
+
+        <activity android:name=".ui.ModificaGiocatoreActivity"
+                android:theme="@style/Theme.Material3.Light.NoActionBar"
+                android:exported="false">
+         </activity>
+
         <activity android:name=".view.MasterActivity"
-        android:exported="true">
-
-
+            android:exported="true">
 
     </activity>
     </application>

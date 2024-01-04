@@ -1,26 +1,18 @@
-package com.example.progettopm.fragments
+package com.example.progettopm.fragments.mainFragments
 
-import android.content.ContentValues.TAG
+import android.content.ContentValues
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.progettopm.R
-import com.example.progettopm.SessionManager
-import com.example.progettopm.model.Giocatore
 import com.example.progettopm.model.Squadra
-import com.example.progettopm.view.GiocatoriAdapter
 import com.example.progettopm.view.ClassificaAdapter
-import com.google.firebase.Firebase
-import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.Query
-import com.google.firebase.firestore.firestore
 
 class ClassificaFragment : Fragment() {
 
@@ -54,7 +46,7 @@ class ClassificaFragment : Fragment() {
                 recyclerView.adapter = classificaAdapter
             }
             .addOnFailureListener { exception ->
-                Log.d(TAG, "Errore recupero dati: $exception")
+                Log.d(ContentValues.TAG, "Errore recupero dati: $exception")
             }
 
         return view

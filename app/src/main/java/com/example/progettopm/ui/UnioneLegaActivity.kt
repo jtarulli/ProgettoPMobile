@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.progettopm.R
-import com.example.progettopm.fragments.HomeFragment
+import com.example.progettopm.fragments.mainFragments.HomeFragment
 import com.example.progettopm.model.Lega
 import com.example.progettopm.view.MasterActivity
 import com.example.progettopm.view.UnioneLegaAdapter

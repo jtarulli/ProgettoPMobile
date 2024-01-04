@@ -13,4 +13,11 @@
     <string name="format_budget">Budget: %d crediti</string>
     <string name="giocatori_rimasti">Giocatori rimasti: %d</string>
     <string name="somma_valori">Somma valori: %d</string>
+    <string name="aggiungi_giocatore">Aggiungi Giocatore"</string>
+    <string name="nome">Nome</string>
+    <string name="cognome">Cognome</string>
+    <string name="conferma">Conferma</string>
+    <string name="valore">Valore</string>
+    <string name="foto_giocatore">Foto</string>
+    <string name="scegli_foto">Scegli foto</string>
 </resources>

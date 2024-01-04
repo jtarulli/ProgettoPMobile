@@ -1,4 +1,4 @@
-package com.example.progettopm.fragments
+package com.example.progettopm.fragments.mainFragments
 
 import android.content.Context
 import android.content.Intent
@@ -22,7 +22,6 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
-
 
 class HomeFragment : Fragment(R.layout.fragment_home) {
 
@@ -89,7 +88,11 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         utenteRef.get().addOnSuccessListener { getUserInformation(it) }
             .addOnFailureListener { eccezione ->
                 // Gestisci eventuali errori durante la lettura dei dati dal Firestore
-                Toast.makeText(requireContext(), "Errore durante il recupero dei dati dell'utente", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    requireContext(),
+                    "Errore durante il recupero dei dati dell'utente",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
 
         utenteRef.addSnapshotListener(object : EventListener<DocumentSnapshot?> {
@@ -152,7 +155,11 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                     }
                     .addOnFailureListener { eccezione ->
                         // Gestisci eventuali errori durante la lettura del documento della lega
-                        Toast.makeText(requireContext(), "Errore durante il recupero dei dati della lega", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            requireContext(),
+                            "Errore durante il recupero dei dati della lega",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
             } else {
                 // L'utente non è iscritto a nessuna lega

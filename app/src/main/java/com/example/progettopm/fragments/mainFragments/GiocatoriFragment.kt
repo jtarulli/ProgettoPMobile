@@ -1,4 +1,4 @@
-package com.example.progettopm.fragments
+package com.example.progettopm.fragments.mainFragments
 
 import android.os.Bundle
 import android.util.Log
@@ -14,7 +14,6 @@ import com.example.progettopm.model.Giocatore
 import com.example.progettopm.view.GiocatoriAdapter
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
-import com.google.firebase.firestore.QuerySnapshot
 
 class GiocatoriFragment : Fragment() {
 

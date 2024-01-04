@@ -27,6 +27,24 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="16dp"
         android:text="Gestione Bonus" />
+    <Button
+        android:id="@+id/calendarioButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Calendario"
+        android:layout_marginTop="16dp"
+        android:layout_below="@id/gestioneBonusButton"
+        android:layout_centerHorizontal="true"/>
+
+    <Button
+        android:id="@+id/gestioneGiocatoriButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Gestione Giocatori"
+        android:layout_marginTop="16dp"
+        android:layout_below="@id/calendarioButton"
+        android:layout_centerHorizontal="true"/>
+
 
 
 </RelativeLayout>
