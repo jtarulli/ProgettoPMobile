@@ -9,7 +9,9 @@ import android.widget.Button
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import com.example.progettopm.R
+import com.example.progettopm.SessionManager
 import com.example.progettopm.model.Bonus
+import com.google.firebase.firestore.FirebaseFirestore
 
 class CreaBonusActivity : AppCompatActivity() {
 
@@ -56,16 +58,13 @@ class CreaBonusActivity : AppCompatActivity() {
             return
         }
 
+        val lega = FirebaseFirestore.getInstance().collection("leghe")
+            .document(SessionManager.legaCorrenteId!!)
+
         // Crea un oggetto Bonus con i valori inseriti
-        val nuovoBonus = Bonus(valore = valore, nome = nome)
+        val nuovoBonus = Bonus(valore = valore, nome = nome, lega = lega)
 
-        // Log per debug
-        Log.d("CreaBonusActivity", "New Bonus object created: $nuovoBonus")
-
-        // Passa il bonus modificato/creato all'activity chiamante utilizzando un Bundle
-        val resultIntent = Intent()
-        resultIntent.putExtra("NUOVO_BONUS", nuovoBonus as Parcelable)
-        setResult(RESULT_OK, resultIntent)
+        FirebaseFirestore.getInstance().collection("bonus").add(nuovoBonus)
         finish()
     }
 
