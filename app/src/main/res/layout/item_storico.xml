@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
@@ -9,36 +8,37 @@
     android:layout_margin="16dp">
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="16dp"
-        android:orientation="horizontal">
+        android:gravity="center_vertical"
+        android:orientation="vertical">
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_weight="1"
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/numGiornata_RV"
-            android:text="Numero Giornata"
-            android:textStyle="bold">
-        </TextView>
+            android:layout_gravity="center_vertical"
+            android:orientation="horizontal">
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:id="@+id/nomeSquadra_RV"
-            android:text="Nome Squadra"
-            android:textStyle="bold">
-        </TextView>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/numGiornata_RV">
+            </TextView>
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_weight="1"
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/nomeSquadra_RV">
+            </TextView>
+        </LinearLayout>
+
+        <!-- RecyclerView per gli elenchi di giocatori -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/punteggioSquadra_RV"
-            android:text="Punteggio"
-            android:textStyle="bold">
-        </TextView>
+            android:id="@+id/elencoGiocatori_Rv">
+        </androidx.recyclerview.widget.RecyclerView>
+
     </LinearLayout>
+
 </androidx.cardview.widget.CardView>

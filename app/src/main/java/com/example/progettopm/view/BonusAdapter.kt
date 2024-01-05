@@ -1,19 +1,23 @@
 package com.example.progettopm.view
 
-import android.content.Intent
-import android.util.Log
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat.startActivity
+import android.widget.AdapterView
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.progettopm.DeleteConfirmationDialog
+import com.example.progettopm.R
+import com.example.progettopm.databinding.ItemGiocatoreModificaBinding
+import com.example.progettopm.model.Giocatore
 import com.example.progettopm.DeleteConfirmationDialog.OnConfirmListener
 import com.example.progettopm.databinding.ItemBonusBinding
+import com.example.progettopm.fragments.AggiungiModificaGiocatoriFragment
 import com.example.progettopm.model.Bonus
-import com.example.progettopm.ui.CreaBonusActivity
 import com.google.firebase.firestore.FirebaseFirestore
 
 
@@ -33,19 +37,24 @@ class BonusAdapter :
     }
 
     inner class BonusViewHolder(private val binding: ItemBonusBinding) : RecyclerView.ViewHolder(binding.root) {
-        private lateinit var idBonus: String
+        private lateinit var idGiocatore: String
         fun bind(bonus: Bonus) {
-            idBonus = bonus.id
-            Log.d("HELP_ID", idBonus)
+            idGiocatore = bonus.id
             binding.nomeTextView.text = bonus.nome
             binding.bonusTextView.text = bonus.valore.toString()
 
             binding.btnEdit.setOnClickListener {
                 val ctx = it.context
-                Log.d("BonusActivity", "Creazione Bonus Button Clicked")
-                val intent = Intent(ctx, CreaBonusActivity::class.java)
-                intent.putExtra("bonus", idBonus)
-                startActivity(ctx, intent, null)
+                if (ctx is FragmentActivity){
+                    val fragmentTransaction = ctx.supportFragmentManager.beginTransaction()
+                    val aggiungiGiocatoriFragment : Fragment = AggiungiModificaGiocatoriFragment()
+                    val args = Bundle()
+                    args.putString("idGiocatore", idGiocatore)
+                    aggiungiGiocatoriFragment.arguments = args
+                    fragmentTransaction.replace(R.id.fragmentContainer, aggiungiGiocatoriFragment)
+                    fragmentTransaction.addToBackStack(null);
+                    fragmentTransaction.commit()
+                }
             }
 
             binding.btnDelete.setOnClickListener {
@@ -55,10 +64,8 @@ class BonusAdapter :
                     "Sei sicuro di voler eliminare questo elemento?",
                     object : OnConfirmListener {
                         override fun onConfirm() {
-                            Log.d("BonusTag", "Id: $idBonus")
-                            FirebaseFirestore.getInstance().collection("bonus")
-                                                           .document(idBonus).delete()
-                            itemClickListener?.onDelete(idBonus)
+                            val giocatoreId = getItem(adapterPosition).id
+                            itemClickListener?.onDelete(giocatoreId)
                         }
                     })
             }
@@ -67,9 +74,7 @@ class BonusAdapter :
     }
 
     interface OnItemClickListener {
-        fun onDelete(bonusId: String){
-            Log.d("BonusTag", bonusId)
-        }
+        fun onDelete(giocatoreId: String)
     }
     class DiffCallback : DiffUtil.ItemCallback<Bonus>() {
         override fun areItemsTheSame(oldItem: Bonus, newItem: Bonus): Boolean {

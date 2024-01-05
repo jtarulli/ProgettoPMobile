@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+<<<<<<< HEAD:app/src/main/res/layout/activity_calendario.xml
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
@@ -34,4 +35,20 @@
         android:layout_centerVertical="true"
         android:text="@string/aggiungi_nuova_giornata" />
 
+=======
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewGiornate"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <Button
+        android:id="@+id/nuovoGiornoButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="16dp"
+        android:text="Nuova Giornata" />
+
+>>>>>>> 5c07b78431c10886181839c908c6a9bc53aa30e2:app/src/main/res/layout/fragment_calendario.xml
 </RelativeLayout>

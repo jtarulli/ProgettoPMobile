@@ -24,6 +24,18 @@ class StoricoFragment : Fragment() {
     private lateinit var storicoAdapter: StoricoAdapter
     private val formazioniList = mutableListOf<Formazione>()
 
+    companion object {
+        const val ARG_SQUADRA_ID = "squadra_id"
+
+        fun newInstance(squadraId: String): StoricoFragment {
+            val fragment = StoricoFragment()
+            val args = Bundle()
+            args.putString(ARG_SQUADRA_ID, squadraId)
+            fragment.arguments = args
+            return fragment
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -36,32 +48,41 @@ class StoricoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Recupero dei dati da Firestore
-        caricaFormazioni()
+        // Recupero dell'ID della squadra passato come parametro
+        val squadraId = arguments?.getString(ARG_SQUADRA_ID)
+
+        if (squadraId != null) {
+            // Recupero dei dati da Firestore per la squadra specificata
+            caricaFormazioni(squadraId)
+        } else {
+            // Gestisci il caso in cui l'ID della squadra non sia disponibile
+            Toast.makeText(requireContext(), "ID della squadra non disponibile", Toast.LENGTH_SHORT)
+                .show()
+        }
     }
 
-    private fun caricaFormazioni(){
-        //Controllo che venga scelto lo storico dell'utente loggato e della lega corrente
+    private fun caricaFormazioni(squadraId: String) {
         // Ottieni l'istanza dell'utente corrente
         val user = FirebaseAuth.getInstance().currentUser
         lateinit var userId: String
         // Verifica se l'utente è attualmente autenticato
         if (user != null) {
-            userId = user.uid.toString()
-            Log.d("User di", "$userId")
-            // Ora userId contiene l'ID dell'utente corrente
+            userId = user.uid
+            Log.d("User di", userId)
         } else {
             // L'utente non è attualmente autenticato
+            return
         }
 
         val legaId = SessionManager.legaCorrenteId
-        Log.d("LegaId", "$legaId")
+
         val formazioniCollection = FirebaseFirestore.getInstance().collection("formazioni")
 
+        // Log per debug
+        Log.d("Storico fragment", "squadraId: $squadraId")
 
         formazioniCollection
-            .whereEqualTo("utente", userId)
-            .whereEqualTo("legaId", legaId)
+            .whereEqualTo("squadra", FirebaseFirestore.getInstance().document("squadre/$squadraId"))
             .orderBy("giornata", Query.Direction.ASCENDING)
             .get()
             .addOnSuccessListener { result ->
@@ -77,7 +98,14 @@ class StoricoFragment : Fragment() {
                 storicoRecycleView.adapter = storicoAdapter
             }
             .addOnFailureListener { exception ->
-                Toast.makeText(requireContext(), "Errore nel recupero delle formazioni: $exception", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    requireContext(),
+                    "Errore nel recupero delle formazioni: $exception",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
     }
+
+
+
 }

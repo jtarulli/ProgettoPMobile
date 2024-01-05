@@ -32,15 +32,15 @@ class CalendarioActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.d("Activity_calendario", "Sono qui")
-        setContentView(R.layout.activity_calendario)
+        //setContentView(R.layout.activity_calendario)
 
         val recyclerView: RecyclerView = findViewById(R.id.recyclerViewCalendario)
         recyclerView.layoutManager = LinearLayoutManager(this)
         // Assume che tu abbia una lista di giornate
         val giornate = getGiornateList()
         Log.d("PROVA", "" + giornate)
-        giornateAdapter = GiornateAdapter(giornate)
-        recyclerView.adapter = giornateAdapter
+        //giornateAdapter = GiornateAdapter(giornate)
+        //recyclerView.adapter = giornateAdapter
     }
 
     // Funzione di esempio per ottenere una lista di giornate

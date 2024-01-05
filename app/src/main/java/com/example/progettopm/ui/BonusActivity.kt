@@ -39,7 +39,7 @@ class BonusActivity : AppCompatActivity() {
     private fun loadBonusData() {
         // Recupera i bonus dalla raccolta 'bonus' con la reference alla lega corrente
         val legaReference = FirebaseFirestore.getInstance().collection("leghe")
-                                                           .document(SessionManager.legaCorrenteId!!)
+            .document(SessionManager.legaCorrenteId!!)
         val bonusCollection = FirebaseFirestore.getInstance().collection("bonus")
         bonusCollection.addSnapshotListener{ querySnapShot, e ->
             if(e != null){
