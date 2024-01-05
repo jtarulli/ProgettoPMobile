@@ -3,7 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-<<<<<<< HEAD:app/src/main/res/layout/activity_calendario.xml
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
@@ -16,30 +15,12 @@
         android:id="@+id/recyclerViewCalendario"
         android:layout_width="match_parent"
         android:layout_height="596dp"
-        android:layout_above="@+id/aggiungiData"
+        android:layout_above="@+id/nuovoGiornoButton"
         android:layout_below="@+id/toolbar"
         android:layout_marginTop="-5dp"
         android:layout_marginBottom="21dp"
         android:padding="16dp" />
 
-    <Button
-        android:id="@+id/aggiungiData"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="135dp"
-        android:layout_marginEnd="135dp"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:text="@string/aggiungi_nuova_giornata" />
-
-=======
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewGiornate"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
 
     <Button
         android:id="@+id/nuovoGiornoButton"
@@ -50,5 +31,4 @@
         android:layout_marginBottom="16dp"
         android:text="Nuova Giornata" />
 
->>>>>>> 5c07b78431c10886181839c908c6a9bc53aa30e2:app/src/main/res/layout/fragment_calendario.xml
 </RelativeLayout>
