@@ -9,6 +9,7 @@ import android.widget.Button
 import androidx.fragment.app.Fragment
 import com.example.progettopm.R
 import com.example.progettopm.ui.BonusActivity
+import com.example.progettopm.ui.CalendarioActivity
 import com.example.progettopm.ui.GiornateActivity
 import com.example.progettopm.ui.ModificaGiocatoreActivity
 import com.example.progettopm.ui.ModificaLegaActivity
@@ -53,7 +54,7 @@ class AdminLegaDashboardFragment : Fragment() {
         val calendarioButton = view.findViewById<Button>(R.id.calendarioButton)
         calendarioButton.setOnClickListener {
             // Avvia l'activity di CalendarioActivity
-            val intent = Intent(activity, GiornateActivity::class.java)
+            val intent = Intent(activity, CalendarioActivity::class.java)
             startActivity(intent)
         }
 

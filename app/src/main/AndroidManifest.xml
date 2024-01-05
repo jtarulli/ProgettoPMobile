@@ -67,7 +67,7 @@
             android:exported="false">
         </activity>
 
-        <activity android:name=".ui.GiornateActivity"
+        <activity android:name=".ui.CalendarioActivity"
             android:theme="@style/Theme.Material3.Light.NoActionBar"
             android:exported="false">
         </activity>
