@@ -2,8 +2,9 @@ package com.example.progettopm.model
 import com.google.firebase.firestore.DocumentReference
 
 data class Formazione(
-    val giornata: Int,
-    val giocatori: List<DocumentReference>, //Reference a giocatori
-    val punteggio: Int,
-    val squadra: DocumentReference //Reference a squadra
+    val legaId: String = "0",
+    val giornata: Int = 0,
+    val giocatori: List<DocumentReference>? = null, //Reference a giocatori
+    val punteggio: Int = 0,
+    val squadra: DocumentReference?= null //Reference a squadra
 )
