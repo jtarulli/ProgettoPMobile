@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/textViewInizio"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Data e Ora di Inizio"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"/>
+
+    <Button
+        android:id="@+id/buttonInizio"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Scegli"
+        android:layout_below="@id/textViewInizio"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="8dp"/>
+
+    <TextView
+        android:id="@+id/textViewFine"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Data e Ora di Fine"
+        android:layout_below="@id/buttonInizio"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"/>
+
+    <Button
+        android:id="@+id/buttonFine"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Scegli"
+        android:layout_below="@id/textViewFine"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="8dp"/>
+
+    <Button
+        android:id="@+id/confermaButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Conferma"
+        android:layout_below="@id/buttonFine"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"/>
+</RelativeLayout>

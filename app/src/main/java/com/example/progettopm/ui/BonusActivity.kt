@@ -81,7 +81,7 @@ class BonusActivity : AppCompatActivity(), BonusAdapter.BonusAdapterListener {
 
     private fun eliminaBonus(bonus: Bonus) {
         // Ottieni l'ID del documento Bonus
-        val documentId = bonus.documentId
+        val documentId = bonus.id
 
         // Verifica se l'ID è valido prima di procedere
         if (documentId.isNotEmpty()) {

@@ -1,126 +1,97 @@
 package com.example.progettopm.ui
 
-import android.app.DatePickerDialog
-import android.app.TimePickerDialog
+import android.content.Intent
 import android.os.Bundle
-import android.view.View
+import android.util.Log
 import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.progettopm.R
+import com.example.progettopm.SessionManager
 import com.example.progettopm.model.Giornata
 import com.example.progettopm.view.GiornateAdapter
-import java.text.SimpleDateFormat
-import java.util.*
+import com.google.firebase.firestore.FirebaseFirestore
+import java.time.Instant
 
-class CalendarioActivity : AppCompatActivity() {
+class CalendarioActivity : AppCompatActivity(), GiornateAdapter.GiornataListener {
 
     private lateinit var recyclerViewGiornate: RecyclerView
     private lateinit var giornateAdapter: GiornateAdapter
     private lateinit var nuovoGiornoButton: Button
+    private lateinit var legaId: String
 
-    class CalendarioActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_calendario)
 
-        private lateinit var recyclerViewGiornate: RecyclerView
-        private lateinit var giornateAdapter: GiornateAdapter
+        recyclerViewGiornate = findViewById(R.id.recyclerViewGiornate)
+        nuovoGiornoButton = findViewById(R.id.nuovoGiornoButton)
 
-        override fun onCreate(savedInstanceState: Bundle?) {
-            super.onCreate(savedInstanceState)
-            setContentView(R.layout.activity_calendario)
+        legaId = SessionManager.legaCorrenteId ?: ""
 
-            recyclerViewGiornate = findViewById(R.id.recyclerViewGiornate)
+        val giornateList = getGiornateList(legaId)
 
-            // Assume che tu abbia una lista di giornate
-            val giornateList = getGiornateList()
+        giornateAdapter = GiornateAdapter(giornateList, this)
+        recyclerViewGiornate.layoutManager = LinearLayoutManager(this)
+        recyclerViewGiornate.adapter = giornateAdapter
 
-            giornateAdapter = GiornateAdapter(giornateList)
-            recyclerViewGiornate.layoutManager = LinearLayoutManager(this)
-            recyclerViewGiornate.adapter = giornateAdapter
-
-            // Aggiungi un listener al pulsante per creare nuove giornate
-            val nuovoGiornoButton = findViewById<Button>(R.id.nuovoGiornoButton)
-            nuovoGiornoButton.setOnClickListener {
-                // Implementa la logica per creare una nuova giornata e aggiungerla alla lista
-                // Assicurati di aggiornare la tua RecyclerView con la nuova lista di giornate
-                // Ad esempio, potresti lanciare una nuova activity per la creazione di giornate
-                // e ottenere il risultato con onActivityResult
-                // onActivityResult sarebbe chiamato quando l'utente completa la creazione della giornata
-            }
-        }
-
-        // Funzione di esempio per ottenere una lista di giornate
-        private fun getGiornateList(): List<Giornata> {
-            // Implementa la logica per ottenere la lista di giornate dalla tua sorgente dati
-            // In questo esempio, creiamo alcune giornate di esempio
-            return listOf(
-                // Aggiungi altre giornate secondo le tue esigenze
-            )
+        nuovoGiornoButton.setOnClickListener {
+            // Avvia l'activity per la creazione di una nuova giornata
+            startActivity(Intent(this, CreaGiornataActivity::class.java))
         }
     }
 
-    private fun mostraSceltaDate() {
-        val calendar = Calendar.getInstance()
-        val datePickerDialog = DatePickerDialog(
-            this,
-            { _, year, month, dayOfMonth ->
-                calendar.set(year, month, dayOfMonth)
-                mostraSceltaOraInizio(calendar)
-            },
-            calendar.get(Calendar.YEAR),
-            calendar.get(Calendar.MONTH),
-            calendar.get(Calendar.DAY_OF_MONTH)
-        )
-        datePickerDialog.show()
-    }
+    private fun getGiornateList(legaId: String): List<Giornata> {
+        val firestore = FirebaseFirestore.getInstance()
 
-    private fun mostraSceltaOraInizio(calendar: Calendar) {
-        val timePickerDialog = TimePickerDialog(
-            this,
-            { _, hourOfDay, minute ->
-                calendar.set(Calendar.HOUR_OF_DAY, hourOfDay)
-                calendar.set(Calendar.MINUTE, minute)
-                val inizio = calendar.timeInMillis
-                mostraSceltaOraFine(inizio)
-            },
-            calendar.get(Calendar.HOUR_OF_DAY),
-            calendar.get(Calendar.MINUTE),
-            true
-        )
-        timePickerDialog.show()
-    }
+        firestore.collection("giornate")
+            .whereEqualTo("lega", legaId)
+            .get()
+            .addOnSuccessListener { documents ->
+                val giornateList = mutableListOf<Giornata>()
+                for (document in documents) {
+                    val id = document.getLong("id")?.toInt() ?: 0
+                    val inizio = document.getDate("inizio")?.toInstant() ?: Instant.now()
+                    val fine = document.getDate("fine")?.toInstant() ?: Instant.now()
+                    val lega = document.getString("lega") ?: ""
 
-    private fun mostraSceltaOraFine(inizio: Long) {
-        val calendar = Calendar.getInstance()
-        val timePickerDialog = TimePickerDialog(
-            this,
-            { _, hourOfDay, minute ->
-                calendar.set(Calendar.HOUR_OF_DAY, hourOfDay)
-                calendar.set(Calendar.MINUTE, minute)
-                val fine = calendar.timeInMillis
-
-                if (fine > inizio) {
-                    // Creare una nuova giornata solo se la fine è successiva all'inizio
-                    //val nuovaGiornata = Giornata(getProssimoNumeroGiornata(), inizio, fine)
-                    //giornateAdapter.aggiungiGiornata(nuovaGiornata)
-                } else {
-                    // Visualizza un messaggio di errore
-                    // Implementa il feedback utente a tuo piacimento
-                    // Ad esempio, mostra un Toast
-                    Toast.makeText(this, "La data di fine deve essere successiva a quella di inizio", Toast.LENGTH_SHORT).show()
+                    val giornata = Giornata(id, inizio, fine, lega)
+                    giornateList.add(giornata)
                 }
-            },
-            calendar.get(Calendar.HOUR_OF_DAY),
-            calendar.get(Calendar.MINUTE),
-            true
-        )
-        timePickerDialog.show()
+
+                giornateAdapter.updateList(giornateList)
+            }
+            .addOnFailureListener { exception ->
+                Toast.makeText(this, "Errore nel recupero delle giornate: ${exception.message}", Toast.LENGTH_SHORT)
+                    .show()
+            }
+
+        return emptyList()
     }
 
-    private fun getProssimoNumeroGiornata() {
-        // Implementa la logica per ottenere il prossimo numero di giornata dalla tua sorgente dati
-        // In questo esempio, restituiamo semplicemente il numero massimo + 1
-        //return giornateAdapter.getGiornateList().maxByOrNull { it.id }?.id?.plus(1) ?: 1
+    // Implementazione delle azioni Modifica ed Elimina
+    override fun onModificaClick(position: Int) {
+        // Implementa l'azione di modifica qui
+        Toast.makeText(this, "Modifica Giornata alla posizione $position", Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onEliminaClick(position: Int) {
+        val giornataDaEliminare = giornateAdapter.getGiornateList()[position]
+
+        // Aggiungi il codice per eliminare la giornata da Firebase Firestore
+        val firestore = FirebaseFirestore.getInstance()
+        firestore.collection("giornate")
+            .document(giornataDaEliminare.id.toString()) // Supponendo che l'ID del documento sia la rappresentazione stringa dell'ID della giornata
+            .delete()
+            .addOnSuccessListener {
+                // Elimina la giornata dalla lista dell'adapter
+                giornateAdapter.rimuoviGiornata(giornataDaEliminare)
+                Toast.makeText(this, "Giornata eliminata con successo", Toast.LENGTH_SHORT).show()
+            }
+            .addOnFailureListener { exception ->
+                Toast.makeText(this, "Errore durante l'eliminazione della giornata: ${exception.message}", Toast.LENGTH_SHORT).show()
+            }
     }
 }
