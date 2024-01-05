@@ -1,8 +1,10 @@
 package com.example.progettopm.view
 
+import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat.startActivity
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -11,6 +13,7 @@ import com.example.progettopm.DeleteConfirmationDialog
 import com.example.progettopm.DeleteConfirmationDialog.OnConfirmListener
 import com.example.progettopm.databinding.ItemBonusBinding
 import com.example.progettopm.model.Bonus
+import com.example.progettopm.ui.CreaBonusActivity
 import com.google.firebase.firestore.FirebaseFirestore
 
 
@@ -39,9 +42,10 @@ class BonusAdapter :
 
             binding.btnEdit.setOnClickListener {
                 val ctx = it.context
-                if(ctx is FragmentActivity){
-
-                }
+                Log.d("BonusActivity", "Creazione Bonus Button Clicked")
+                val intent = Intent(ctx, CreaBonusActivity::class.java)
+                intent.putExtra("bonus", idBonus)
+                startActivity(ctx, intent, null)
             }
 
             binding.btnDelete.setOnClickListener {
