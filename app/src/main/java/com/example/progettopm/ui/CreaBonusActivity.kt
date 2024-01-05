@@ -64,7 +64,13 @@ class CreaBonusActivity : AppCompatActivity() {
         // Crea un oggetto Bonus con i valori inseriti
         val nuovoBonus = Bonus(valore = valore, nome = nome, lega = lega)
 
-        FirebaseFirestore.getInstance().collection("bonus").add(nuovoBonus)
+        val bonusRef = FirebaseFirestore.getInstance().collection("bonus")
+        bonusRef.add(nuovoBonus)
+            .addOnSuccessListener { documentReference ->
+                val nuovoId = documentReference.id
+                documentReference.update("id", nuovoId)
+            }
+
         finish()
     }
 
