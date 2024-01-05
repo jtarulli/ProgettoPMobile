@@ -20,4 +20,5 @@
     <string name="valore">Valore</string>
     <string name="foto_giocatore">Foto</string>
     <string name="scegli_foto">Scegli foto</string>
+    <string name="nome_del_bonus">Nome del bonus</string>
 </resources>

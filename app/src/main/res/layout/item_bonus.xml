@@ -1,48 +1,53 @@
-<!-- Risorsa XML per l'elemento nella RecyclerView -->
-<!-- Personalizzala a seconda delle tue esigenze -->
-
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="16dp">
+    android:layout_height="wrap_content">
+
+    <ImageButton
+        android:id="@+id/btnEdit"
+        android:layout_width="54dp"
+        android:layout_height="39dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="12dp"
+        android:src="@drawable/edit_icon"
+        app:layout_constraintEnd_toStartOf="@+id/btnDelete"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/btnDelete"
+        android:layout_width="54dp"
+        android:layout_height="39dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="40dp"
+        android:layout_toEndOf="@+id/btnEdit"
+        android:src="@drawable/delete_icon"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/nomeTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Nome del Bonus"
-        android:textSize="18sp"
-        android:textStyle="bold" />
+        android:layout_width="117dp"
+        android:layout_height="24dp"
+        android:layout_marginTop="20dp"
+        android:text="@string/nome_del_bonus"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/bonusTextView"
+        app:layout_constraintHorizontal_bias="0.727"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/valoreTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Valore: 0"
-        android:textSize="16sp" />
+        android:id="@+id/bonusTextView"
+        android:layout_width="78dp"
+        android:layout_height="23dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="16dp"
+        android:text="@string/valore"
+        app:layout_constraintEnd_toStartOf="@+id/btnEdit"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Pulsanti Modifica ed Elimina -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/modificaButton"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Modifica"
-            android:textSize="14sp" />
-
-        <Button
-            android:id="@+id/eliminaButton"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Elimina"
-            android:textSize="14sp" />
-    </LinearLayout>
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -16,7 +16,7 @@ import com.example.progettopm.model.Bonus
 import com.example.progettopm.view.BonusAdapter
 import com.google.firebase.firestore.FirebaseFirestore
 
-class BonusActivity : AppCompatActivity(), BonusAdapter.BonusAdapterListener {
+class BonusActivity : AppCompatActivity() {
 
     private lateinit var bonusAdapter: BonusAdapter
 
@@ -26,7 +26,7 @@ class BonusActivity : AppCompatActivity(), BonusAdapter.BonusAdapterListener {
 
         val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
-        bonusAdapter = BonusAdapter(this)
+        bonusAdapter = BonusAdapter()
         recyclerView.adapter = bonusAdapter
 
         loadBonusData()
@@ -41,7 +41,8 @@ class BonusActivity : AppCompatActivity(), BonusAdapter.BonusAdapterListener {
 
     private fun loadBonusData() {
         // Recupera i bonus dalla raccolta 'bonus' con la reference alla lega corrente
-        val legaReference = SessionManager.legaCorrenteId
+        val legaReference = FirebaseFirestore.getInstance().collection("leghe")
+                                                           .document(SessionManager.legaCorrenteId!!)
         val bonusCollection = FirebaseFirestore.getInstance().collection("bonus")
         bonusCollection.whereEqualTo("lega", legaReference)
             .get()
@@ -51,7 +52,8 @@ class BonusActivity : AppCompatActivity(), BonusAdapter.BonusAdapterListener {
                     val bonus = document.toObject(Bonus::class.java)
                     bonusList.add(bonus)
                 }
-                bonusAdapter.setBonusList(bonusList)
+                Log.d("Debug_list", "" + bonusList)
+                bonusAdapter.submitList(bonusList)
             }
             .addOnFailureListener { exception ->
                 Log.e("BonusActivity", "Error loading bonus data: ${exception.message}")
@@ -59,49 +61,49 @@ class BonusActivity : AppCompatActivity(), BonusAdapter.BonusAdapterListener {
             }
     }
 
-    override fun onModificaButtonClick(bonus: Bonus) {
-        // Avvia l'activity per la modifica del bonus passando l'oggetto Bonus
-        Log.d("BonusActivity", "Modifica Button Clicked")
-        startActivity(CreaBonusActivity.editIntent(this, bonus))
-    }
-
-    override fun onEliminaButtonClick(bonus: Bonus) {
-        // Mostra un dialog di conferma eliminazione
-        AlertDialog.Builder(this)
-            .setTitle("Conferma eliminazione")
-            .setMessage("Confermi l'eliminazione del bonus?")
-            .setPositiveButton("Conferma") { _, _ ->
-                // Se l'utente conferma, procedi con l'eliminazione
-                Log.d("BonusActivity", "Elimina Button Clicked")
-                eliminaBonus(bonus)
-            }
-            .setNegativeButton("Annulla", null)
-            .show()
-    }
-
-    private fun eliminaBonus(bonus: Bonus) {
-        // Ottieni l'ID del documento Bonus
-        val documentId = bonus.documentId
-
-        // Verifica se l'ID è valido prima di procedere
-        if (documentId.isNotEmpty()) {
-            // Elimina il documento dal Firestore utilizzando l'ID
-            FirebaseFirestore.getInstance().collection("bonus").document(documentId)
-                .delete()
-                .addOnSuccessListener {
-                    // Se l'eliminazione ha successo, aggiorna la lista dei bonus
-                    loadBonusData()
-                    Toast.makeText(this, "Bonus eliminato con successo", Toast.LENGTH_SHORT).show()
-                }
-                .addOnFailureListener {
-                    Log.e("BonusActivity", "Error deleting bonus: ${it.message}")
-                    // In caso di errore nell'eliminazione, gestisci l'errore di conseguenza
-                    Toast.makeText(this, "Errore durante l'eliminazione del bonus", Toast.LENGTH_SHORT)
-                        .show()
-                }
-        } else {
-            // L'ID del documento non è valido, gestisci di conseguenza
-            Toast.makeText(this, "ID del documento non valido", Toast.LENGTH_SHORT).show()
-        }
-    }
+//    override fun onModificaButtonClick(bonus: Bonus) {
+//        // Avvia l'activity per la modifica del bonus passando l'oggetto Bonus
+//        Log.d("BonusActivity", "Modifica Button Clicked")
+//        startActivity(CreaBonusActivity.editIntent(this, bonus))
+//    }
+//
+//    override fun onEliminaButtonClick(bonus: Bonus) {
+//        // Mostra un dialog di conferma eliminazione
+//        AlertDialog.Builder(this)
+//            .setTitle("Conferma eliminazione")
+//            .setMessage("Confermi l'eliminazione del bonus?")
+//            .setPositiveButton("Conferma") { _, _ ->
+//                // Se l'utente conferma, procedi con l'eliminazione
+//                Log.d("BonusActivity", "Elimina Button Clicked")
+//                eliminaBonus(bonus)
+//            }
+//            .setNegativeButton("Annulla", null)
+//            .show()
+//    }
+//
+//    private fun eliminaBonus(bonus: Bonus) {
+//        // Ottieni l'ID del documento Bonus
+//        val documentId = bonus.documentId
+//
+//        // Verifica se l'ID è valido prima di procedere
+//        if (documentId.isNotEmpty()) {
+//            // Elimina il documento dal Firestore utilizzando l'ID
+//            FirebaseFirestore.getInstance().collection("bonus").document(documentId)
+//                .delete()
+//                .addOnSuccessListener {
+//                    // Se l'eliminazione ha successo, aggiorna la lista dei bonus
+//                    loadBonusData()
+//                    Toast.makeText(this, "Bonus eliminato con successo", Toast.LENGTH_SHORT).show()
+//                }
+//                .addOnFailureListener {
+//                    Log.e("BonusActivity", "Error deleting bonus: ${it.message}")
+//                    // In caso di errore nell'eliminazione, gestisci l'errore di conseguenza
+//                    Toast.makeText(this, "Errore durante l'eliminazione del bonus", Toast.LENGTH_SHORT)
+//                        .show()
+//                }
+//        } else {
+//            // L'ID del documento non è valido, gestisci di conseguenza
+//            Toast.makeText(this, "ID del documento non valido", Toast.LENGTH_SHORT).show()
+//        }
+//    }
 }

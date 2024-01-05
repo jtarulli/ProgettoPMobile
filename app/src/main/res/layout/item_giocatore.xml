@@ -25,7 +25,7 @@
         android:text="Nome"
         app:layout_constraintStart_toEndOf="@id/fotoImageView"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/cognomeTextView"
+        app:layout_constraintEnd_toStartOf="@id/bonusTextView"
         app:layout_constraintBottom_toTopOf="@id/punteggioTextView"/>
 
     <TextView
@@ -47,7 +47,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:text="0"
-        app:layout_constraintStart_toEndOf="@id/cognomeTextView"
+        app:layout_constraintStart_toEndOf="@id/bonusTextView"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@id/recyclerViewBonusGiornata"/>
