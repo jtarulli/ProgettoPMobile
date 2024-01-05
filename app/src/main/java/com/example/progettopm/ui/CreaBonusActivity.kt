@@ -11,7 +11,9 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.progettopm.R
 import com.example.progettopm.SessionManager
 import com.example.progettopm.model.Bonus
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.getField
 
 class CreaBonusActivity : AppCompatActivity() {
 
@@ -31,24 +33,31 @@ class CreaBonusActivity : AppCompatActivity() {
         confermaButton = findViewById(R.id.buttonConferma)
 
         // Recupera l'oggetto Bonus passato dall'intent, se presente
-        // bonus = intent.getParcelableExtra("BONUS")
+        val bonus = intent.getStringExtra("bonus")
 
         // Log per debug
         Log.d("CreaBonusActivity", "Bonus object received: $bonus")
 
         // Imposta i valori nei campi di testo se l'oggetto Bonus esiste
         bonus?.let {
-            nomeEditText.setText(it.nome)
-            valoreEditText.setText(it.valore.toString())
+            FirebaseFirestore.getInstance()
+                             .collection("bonus")
+                             .document(bonus)
+                             .get()
+                             .addOnCompleteListener{ doc ->
+                                 Log.d("Result", doc.result.toString())
+                                 nomeEditText.setText(doc.result.get("nome").toString())
+                                 valoreEditText.setText(doc.result.get("valore").toString())
+                             }
         }
 
         // Aggiungi un listener al pulsante Conferma
         confermaButton.setOnClickListener {
-            confermaModifica()
+            confermaModifica(bonus)
         }
     }
 
-    private fun confermaModifica() {
+    private fun confermaModifica(bonusId : String? = "") {
         val nome = nomeEditText.text.toString().trim()
         val valore = valoreEditText.text.toString().toIntOrNull()
 
@@ -64,7 +73,19 @@ class CreaBonusActivity : AppCompatActivity() {
         // Crea un oggetto Bonus con i valori inseriti
         val nuovoBonus = Bonus(valore = valore, nome = nome, lega = lega)
 
-        FirebaseFirestore.getInstance().collection("bonus").add(nuovoBonus)
+        val bonusRef = FirebaseFirestore.getInstance().collection("bonus")
+        if (bonusId != null) {
+            nuovoBonus.id = bonusId
+            bonusRef.document(bonusId)
+                .set(nuovoBonus)
+        } else {
+            bonusRef.add(nuovoBonus)
+                .addOnSuccessListener { documentReference ->
+                    val nuovoId = documentReference.id
+                    documentReference.update("id", nuovoId)
+                }
+        }
+
         finish()
     }
 
