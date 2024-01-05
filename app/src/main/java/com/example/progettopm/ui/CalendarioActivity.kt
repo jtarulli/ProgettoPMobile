@@ -3,6 +3,7 @@ package com.example.progettopm.ui
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.Toast
@@ -10,9 +11,16 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.progettopm.R
+import com.example.progettopm.SessionManager
 import com.example.progettopm.model.Giornata
+import com.example.progettopm.view.BonusAdapter
 import com.example.progettopm.view.GiornateAdapter
+import com.google.android.gms.tasks.Tasks
+import com.google.firebase.Timestamp
+import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.tasks.await
 import java.text.SimpleDateFormat
+import java.time.Instant
 import java.util.*
 
 class CalendarioActivity : AppCompatActivity() {
@@ -21,43 +29,26 @@ class CalendarioActivity : AppCompatActivity() {
     private lateinit var giornateAdapter: GiornateAdapter
     private lateinit var nuovoGiornoButton: Button
 
-    class CalendarioActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        Log.d("Activity_calendario", "Sono qui")
+        setContentView(R.layout.activity_calendario)
 
-        private lateinit var recyclerViewGiornate: RecyclerView
-        private lateinit var giornateAdapter: GiornateAdapter
+        val recyclerView: RecyclerView = findViewById(R.id.recyclerViewCalendario)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        // Assume che tu abbia una lista di giornate
+        val giornate = getGiornateList()
+        Log.d("PROVA", "" + giornate)
+        giornateAdapter = GiornateAdapter(giornate)
+        recyclerView.adapter = giornateAdapter
+    }
 
-        override fun onCreate(savedInstanceState: Bundle?) {
-            super.onCreate(savedInstanceState)
-            setContentView(R.layout.activity_calendario)
-
-            recyclerViewGiornate = findViewById(R.id.recyclerViewGiornate)
-
-            // Assume che tu abbia una lista di giornate
-            val giornateList = getGiornateList()
-
-            giornateAdapter = GiornateAdapter(giornateList)
-            recyclerViewGiornate.layoutManager = LinearLayoutManager(this)
-            recyclerViewGiornate.adapter = giornateAdapter
-
-            // Aggiungi un listener al pulsante per creare nuove giornate
-            val nuovoGiornoButton = findViewById<Button>(R.id.nuovoGiornoButton)
-            nuovoGiornoButton.setOnClickListener {
-                // Implementa la logica per creare una nuova giornata e aggiungerla alla lista
-                // Assicurati di aggiornare la tua RecyclerView con la nuova lista di giornate
-                // Ad esempio, potresti lanciare una nuova activity per la creazione di giornate
-                // e ottenere il risultato con onActivityResult
-                // onActivityResult sarebbe chiamato quando l'utente completa la creazione della giornata
-            }
-        }
-
-        // Funzione di esempio per ottenere una lista di giornate
-        private fun getGiornateList(): List<Giornata> {
-            // Implementa la logica per ottenere la lista di giornate dalla tua sorgente dati
-            // In questo esempio, creiamo alcune giornate di esempio
-            return listOf(
-                // Aggiungi altre giornate secondo le tue esigenze
-            )
-        }
+    // Funzione di esempio per ottenere una lista di giornate
+    private fun getGiornateList() : List<Giornata> {
+        return FirebaseFirestore.getInstance()
+                         .collection("giornate")
+                         .whereEqualTo("lega", SessionManager.legaCorrenteId)
+                         .get().result.toObjects(Giornata::class.java)
     }
 
     private fun mostraSceltaDate() {

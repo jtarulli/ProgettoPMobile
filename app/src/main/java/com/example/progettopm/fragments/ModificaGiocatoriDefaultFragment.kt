@@ -1,6 +1,5 @@
 package com.example.progettopm.fragments
 
-import android.content.ContentValues.TAG
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -25,7 +24,7 @@ class ModificaGiocatoriDefaultFragment : Fragment(), ModificaGiocatoriAdapter.On
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.modifica_giocatori_default_fragment, container, false)
+        val view = inflater.inflate(R.layout.fragment_default_modifica_giocatori, container, false)
         val addButton : Button = view.findViewById(R.id.aggiungiGiocatoreButton)
         addListener(addButton, AggiungiModificaGiocatoriFragment())
 

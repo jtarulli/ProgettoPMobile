@@ -21,4 +21,9 @@
     <string name="foto_giocatore">Foto</string>
     <string name="scegli_foto">Scegli foto</string>
     <string name="nome_del_bonus">Nome del bonus</string>
+    <string name="aggiungi_nuova_giornata">Aggiungi giornata</string>
+    <string name="modifica_lega">Modifica Lega</string>
+    <string name="gestione_bonus">Gestione Bonus</string>
+    <string name="calendario">Calendario</string>
+    <string name="gestione_giocatori">Gestione Giocatori</string>
 </resources>

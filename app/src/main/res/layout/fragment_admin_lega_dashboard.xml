@@ -17,7 +17,7 @@
         android:layout_below="@id/toolbar"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="16dp"
-        android:text="Modifica Lega" />
+        android:text="@string/modifica_lega" />
 
     <Button
         android:id="@+id/gestioneBonusButton"
@@ -26,12 +26,12 @@
         android:layout_below="@id/modificaLegaButton"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="16dp"
-        android:text="Gestione Bonus" />
+        android:text="@string/gestione_bonus" />
     <Button
         android:id="@+id/calendarioButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Calendario"
+        android:text="@string/calendario"
         android:layout_marginTop="16dp"
         android:layout_below="@id/gestioneBonusButton"
         android:layout_centerHorizontal="true"/>
@@ -40,7 +40,7 @@
         android:id="@+id/gestioneGiocatoriButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Gestione Giocatori"
+        android:text="@string/gestione_giocatori"
         android:layout_marginTop="16dp"
         android:layout_below="@id/calendarioButton"
         android:layout_centerHorizontal="true"/>
