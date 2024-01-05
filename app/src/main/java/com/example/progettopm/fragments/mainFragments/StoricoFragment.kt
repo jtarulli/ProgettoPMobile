@@ -48,16 +48,19 @@ class StoricoFragment : Fragment() {
         // Verifica se l'utente è attualmente autenticato
         if (user != null) {
             userId = user.uid.toString()
+            Log.d("User di", "$userId")
             // Ora userId contiene l'ID dell'utente corrente
         } else {
             // L'utente non è attualmente autenticato
         }
 
         val legaId = SessionManager.legaCorrenteId
+        Log.d("LegaId", "$legaId")
         val formazioniCollection = FirebaseFirestore.getInstance().collection("formazioni")
 
+
         formazioniCollection
-            .whereEqualTo("id", userId)
+            .whereEqualTo("utente", userId)
             .whereEqualTo("legaId", legaId)
             .orderBy("giornata", Query.Direction.ASCENDING)
             .get()
@@ -65,6 +68,7 @@ class StoricoFragment : Fragment() {
                 for (document in result) {
                     val formazione = document.toObject(Formazione::class.java)
                     formazioniList.add(formazione)
+                    Log.d("Storico fragment", "add(formazione)")
                 }
 
                 // Inizializzazione e associazione dell'adapter alla RecyclerView
