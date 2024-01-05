@@ -20,8 +20,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import java.time.Instant
 
-class CalendarioFragment : Fragment(), GiornateAdapter.GiornataListener {
-
+class CalendarioFragment : Fragment() {
+/*
     private lateinit var recyclerViewGiornate: RecyclerView
     private lateinit var giornateAdapter: GiornateAdapter
 
@@ -100,4 +100,6 @@ class CalendarioFragment : Fragment(), GiornateAdapter.GiornataListener {
             }
             .show()
     }
+
+ */
 }

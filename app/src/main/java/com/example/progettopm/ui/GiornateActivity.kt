@@ -15,7 +15,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 
 class GiornateActivity : AppCompatActivity() {
-
+/*
     private lateinit var giornateAdapter: GiornateAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -67,5 +67,8 @@ class GiornateActivity : AppCompatActivity() {
         }
         Log.d("Debug_list", "" + giornateList)
         giornateAdapter.submitList(giornateList)
-    }
+
+   }
+
+ */
 }

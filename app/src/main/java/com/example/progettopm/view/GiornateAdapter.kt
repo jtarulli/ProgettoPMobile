@@ -2,6 +2,8 @@
 package com.example.progettopm.view
 
 import android.os.Bundle
+import android.os.Parcel
+import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
@@ -16,8 +18,8 @@ import com.example.progettopm.DeleteConfirmationDialog.OnConfirmListener
 import com.example.progettopm.model.Giornata
 import com.google.firebase.firestore.FirebaseFirestore
 
-class GiornateAdapter :
-    ListAdapter<Giornata, GiornateAdapter.GiornataViewHolder>(DiffCallback()) {
+class GiornateAdapter() :
+    /*
 
     var itemClickListener: OnItemClickListener? = null
 
@@ -78,6 +80,29 @@ class GiornateAdapter :
 
         override fun areContentsTheSame(oldItem: Giornata, newItem: Giornata): Boolean {
             return oldItem == newItem
+        }
+    }
+
+     */
+    Parcelable {
+    constructor(parcel: Parcel) : this() {
+    }
+
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+
+    }
+
+    override fun describeContents(): Int {
+        return 0
+    }
+
+    companion object CREATOR : Parcelable.Creator<GiornateAdapter> {
+        override fun createFromParcel(parcel: Parcel): GiornateAdapter {
+            return GiornateAdapter(parcel)
+        }
+
+        override fun newArray(size: Int): Array<GiornateAdapter?> {
+            return arrayOfNulls(size)
         }
     }
 }

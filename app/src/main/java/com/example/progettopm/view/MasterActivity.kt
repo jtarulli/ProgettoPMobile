@@ -79,7 +79,8 @@ class MasterActivity : AppCompatActivity() {
                     replaceFragment(HomeFragment())
                 }
                 R.id.storico_nav_bar -> {
-                    replaceFragment(StoricoFragment())
+                    showStoricoFragment()
+                    true
                 }
                 R.id.classifica_nav_bar -> {
                     replaceFragment(ClassificaFragment())
@@ -91,6 +92,23 @@ class MasterActivity : AppCompatActivity() {
             true
         }
     }
+
+    private fun showStoricoFragment() {
+        // Recupera l'ID della squadra corrente da SessionManager
+        val squadraCorrenteId = SessionManager.squadraCorrenteId
+
+        if (squadraCorrenteId != null) {
+            // Crea un nuovo StoricoFragment con l'ID della squadra come parametro
+            val storicoFragment = StoricoFragment.newInstance(squadraCorrenteId)
+
+            // Sostituisci il fragment con il nuovo StoricoFragment
+            replaceFragment(storicoFragment)
+        } else {
+            // Gestisci il caso in cui l'ID della squadra non sia disponibile
+            Toast.makeText(this, "ID della squadra corrente non disponibile", Toast.LENGTH_SHORT).show()
+        }
+    }
+
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (toggle.onOptionsItemSelected(item)) {
