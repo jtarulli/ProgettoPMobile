@@ -1,0 +1,705 @@
+Index: app/src/main/java/com/example/progettopm/model/Utente.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.progettopm.model\r\n\r\nimport com.google.firebase.firestore.DocumentReference\r\n\r\ndata class Utente(\r\n    val id: String,  // Cambiato da Int a String\r\n    val nome: String,\r\n    val cognome: String,\r\n    val ruolo: String,\r\n    val email: String,\r\n    val password: String,\r\n    val foto: String,\r\n    val leghe: List<DocumentReference>,  // Cambiato da Array a Lis\r\n    val squadre: List<DocumentReference>\r\n)\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/progettopm/model/Utente.kt b/app/src/main/java/com/example/progettopm/model/Utente.kt
+--- a/app/src/main/java/com/example/progettopm/model/Utente.kt	
++++ b/app/src/main/java/com/example/progettopm/model/Utente.kt	
+@@ -3,13 +3,13 @@
+ import com.google.firebase.firestore.DocumentReference
+ 
+ data class Utente(
+-    val id: String,  // Cambiato da Int a String
+-    val nome: String,
+-    val cognome: String,
+-    val ruolo: String,
+-    val email: String,
+-    val password: String,
+-    val foto: String,
+-    val leghe: List<DocumentReference>,  // Cambiato da Array a Lis
+-    val squadre: List<DocumentReference>
++    val id: String = "",
++    val nome: String = "",
++    val cognome: String = "",
++    val ruolo: String = "",
++    val email: String = "",
++    val password: String = "",
++    val foto: String = "",
++    val leghe: List<DocumentReference> ?= null,
++    val squadre: List<DocumentReference> ?= null
+ )
+Index: app/src/main/res/layout/item_storico.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<androidx.cardview.widget.CardView xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"wrap_content\"\r\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n    app:cardElevation=\"8dp\"\r\n    app:cardCornerRadius=\"8dp\"\r\n    android:layout_margin=\"16dp\">\r\n    <LinearLayout\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:gravity=\"center_vertical\"\r\n        android:orientation=\"vertical\">\r\n        <LinearLayout\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:layout_gravity=\"center_vertical\"\r\n            android:orientation=\"horizontal\">\r\n\r\n            <TextView\r\n                android:layout_width=\"wrap_content\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:id=\"@+id/numGiornata_RV\">\r\n            </TextView>\r\n\r\n            <TextView\r\n                android:layout_width=\"wrap_content\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:id=\"@+id/nomeSquadra_RV\">\r\n            </TextView>\r\n        </LinearLayout>\r\n        <androidx.recyclerview.widget.RecyclerView\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:id=\"@+id/elencoGiocatori_Rv\">\r\n        </androidx.recyclerview.widget.RecyclerView>\r\n    </LinearLayout>\r\n\r\n</androidx.cardview.widget.CardView>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/item_storico.xml b/app/src/main/res/layout/item_storico.xml
+--- a/app/src/main/res/layout/item_storico.xml	
++++ b/app/src/main/res/layout/item_storico.xml	
+@@ -1,39 +1,44 @@
+ <?xml version="1.0" encoding="utf-8"?>
+-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
++<androidx.cardview.widget.CardView
++    xmlns:android="http://schemas.android.com/apk/res/android"
+     android:layout_width="match_parent"
+     android:layout_height="wrap_content"
+     xmlns:app="http://schemas.android.com/apk/res-auto"
+     app:cardElevation="8dp"
+     app:cardCornerRadius="8dp"
+     android:layout_margin="16dp">
++
+     <LinearLayout
+-        android:layout_width="wrap_content"
++        android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+-        android:gravity="center_vertical"
+-        android:orientation="vertical">
+-        <LinearLayout
+-            android:layout_width="wrap_content"
+-            android:layout_height="wrap_content"
+-            android:layout_gravity="center_vertical"
+-            android:orientation="horizontal">
++        android:padding="16dp"
++        android:orientation="horizontal">
+ 
+-            <TextView
+-                android:layout_width="wrap_content"
+-                android:layout_height="wrap_content"
+-                android:id="@+id/numGiornata_RV">
+-            </TextView>
++        <TextView
++            android:layout_width="0dp"
++            android:layout_weight="1"
++            android:layout_height="wrap_content"
++            android:id="@+id/numGiornata_RV"
++            android:text="Numero Giornata"
++            android:textStyle="bold">
++        </TextView>
+ 
+-            <TextView
+-                android:layout_width="wrap_content"
+-                android:layout_height="wrap_content"
+-                android:id="@+id/nomeSquadra_RV">
+-            </TextView>
+-        </LinearLayout>
+-        <androidx.recyclerview.widget.RecyclerView
+-            android:layout_width="wrap_content"
++        <TextView
++            android:layout_width="0dp"
++            android:layout_weight="1"
++            android:layout_height="wrap_content"
++            android:id="@+id/nomeSquadra_RV"
++            android:text="Nome Squadra"
++            android:textStyle="bold">
++        </TextView>
++
++        <TextView
++            android:layout_width="0dp"
++            android:layout_weight="1"
+             android:layout_height="wrap_content"
+-            android:id="@+id/elencoGiocatori_Rv">
+-        </androidx.recyclerview.widget.RecyclerView>
++            android:id="@+id/punteggioSquadra_RV"
++            android:text="Punteggio"
++            android:textStyle="bold">
++        </TextView>
+     </LinearLayout>
+-
+ </androidx.cardview.widget.CardView>
+\ No newline at end of file
+Index: app/src/main/java/com/example/progettopm/view/StoricoAdapter.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.progettopm.view\r\n\r\nclass StoricoAdapter {\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/progettopm/view/StoricoAdapter.kt b/app/src/main/java/com/example/progettopm/view/StoricoAdapter.kt
+--- a/app/src/main/java/com/example/progettopm/view/StoricoAdapter.kt	
++++ b/app/src/main/java/com/example/progettopm/view/StoricoAdapter.kt	
+@@ -1,4 +1,43 @@
+ package com.example.progettopm.view
+ 
+-class StoricoAdapter {
++import android.view.LayoutInflater
++import android.view.View
++import android.view.ViewGroup
++import android.widget.TextView
++import androidx.recyclerview.widget.RecyclerView
++import com.example.progettopm.R
++import com.example.progettopm.model.Formazione
++import com.example.progettopm.model.Squadra
++
++class StoricoAdapter(private val formazioni: List<Formazione>) : RecyclerView.Adapter<StoricoAdapter.StoricoViewHolder>() {
++
++    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StoricoViewHolder {
++        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_storico, parent, false)
++        return StoricoViewHolder(view)
++    }
++
++    override fun onBindViewHolder(holder: StoricoViewHolder, position: Int) {
++        val formazione = formazioni[position]
++        holder.bind(formazione)
++    }
++
++    override fun getItemCount(): Int {
++        return formazioni.size
++    }
++
++    inner class StoricoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
++        fun bind(formazione: Formazione) {
++            itemView.findViewById<TextView>(R.id.numGiornata_RV).text = formazione.giornata.toString()
++
++            // Recupera il nome della squadra dall'oggetto DocumentReference
++            formazione.squadra?.get()?.addOnSuccessListener { squadraDocument ->
++                if (squadraDocument.exists()) {
++                    val nomeSquadra = squadraDocument.toObject(Squadra::class.java)
++                    itemView.findViewById<TextView>(R.id.nomeSquadra_RV).text = nomeSquadra?.nome
++                }
++            }
++
++            itemView.findViewById<TextView>(R.id.punteggioSquadra_RV).text = formazione.punteggio.toString()
++        }
++    }
+ }
+\ No newline at end of file
+Index: app/src/main/java/com/example/progettopm/model/Formazione.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.progettopm.model\r\nimport com.google.firebase.firestore.DocumentReference\r\n\r\ndata class Formazione(\r\n    val giornata: Int,\r\n    val giocatori: List<DocumentReference>, //Reference a giocatori\r\n    val punteggio: Int,\r\n    val squadra: DocumentReference //Reference a squadra\r\n)\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/progettopm/model/Formazione.kt b/app/src/main/java/com/example/progettopm/model/Formazione.kt
+--- a/app/src/main/java/com/example/progettopm/model/Formazione.kt	
++++ b/app/src/main/java/com/example/progettopm/model/Formazione.kt	
+@@ -2,8 +2,9 @@
+ import com.google.firebase.firestore.DocumentReference
+ 
+ data class Formazione(
+-    val giornata: Int,
+-    val giocatori: List<DocumentReference>, //Reference a giocatori
+-    val punteggio: Int,
+-    val squadra: DocumentReference //Reference a squadra
++    val legaId: String = "0",
++    val giornata: Int = 0,
++    val giocatori: List<DocumentReference>? = null, //Reference a giocatori
++    val punteggio: Int = 0,
++    val squadra: DocumentReference?= null //Reference a squadra
+ )
+Index: .idea/shelf/Uncommitted_changes_before_Update_at_27_12_2023_18_28__Changes_.xml
+===================================================================
+diff --git a/.idea/shelf/Uncommitted_changes_before_Update_at_27_12_2023_18_28__Changes_.xml b/.idea/shelf/Uncommitted_changes_before_Update_at_27_12_2023_18_28__Changes_.xml
+deleted file mode 100644
+--- a/.idea/shelf/Uncommitted_changes_before_Update_at_27_12_2023_18_28__Changes_.xml	
++++ /dev/null	
+@@ -1,4 +0,0 @@
+-<changelist name="Uncommitted_changes_before_Update_at_27_12_2023_18_28_[Changes]" date="1703698124278" recycled="true" deleted="true">
+-  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_27_12_2023_18_28_[Changes]/shelved.patch" />
+-  <option name="DESCRIPTION" value="Uncommitted changes before Update at 27/12/2023 18:28 [Changes]" />
+-</changelist>
+\ No newline at end of file
+Index: .idea/shelf/Uncommitted_changes_before_Update_at_27_12_2023_16_43__Changes_.xml
+===================================================================
+diff --git a/.idea/shelf/Uncommitted_changes_before_Update_at_27_12_2023_16_43__Changes_.xml b/.idea/shelf/Uncommitted_changes_before_Update_at_27_12_2023_16_43__Changes_.xml
+deleted file mode 100644
+--- a/.idea/shelf/Uncommitted_changes_before_Update_at_27_12_2023_16_43__Changes_.xml	
++++ /dev/null	
+@@ -1,4 +0,0 @@
+-<changelist name="Uncommitted_changes_before_Update_at_27_12_2023_16_43_[Changes]" date="1703692121302" recycled="true" deleted="true">
+-  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_27_12_2023_16_43_[Changes]/shelved.patch" />
+-  <option name="DESCRIPTION" value="Uncommitted changes before Update at 27/12/2023 16:43 [Changes]" />
+-</changelist>
+\ No newline at end of file
+Index: .idea/shelf/Uncommitted_changes_before_Update_at_27_12_2023_16_43_[Changes]/shelved.patch
+===================================================================
+diff --git a/.idea/shelf/Uncommitted_changes_before_Update_at_27_12_2023_16_43_[Changes]/shelved.patch b/.idea/shelf/Uncommitted_changes_before_Update_at_27_12_2023_16_43_[Changes]/shelved.patch
+deleted file mode 100644
+--- a/.idea/shelf/Uncommitted_changes_before_Update_at_27_12_2023_16_43_[Changes]/shelved.patch	
++++ /dev/null	
+@@ -1,198 +0,0 @@
+-Index: app/src/main/java/com/example/progettopm/fragments/HomeFragment.kt
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+-<+>package com.example.progettopm.fragments\r\n\r\nimport android.os.Bundle\r\nimport androidx.fragment.app.Fragment\r\nimport android.view.LayoutInflater\r\nimport android.view.View\r\nimport android.view.ViewGroup\r\nimport com.example.progettopm.R\r\n\r\nclass HomeFragment : Fragment(R.layout.fragment_home) {\r\n    override fun onCreateView(\r\n        inflater: LayoutInflater, container: ViewGroup?,\r\n        savedInstanceState: Bundle?\r\n    ): View? {\r\n        // Inflate the layout for this fragment\r\n        return inflater.inflate(R.layout.fragment_home, container, false)\r\n    }\r\n\r\n\r\n}
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/app/src/main/java/com/example/progettopm/fragments/HomeFragment.kt b/app/src/main/java/com/example/progettopm/fragments/HomeFragment.kt
+---- a/app/src/main/java/com/example/progettopm/fragments/HomeFragment.kt	(revision da5eeb6a5de8441c3d66babf7c73b2c820c3ee37)
+-+++ b/app/src/main/java/com/example/progettopm/fragments/HomeFragment.kt	(date 1703264072240)
+-@@ -5,15 +5,29 @@
+- import android.view.LayoutInflater
+- import android.view.View
+- import android.view.ViewGroup
+-+import android.widget.Button
+- import com.example.progettopm.R
+-+import androidx.navigation.fragment.findNavController
+- 
+--class HomeFragment : Fragment(R.layout.fragment_home) {
+-+class HomeFragment : Fragment() {
+-+    // Al momento della creazione del fragment
+-     override fun onCreateView(
+-         inflater: LayoutInflater, container: ViewGroup?,
+-         savedInstanceState: Bundle?
+-     ): View? {
+--        // Inflate the layout for this fragment
+--        return inflater.inflate(R.layout.fragment_home, container, false)
+-+        // Infla il layout per questo fragment
+-+        val view = inflater.inflate(R.layout.fragment_home, container, false)
+-+
+-+        // Trova il bottone nel layout
+-+        val inserisciFormazioneButton: Button = view.findViewById(R.id.inserisciFormazione_btn)
+-+        val navController = findNavController()
+-+        inserisciFormazioneButton.setOnClickListener {
+-+            // Naviga verso il FormazioneFragment
+-+            findNavController().navigate(R.id.formazioneFragment)
+-+        }
+-+
+-+        // Restituisci la vista
+-+        return view
+-     }
+- 
+- 
+-Index: app/src/main/res/layout/fragment_home.xml
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+-<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<RelativeLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    android:layout_height=\"match_parent\"\r\n    android:layout_width=\"match_parent\">\r\n\r\n    <Button\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_centerInParent=\"true\"\r\n        android:text=\"HOMEPAGE\"\r\n        android:textSize=\"30dp\"\r\n        android:textStyle=\"bold\"></Button>\r\n\r\n</RelativeLayout>
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/app/src/main/res/layout/fragment_home.xml b/app/src/main/res/layout/fragment_home.xml
+---- a/app/src/main/res/layout/fragment_home.xml	(revision da5eeb6a5de8441c3d66babf7c73b2c820c3ee37)
+-+++ b/app/src/main/res/layout/fragment_home.xml	(date 1703260711699)
+-@@ -4,10 +4,11 @@
+-     android:layout_width="match_parent">
+- 
+-     <Button
+-+        android:id="@+id/inserisciFormazione_btn"
+-         android:layout_width="wrap_content"
+-         android:layout_height="wrap_content"
+-         android:layout_centerInParent="true"
+--        android:text="HOMEPAGE"
+-+        android:text="Inserisci formazione"
+-         android:textSize="30dp"
+-         android:textStyle="bold"></Button>
+- 
+-Index: app/build.gradle
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+-<+>plugins {\r\n    id 'com.android.application'\r\n    id 'org.jetbrains.kotlin.android'\r\n    id 'com.google.gms.google-services'\r\n    id 'com.google.firebase.crashlytics'\r\n}\r\n\r\nandroid {\r\n    compileSdk 34\r\n\r\n    defaultConfig {\r\n        applicationId \"com.example.progettopm\"\r\n        minSdkVersion 31\r\n        targetSdkVersion 31\r\n        versionCode 1\r\n        versionName \"1.0\"\r\n        testInstrumentationRunner \"androidx.test.runner.AndroidJUnitRunner\"\r\n        namespace \"com.example.progettopm\"\r\n    }\r\n\r\n    buildTypes {\r\n        release {\r\n            minifyEnabled false\r\n            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'\r\n        }\r\n    }\r\n\r\n    compileOptions {\r\n        sourceCompatibility JavaVersion.VERSION_1_8\r\n        targetCompatibility JavaVersion.VERSION_1_8\r\n    }\r\n\r\n    kotlinOptions {\r\n        jvmTarget = '1.8'\r\n    }\r\n\r\n    buildFeatures {\r\n        viewBinding true\r\n    }\r\n}\r\n\r\ndependencies {\r\n    implementation 'androidx.core:core-ktx:1.7.0'\r\n    implementation 'androidx.appcompat:appcompat:1.6.1'\r\n    implementation 'com.google.android.material:material:1.9.0'\r\n    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'\r\n    implementation 'com.google.firebase:firebase-auth-ktx:22.3.0'\r\n    implementation 'com.google.firebase:firebase-database:20.3.0'\r\n    implementation 'com.google.firebase:firebase-firestore:24.10.0'\r\n    implementation 'com.google.firebase:firebase-storage-ktx:20.3.0'\r\n    implementation 'com.google.firebase:firebase-crashlytics:18.6.0'\r\n    implementation 'com.google.firebase:firebase-analytics:21.5.0'\r\n    testImplementation 'junit:junit:4.13.2'\r\n    androidTestImplementation 'androidx.test.ext:junit:1.1.5'\r\n    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'\r\n    implementation 'com.firebaseui:firebase-ui-firestore:8.0.0'\r\n\r\n}
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/app/build.gradle b/app/build.gradle
+---- a/app/build.gradle	(revision da5eeb6a5de8441c3d66babf7c73b2c820c3ee37)
+-+++ b/app/build.gradle	(date 1703264013580)
+-@@ -37,6 +37,7 @@
+-     buildFeatures {
+-         viewBinding true
+-     }
+-+
+- }
+- 
+- dependencies {
+-@@ -50,9 +51,15 @@
+-     implementation 'com.google.firebase:firebase-storage-ktx:20.3.0'
+-     implementation 'com.google.firebase:firebase-crashlytics:18.6.0'
+-     implementation 'com.google.firebase:firebase-analytics:21.5.0'
+-+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+-+    implementation 'androidx.recyclerview:recyclerview:1.3.2'
+-     testImplementation 'junit:junit:4.13.2'
+-     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+-     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+-     implementation 'com.firebaseui:firebase-ui-firestore:8.0.0'
+-+    // Dipendenze per le Navigation Architecture Components
+-+    def nav_version = "2.3.5"
+-+    implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
+-+    implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
+- 
+- }
+-\ No newline at end of file
+-Index: app/src/main/res/layout/fragment_formazione.xml
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/app/src/main/res/layout/fragment_formazione.xml b/app/src/main/res/layout/fragment_formazione.xml
+-new file mode 100644
+---- /dev/null	(date 1703264119757)
+-+++ b/app/src/main/res/layout/fragment_formazione.xml	(date 1703264119757)
+-@@ -0,0 +1,15 @@
+-+<?xml version="1.0" encoding="utf-8"?>
+-+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+-+    xmlns:tools="http://schemas.android.com/tools"
+-+    android:id="@+id/formazioneFragment"
+-+    android:layout_width="match_parent"
+-+    android:layout_height="match_parent"
+-+    tools:context=".fragments.FormazioneFragment">
+-+
+-+    <!-- TODO: Update blank fragment layout -->
+-+    <TextView
+-+        android:layout_width="match_parent"
+-+        android:layout_height="match_parent"
+-+        android:text="@string/hello_blank_fragment" />
+-+
+-+</FrameLayout>
+-\ No newline at end of file
+-Index: app/src/main/java/com/example/progettopm/fragments/FormazioneFragment.kt
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/app/src/main/java/com/example/progettopm/fragments/FormazioneFragment.kt b/app/src/main/java/com/example/progettopm/fragments/FormazioneFragment.kt
+-new file mode 100644
+---- /dev/null	(date 1703260534955)
+-+++ b/app/src/main/java/com/example/progettopm/fragments/FormazioneFragment.kt	(date 1703260534955)
+-@@ -0,0 +1,60 @@
+-+package com.example.progettopm.fragments
+-+
+-+import android.os.Bundle
+-+import androidx.fragment.app.Fragment
+-+import android.view.LayoutInflater
+-+import android.view.View
+-+import android.view.ViewGroup
+-+import com.example.progettopm.R
+-+
+-+// TODO: Rename parameter arguments, choose names that match
+-+// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+-+private const val ARG_PARAM1 = "param1"
+-+private const val ARG_PARAM2 = "param2"
+-+
+-+/**
+-+ * A simple [Fragment] subclass.
+-+ * Use the [FormazioneFragment.newInstance] factory method to
+-+ * create an instance of this fragment.
+-+ */
+-+class FormazioneFragment : Fragment() {
+-+    // TODO: Rename and change types of parameters
+-+    private var param1: String? = null
+-+    private var param2: String? = null
+-+
+-+    override fun onCreate(savedInstanceState: Bundle?) {
+-+        super.onCreate(savedInstanceState)
+-+        arguments?.let {
+-+            param1 = it.getString(ARG_PARAM1)
+-+            param2 = it.getString(ARG_PARAM2)
+-+        }
+-+    }
+-+
+-+    override fun onCreateView(
+-+        inflater: LayoutInflater, container: ViewGroup?,
+-+        savedInstanceState: Bundle?
+-+    ): View? {
+-+        // Inflate the layout for this fragment
+-+        return inflater.inflate(R.layout.fragment_formazione, container, false)
+-+    }
+-+
+-+    companion object {
+-+        /**
+-+         * Use this factory method to create a new instance of
+-+         * this fragment using the provided parameters.
+-+         *
+-+         * @param param1 Parameter 1.
+-+         * @param param2 Parameter 2.
+-+         * @return A new instance of fragment FormazioneFragment.
+-+         */
+-+        // TODO: Rename and change types and number of parameters
+-+        @JvmStatic
+-+        fun newInstance(param1: String, param2: String) =
+-+            FormazioneFragment().apply {
+-+                arguments = Bundle().apply {
+-+                    putString(ARG_PARAM1, param1)
+-+                    putString(ARG_PARAM2, param2)
+-+                }
+-+            }
+-+    }
+-+}
+-\ No newline at end of file
+Index: .idea/shelf/Uncommitted_changes_before_Update_at_27_12_2023_18_28_[Changes]/shelved.patch
+===================================================================
+diff --git a/.idea/shelf/Uncommitted_changes_before_Update_at_27_12_2023_18_28_[Changes]/shelved.patch b/.idea/shelf/Uncommitted_changes_before_Update_at_27_12_2023_18_28_[Changes]/shelved.patch
+deleted file mode 100644
+--- a/.idea/shelf/Uncommitted_changes_before_Update_at_27_12_2023_18_28_[Changes]/shelved.patch	
++++ /dev/null	
+@@ -1,240 +0,0 @@
+-Index: app/src/main/java/com/example/progettopm/fragments/HomeFragment.kt
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+-<+>package com.example.progettopm.fragments\r\n\r\nimport android.content.Intent\r\nimport android.os.Bundle\r\nimport androidx.fragment.app.Fragment\r\nimport android.view.LayoutInflater\r\nimport android.view.View\r\nimport android.view.ViewGroup\r\nimport android.widget.Button\r\nimport android.widget.TextView\r\nimport android.widget.Toast\r\nimport com.example.progettopm.R\r\nimport com.example.progettopm.ui.CreazioneLegaActivity\r\nimport com.example.progettopm.ui.UnioneLegaActivity\r\nimport com.google.firebase.auth.FirebaseAuth\r\nimport com.google.firebase.firestore.FirebaseFirestore\r\n\r\nclass HomeFragment : Fragment(R.layout.fragment_home) {\r\n\r\n    private lateinit var pulsanteUnisciti: Button\r\n    private lateinit var pulsanteCreaLega: Button\r\n    private lateinit var textViewNomeLega: TextView\r\n\r\n    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {\r\n        super.onViewCreated(view, savedInstanceState)\r\n\r\n        pulsanteUnisciti = view.findViewById(R.id.uniscitiButton)\r\n        pulsanteCreaLega = view.findViewById(R.id.creaLegaButton)\r\n        textViewNomeLega = view.findViewById(R.id.nomeLegaTextView)\r\n\r\n        // Ottieni l'ID utente corrente da Firebase Authentication\r\n        val idUtente = FirebaseAuth.getInstance().currentUser?.uid\r\n\r\n        // Verifica se l'utente è iscritto a una lega\r\n        if (idUtente != null) {\r\n            controllaAppartenenzaLegaUtente(idUtente)\r\n        }\r\n\r\n        // Gestisci il click sul pulsante \"Unisciti a una lega\"\r\n        pulsanteUnisciti.setOnClickListener {\r\n            // Avvia l'activity per unirsi a una lega\r\n            val intent = Intent(requireContext(), UnioneLegaActivity::class.java)\r\n            startActivity(intent)\r\n        }\r\n\r\n        // Gestisci il click sul pulsante \"Crea la tua lega\"\r\n        pulsanteCreaLega.setOnClickListener {\r\n            // Avvia l'activity per creare una lega\r\n            val intent = Intent(requireContext(), CreazioneLegaActivity::class.java)\r\n            startActivity(intent)\r\n        }\r\n    }\r\n\r\n    private fun controllaAppartenenzaLegaUtente(idUtente: String) {\r\n        // Ottieni il riferimento al documento dell'utente nel Firestore\r\n        val riferimentoDocUtente = FirebaseFirestore.getInstance().collection(\"utenti\").document(idUtente)\r\n\r\n        // Leggi i dati dell'utente dal Firestore\r\n        riferimentoDocUtente.get()\r\n            .addOnSuccessListener { documentoUtente ->\r\n                if (documentoUtente.exists()) {\r\n                    // Verifica se l'utente è iscritto a una lega\r\n                    val leghe = documentoUtente.get(\"leghe\") as? List<String>\r\n                    if (leghe != null && leghe.isNotEmpty()) {\r\n                        // L'utente è iscritto a almeno una lega\r\n                        val nomeLega = leghe[0] // Supponendo che l'utente possa appartenere solo a una lega per ora\r\n                        visualizzaHomeLega(nomeLega)\r\n                    } else {\r\n                        // L'utente non è iscritto a nessuna lega\r\n                        visualizzaHomeNoLega()\r\n                    }\r\n                }\r\n            }\r\n            .addOnFailureListener { eccezione ->\r\n                // Gestisci eventuali errori durante la lettura dei dati dal Firestore\r\n                Toast.makeText(requireContext(), \"Errore durante il recupero dei dati dell'utente\", Toast.LENGTH_SHORT).show()\r\n            }\r\n    }\r\n\r\n    private fun visualizzaHomeLega(nomeLega: String) {\r\n        // Nascondi i pulsanti di \"Unisciti a una lega\" e \"Crea la tua lega\"\r\n        pulsanteUnisciti.visibility = View.GONE\r\n        pulsanteCreaLega.visibility = View.GONE\r\n\r\n        // Mostra il nome della lega in alto\r\n        textViewNomeLega.text = nomeLega\r\n        textViewNomeLega.visibility = View.VISIBLE\r\n    }\r\n\r\n    private fun visualizzaHomeNoLega() {\r\n        // Mostra i pulsanti di \"Unisciti a una lega\" e \"Crea la tua lega\"\r\n\r\n        pulsanteUnisciti.visibility = View.VISIBLE\r\n        pulsanteCreaLega.visibility = View.VISIBLE\r\n\r\n        // Nascondi il nome della lega\r\n        textViewNomeLega.visibility = View.GONE\r\n    }\r\n}\r\n
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/app/src/main/java/com/example/progettopm/fragments/HomeFragment.kt b/app/src/main/java/com/example/progettopm/fragments/HomeFragment.kt
+---- a/app/src/main/java/com/example/progettopm/fragments/HomeFragment.kt	(revision c461a0ae1e3481e3dc0928a747446e3376be9767)
+-+++ b/app/src/main/java/com/example/progettopm/fragments/HomeFragment.kt	(date 1703692062252)
+-@@ -7,9 +7,11 @@
+- import android.view.View
+- import android.view.ViewGroup
+- import android.widget.Button
+-+import android.widget.Button
+- import android.widget.TextView
+- import android.widget.Toast
+- import com.example.progettopm.R
+-+import androidx.navigation.fragment.findNavController
+- import com.example.progettopm.ui.CreazioneLegaActivity
+- import com.example.progettopm.ui.UnioneLegaActivity
+- import com.google.firebase.auth.FirebaseAuth
+-@@ -49,6 +51,25 @@
+-             val intent = Intent(requireContext(), CreazioneLegaActivity::class.java)
+-             startActivity(intent)
+-         }
+-+class HomeFragment : Fragment() {
+-+    // Al momento della creazione del fragment
+-+    override fun onCreateView(
+-+        inflater: LayoutInflater, container: ViewGroup?,
+-+        savedInstanceState: Bundle?
+-+    ): View? {
+-+        // Infla il layout per questo fragment
+-+        val view = inflater.inflate(R.layout.fragment_home, container, false)
+-+
+-+        // Trova il bottone nel layout
+-+        val inserisciFormazioneButton: Button = view.findViewById(R.id.inserisciFormazione_btn)
+-+        val navController = findNavController()
+-+        inserisciFormazioneButton.setOnClickListener {
+-+            // Naviga verso il FormazioneFragment
+-+            findNavController().navigate(R.id.formazioneFragment)
+-+        }
+-+
+-+        // Restituisci la vista
+-+        return view
+-     }
+- 
+-     private fun controllaAppartenenzaLegaUtente(idUtente: String) {
+-Index: app/src/main/res/layout/fragment_home.xml
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+-<+><!-- res/layout/fragment_home.xml -->\r\n<RelativeLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\">\r\n\r\n    <Button\r\n        android:id=\"@+id/uniscitiButton\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_centerHorizontal=\"true\"\r\n        android:layout_marginTop=\"16dp\"\r\n        android:text=\"Unisciti a una lega\" />\r\n\r\n    <Button\r\n        android:id=\"@+id/creaLegaButton\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_below=\"@id/uniscitiButton\"\r\n        android:layout_centerHorizontal=\"true\"\r\n        android:layout_marginTop=\"16dp\"\r\n        android:text=\"Crea la tua lega\" />\r\n\r\n    <TextView\r\n        android:id=\"@+id/nomeLegaTextView\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_below=\"@id/creaLegaButton\"\r\n        android:layout_centerHorizontal=\"true\"\r\n        android:layout_marginTop=\"16dp\"\r\n        android:text=\"\"\r\n        android:visibility=\"gone\" />\r\n\r\n</RelativeLayout>\r\n
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/app/src/main/res/layout/fragment_home.xml b/app/src/main/res/layout/fragment_home.xml
+---- a/app/src/main/res/layout/fragment_home.xml	(revision c461a0ae1e3481e3dc0928a747446e3376be9767)
+-+++ b/app/src/main/res/layout/fragment_home.xml	(date 1703693289106)
+-@@ -20,6 +20,16 @@
+-         android:layout_marginTop="16dp"
+-         android:text="Crea la tua lega" />
+- 
+-+
+-+    <Button
+-+        android:id="@+id/inserisciFormazione_btn"
+-+        android:layout_height="wrap_content"
+-+        android:layout_width="wrap_content"
+-+        android:layout_below="@+id/creaLegaButton"
+-+        android:layout_centerHorizontal="true"
+-+        android:layout_marginTop="16dp"
+-+        android:text="Inserisci formazione" />
+-+
+-     <TextView
+-         android:id="@+id/nomeLegaTextView"
+-         android:layout_width="wrap_content"
+-@@ -27,7 +37,7 @@
+-         android:layout_below="@id/creaLegaButton"
+-         android:layout_centerHorizontal="true"
+-         android:layout_marginTop="16dp"
+--        android:text=""
+-+        android:text="Inserisci Formazione"
+-         android:visibility="gone" />
+- 
+- </RelativeLayout>
+-Index: app/build.gradle
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+-<+>plugins {\r\n    id 'com.android.application'\r\n    id 'org.jetbrains.kotlin.android'\r\n    id 'com.google.gms.google-services'\r\n    id 'com.google.firebase.crashlytics'\r\n}\r\n\r\nandroid {\r\n    compileSdk 34\r\n\r\n    defaultConfig {\r\n        applicationId \"com.example.progettopm\"\r\n        minSdkVersion 31\r\n        targetSdkVersion 31\r\n        versionCode 1\r\n        versionName \"1.0\"\r\n        testInstrumentationRunner \"androidx.test.runner.AndroidJUnitRunner\"\r\n        namespace \"com.example.progettopm\"\r\n    }\r\n\r\n    buildTypes {\r\n        release {\r\n            minifyEnabled false\r\n            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'\r\n        }\r\n    }\r\n\r\n    compileOptions {\r\n        sourceCompatibility JavaVersion.VERSION_1_8\r\n        targetCompatibility JavaVersion.VERSION_1_8\r\n    }\r\n\r\n    kotlinOptions {\r\n        jvmTarget = '1.8'\r\n    }\r\n\r\n    buildFeatures {\r\n        viewBinding true\r\n    }\r\n}\r\n\r\ndependencies {\r\n    implementation 'androidx.core:core-ktx:1.7.0'\r\n    implementation 'androidx.appcompat:appcompat:1.6.1'\r\n    implementation 'com.google.android.material:material:1.9.0'\r\n    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'\r\n    implementation 'com.google.firebase:firebase-auth-ktx:22.3.0'\r\n    implementation 'com.google.firebase:firebase-database:20.3.0'\r\n    implementation 'com.google.firebase:firebase-firestore:24.10.0'\r\n    implementation 'com.google.firebase:firebase-storage-ktx:20.3.0'\r\n    implementation 'com.google.firebase:firebase-crashlytics:18.6.0'\r\n    implementation 'com.google.firebase:firebase-analytics:21.5.0'\r\n    implementation 'com.google.firebase:firebase-database-ktx:20.3.0'\r\n    testImplementation 'junit:junit:4.13.2'\r\n    androidTestImplementation 'androidx.test.ext:junit:1.1.5'\r\n    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'\r\n    implementation 'com.firebaseui:firebase-ui-firestore:8.0.0'\r\n    implementation 'com.github.bumptech.glide:glide:4.12.0'\r\n    annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'\r\n\r\n}
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/app/build.gradle b/app/build.gradle
+---- a/app/build.gradle	(revision c461a0ae1e3481e3dc0928a747446e3376be9767)
+-+++ b/app/build.gradle	(date 1703692120959)
+-@@ -37,6 +37,7 @@
+-     buildFeatures {
+-         viewBinding true
+-     }
+-+
+- }
+- 
+- dependencies {
+-@@ -50,6 +51,8 @@
+-     implementation 'com.google.firebase:firebase-storage-ktx:20.3.0'
+-     implementation 'com.google.firebase:firebase-crashlytics:18.6.0'
+-     implementation 'com.google.firebase:firebase-analytics:21.5.0'
+-+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+-+    implementation 'androidx.recyclerview:recyclerview:1.3.2'
+-     implementation 'com.google.firebase:firebase-database-ktx:20.3.0'
+-     testImplementation 'junit:junit:4.13.2'
+-     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+-@@ -57,5 +60,9 @@
+-     implementation 'com.firebaseui:firebase-ui-firestore:8.0.0'
+-     implementation 'com.github.bumptech.glide:glide:4.12.0'
+-     annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'
+-+    // Dipendenze per le Navigation Architecture Components
+-+    def nav_version = "2.3.5"
+-+    implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
+-+    implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
+- 
+- }
+-\ No newline at end of file
+-Index: app/src/main/res/layout/fragment_formazione.xml
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/app/src/main/res/layout/fragment_formazione.xml b/app/src/main/res/layout/fragment_formazione.xml
+-new file mode 100644
+---- /dev/null	(date 1703692121016)
+-+++ b/app/src/main/res/layout/fragment_formazione.xml	(date 1703692121016)
+-@@ -0,0 +1,15 @@
+-+<?xml version="1.0" encoding="utf-8"?>
+-+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+-+    xmlns:tools="http://schemas.android.com/tools"
+-+    android:id="@+id/formazioneFragment"
+-+    android:layout_width="match_parent"
+-+    android:layout_height="match_parent"
+-+    tools:context=".fragments.FormazioneFragment">
+-+
+-+    <!-- TODO: Update blank fragment layout -->
+-+    <TextView
+-+        android:layout_width="match_parent"
+-+        android:layout_height="match_parent"
+-+        android:text="@string/hello_blank_fragment" />
+-+
+-+</FrameLayout>
+-\ No newline at end of file
+-Index: app/src/main/java/com/example/progettopm/fragments/FormazioneFragment.kt
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/app/src/main/java/com/example/progettopm/fragments/FormazioneFragment.kt b/app/src/main/java/com/example/progettopm/fragments/FormazioneFragment.kt
+-new file mode 100644
+---- /dev/null	(date 1703692121021)
+-+++ b/app/src/main/java/com/example/progettopm/fragments/FormazioneFragment.kt	(date 1703692121021)
+-@@ -0,0 +1,60 @@
+-+package com.example.progettopm.fragments
+-+
+-+import android.os.Bundle
+-+import androidx.fragment.app.Fragment
+-+import android.view.LayoutInflater
+-+import android.view.View
+-+import android.view.ViewGroup
+-+import com.example.progettopm.R
+-+
+-+// TODO: Rename parameter arguments, choose names that match
+-+// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+-+private const val ARG_PARAM1 = "param1"
+-+private const val ARG_PARAM2 = "param2"
+-+
+-+/**
+-+ * A simple [Fragment] subclass.
+-+ * Use the [FormazioneFragment.newInstance] factory method to
+-+ * create an instance of this fragment.
+-+ */
+-+class FormazioneFragment : Fragment() {
+-+    // TODO: Rename and change types of parameters
+-+    private var param1: String? = null
+-+    private var param2: String? = null
+-+
+-+    override fun onCreate(savedInstanceState: Bundle?) {
+-+        super.onCreate(savedInstanceState)
+-+        arguments?.let {
+-+            param1 = it.getString(ARG_PARAM1)
+-+            param2 = it.getString(ARG_PARAM2)
+-+        }
+-+    }
+-+
+-+    override fun onCreateView(
+-+        inflater: LayoutInflater, container: ViewGroup?,
+-+        savedInstanceState: Bundle?
+-+    ): View? {
+-+        // Inflate the layout for this fragment
+-+        return inflater.inflate(R.layout.fragment_formazione, container, false)
+-+    }
+-+
+-+    companion object {
+-+        /**
+-+         * Use this factory method to create a new instance of
+-+         * this fragment using the provided parameters.
+-+         *
+-+         * @param param1 Parameter 1.
+-+         * @param param2 Parameter 2.
+-+         * @return A new instance of fragment FormazioneFragment.
+-+         */
+-+        // TODO: Rename and change types and number of parameters
+-+        @JvmStatic
+-+        fun newInstance(param1: String, param2: String) =
+-+            FormazioneFragment().apply {
+-+                arguments = Bundle().apply {
+-+                    putString(ARG_PARAM1, param1)
+-+                    putString(ARG_PARAM2, param2)
+-+                }
+-+            }
+-+    }
+-+}
+-\ No newline at end of file
+-Index: app/src/main/res/layout/item_storico.xml
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/app/src/main/res/layout/item_storico.xml b/app/src/main/res/layout/item_storico.xml
+-new file mode 100644
+---- /dev/null	(date 1703695438277)
+-+++ b/app/src/main/res/layout/item_storico.xml	(date 1703695438277)
+-@@ -0,0 +1,10 @@
+-+<?xml version="1.0" encoding="utf-8"?>
+-+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+-+    android:layout_width="match_parent"
+-+    android:layout_height="wrap_content"
+-+    xmlns:app="http://schemas.android.com/apk/res-auto"
+-+    app:cardElevation="8dp"
+-+    app:cardCornerRadius="8dp"
+-+    android:layout_margin="16dp">
+-+
+-+</androidx.cardview.widget.CardView>
+-\ No newline at end of file
+Index: app/src/main/java/com/example/progettopm/view/StoricoGiocatoriAdapter.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/progettopm/view/StoricoGiocatoriAdapter.kt b/app/src/main/java/com/example/progettopm/view/StoricoGiocatoriAdapter.kt
+new file mode 100644
+--- /dev/null	
++++ b/app/src/main/java/com/example/progettopm/view/StoricoGiocatoriAdapter.kt	
+@@ -0,0 +1,5 @@
++package com.example.progettopm.view
++
++class StoricoGiocatoriAdapter {
++
++}
+\ No newline at end of file
+Index: app/src/main/res/layout/item_storico_formazione.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<androidx.cardview.widget.CardView xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"wrap_content\"\r\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n    app:cardElevation=\"8dp\"\r\n    app:cardCornerRadius=\"8dp\"\r\n    android:layout_margin=\"16dp\">\r\n\r\n    <LinearLayout\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_gravity=\"center_vertical\"\r\n        android:orientation=\"horizontal\">\r\n        <TextView\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:id=\"@+id/giocatore_storico_RV\">\r\n        </TextView>\r\n        <TextView\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:id=\"@+id/punteggioGiocatore_storico_Rv\">\r\n        </TextView>\r\n    </LinearLayout>\r\n\r\n</androidx.cardview.widget.CardView>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/item_storico_formazione.xml b/app/src/main/res/layout/item_storico_formazione.xml
+--- a/app/src/main/res/layout/item_storico_formazione.xml	
++++ b/app/src/main/res/layout/item_storico_formazione.xml	
+@@ -15,7 +15,7 @@
+         <TextView
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+-            android:id="@+id/giocatore_storico_RV">
++            android:id="@+id/giocatori_storico_RV">
+         </TextView>
+         <TextView
+             android:layout_width="wrap_content"
