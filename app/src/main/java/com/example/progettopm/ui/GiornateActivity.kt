@@ -1,18 +1,7 @@
 // GiornateActivity.kt
 package com.example.progettopm.ui
 
-import android.os.Bundle
-import android.util.Log
-import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.example.progettopm.R
-import com.example.progettopm.SessionManager
-import com.example.progettopm.model.Giornata
-import com.example.progettopm.view.GiornateAdapter
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.QuerySnapshot
 
 class GiornateActivity : AppCompatActivity() {
 /*

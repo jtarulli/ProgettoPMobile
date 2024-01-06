@@ -3,8 +3,8 @@ package com.example.progettopm.model
 import java.time.Instant
 
 data class Giornata(
-    var id: Int,
-    val inizio: Instant,
-    val fine: Instant,
-    val legaId: String // Aggiunto campo legaId per identificare a quale lega appartiene la giornata
+    var id: String = "",
+    val inizio: Instant = Instant.EPOCH,
+    val fine: Instant = Instant.EPOCH,
+    val lega: String = ""
 )
