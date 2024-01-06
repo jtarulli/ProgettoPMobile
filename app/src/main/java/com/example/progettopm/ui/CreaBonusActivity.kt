@@ -31,24 +31,30 @@ class CreaBonusActivity : AppCompatActivity() {
         confermaButton = findViewById(R.id.buttonConferma)
 
         // Recupera l'oggetto Bonus passato dall'intent, se presente
-        // bonus = intent.getParcelableExtra("BONUS")
+        val bonus = intent.getStringExtra("bonus");
 
         // Log per debug
         Log.d("CreaBonusActivity", "Bonus object received: $bonus")
 
         // Imposta i valori nei campi di testo se l'oggetto Bonus esiste
         bonus?.let {
-            nomeEditText.setText(it.nome)
-            valoreEditText.setText(it.valore.toString())
+            FirebaseFirestore.getInstance()
+                .collection("bonus")
+                .document(bonus)
+                .get()
+                .addOnCompleteListener { obj ->
+                    nomeEditText.setText(obj.result.get("nome").toString())
+                    valoreEditText.setText(obj.result.get("valore").toString())
+                }
         }
 
         // Aggiungi un listener al pulsante Conferma
         confermaButton.setOnClickListener {
-            confermaModifica()
+            confermaModifica(bonus)
         }
     }
 
-    private fun confermaModifica() {
+    private fun confermaModifica(bonusId: String?) {
         val nome = nomeEditText.text.toString().trim()
         val valore = valoreEditText.text.toString().toIntOrNull()
 
@@ -63,8 +69,18 @@ class CreaBonusActivity : AppCompatActivity() {
 
         // Crea un oggetto Bonus con i valori inseriti
         val nuovoBonus = Bonus(valore = valore, nome = nome, lega = lega)
+        val bonus = FirebaseFirestore.getInstance()
+                                     .collection("bonus")
 
-        FirebaseFirestore.getInstance().collection("bonus").add(nuovoBonus)
+        if (bonusId == null){
+            val task = bonus.add(nuovoBonus).addOnSuccessListener { doc ->
+                doc.update("id", doc.id)
+            }
+        } else {
+            nuovoBonus.id = bonusId
+            bonus.document(bonusId).set(nuovoBonus)
+        }
+
         finish()
     }
 

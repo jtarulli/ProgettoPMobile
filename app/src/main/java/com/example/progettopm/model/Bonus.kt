@@ -5,6 +5,6 @@ import com.google.firebase.firestore.DocumentReference
 data class Bonus(
     val valore: Int = 0,
     val nome: String = "",
-    val id: String = "",
+    var id: String = "",
     val lega: DocumentReference? = null,
 )

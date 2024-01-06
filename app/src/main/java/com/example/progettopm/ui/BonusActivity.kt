@@ -10,6 +10,7 @@ import com.example.progettopm.R
 import com.example.progettopm.SessionManager
 import com.example.progettopm.model.Bonus
 import com.example.progettopm.view.BonusAdapter
+import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 
@@ -26,7 +27,16 @@ class BonusActivity : AppCompatActivity() {
         bonusAdapter = BonusAdapter()
         recyclerView.adapter = bonusAdapter
 
-        loadBonusData()
+        val bonusCollection = FirebaseFirestore.getInstance().collection("bonus")
+        // Recupera i bonus dalla raccolta 'bonus' con la reference alla lega corrente
+        bonusCollection.addSnapshotListener{ _, e ->
+            if(e != null){
+                Log.w("Error in bonusCollection", "Si è verificato un errore", e)
+                return@addSnapshotListener
+            }
+            loadBonusData(bonusCollection)
+        }
+        loadBonusData(bonusCollection)
 
         val creaBonusButton: Button = findViewById(R.id.creaBonusButton)
         creaBonusButton.setOnClickListener {
@@ -36,26 +46,14 @@ class BonusActivity : AppCompatActivity() {
         }
     }
 
-    private fun loadBonusData() {
-        // Recupera i bonus dalla raccolta 'bonus' con la reference alla lega corrente
+    private fun loadBonusData(bonusCollection : CollectionReference) {
         val legaReference = FirebaseFirestore.getInstance().collection("leghe")
             .document(SessionManager.legaCorrenteId!!)
-        val bonusCollection = FirebaseFirestore.getInstance().collection("bonus")
-        bonusCollection.addSnapshotListener{ querySnapShot, e ->
-            if(e != null){
-                Log.w("Error in bonusCollection", "Si è verificato un errore", e)
-                return@addSnapshotListener
-            }
-            if (querySnapShot != null) {
-                updateBonus(querySnapShot)
-            }
-        }
         bonusCollection.whereEqualTo("lega", legaReference)
             .get()
             .addOnSuccessListener { updateBonus(it) }
             .addOnFailureListener { exception ->
                 Log.e("BonusActivity", "Error loading bonus data: ${exception.message}")
-                // Gestisci eventuali errori durante il recupero dei bonus
             }
     }
 
