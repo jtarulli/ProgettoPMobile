@@ -52,11 +52,11 @@ class GiornataAdapter : ListAdapter<Giornata, GiornataAdapter.GiornataViewHolder
 
             setDate(inizio, fine)
 
-            inizioPicker = MyDatePicker(ctx)
+            inizioPicker = MyDatePicker("Inizio", ctx)
             inizioPicker.setOnDateChangedListener {
                 inizioDate = Timestamp(inizioPicker.getTimeLocal().toEpochSecond(ZoneOffset.UTC), 0)
             }
-            finePicker = MyDatePicker(ctx)
+            finePicker = MyDatePicker("Fine", ctx)
             finePicker.setOnDateChangedListener {
                 fineDate = Timestamp(finePicker.getTimeLocal().toEpochSecond(ZoneOffset.UTC), 0)
                 pushMod()
@@ -99,7 +99,7 @@ class GiornataAdapter : ListAdapter<Giornata, GiornataAdapter.GiornataViewHolder
         }
 
         private fun parseToDt(data : Instant) : LocalDateTime {
-            return LocalDateTime.ofInstant(data, ZoneId.of("GMT+1"))
+            return LocalDateTime.ofInstant(data, ZoneId.of("UTC"))
         }
 
         private fun pushMod() {
@@ -114,9 +114,6 @@ class GiornataAdapter : ListAdapter<Giornata, GiornataAdapter.GiornataViewHolder
                                                .document(giornata.id)
                                                .set(updateGiornata)
             } else {
-                // Visualizza un messaggio di errore
-                // Implementa il feedback utente a tuo piacimento
-                // Ad esempio, mostra un Toast
                 Toast.makeText(ctx, "La data di fine deve essere successiva a quella di inizio", Toast.LENGTH_SHORT).show()
             }
         }

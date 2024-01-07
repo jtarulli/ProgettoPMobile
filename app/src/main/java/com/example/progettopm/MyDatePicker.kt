@@ -10,9 +10,10 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.Calendar
 
-class MyDatePicker(ctx: Context) : DatePicker(ctx) {
+class MyDatePicker(title : String, ctx: Context) : DatePicker(ctx) {
 
     private val context: Context = ctx
+    private val title: String = title
     private var timeLocal: LocalDateTime = LocalDateTime.ofInstant(Instant.EPOCH, ZoneId.of("GMT+1"))
 
     fun getTimeLocal(): LocalDateTime = timeLocal
@@ -27,7 +28,7 @@ class MyDatePicker(ctx: Context) : DatePicker(ctx) {
         return LocalDateTime.ofInstant(data, ZoneId.of("GMT+1"))
     }
 
-    fun mostraSceltaDate(data: Instant) {
+    fun mostraSceltaDate(data: Instant = Instant.now()) {
         val calendar = Calendar.getInstance()
         val yy = parseToDt(data).year
         val mm = parseToDt(data).monthValue
@@ -44,6 +45,7 @@ class MyDatePicker(ctx: Context) : DatePicker(ctx) {
             calendar.get(Calendar.MONTH),
             calendar.get(Calendar.DAY_OF_MONTH)
         )
+        datePickerDialog.setTitle(title)
         datePickerDialog.updateDate(yy, mm, dd)
         datePickerDialog.show()
     }

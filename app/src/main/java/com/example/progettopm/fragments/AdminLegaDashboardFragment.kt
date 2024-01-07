@@ -11,7 +11,6 @@ import androidx.fragment.app.Fragment
 import com.example.progettopm.R
 import com.example.progettopm.ui.BonusActivity
 import com.example.progettopm.ui.CalendarioActivity
-import com.example.progettopm.ui.GiornateActivity
 import com.example.progettopm.ui.ModificaGiocatoreActivity
 import com.example.progettopm.ui.ModificaLegaActivity
 
