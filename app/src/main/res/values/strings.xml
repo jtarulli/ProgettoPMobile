@@ -26,4 +26,5 @@
     <string name="gestione_bonus">Gestione Bonus</string>
     <string name="calendario">Calendario</string>
     <string name="gestione_giocatori">Gestione Giocatori</string>
+    <string name="aggiungi_bonus_giornata">Aggiungi Bonus Giornata</string>
 </resources>
