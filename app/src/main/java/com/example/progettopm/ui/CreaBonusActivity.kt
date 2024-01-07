@@ -73,7 +73,7 @@ class CreaBonusActivity : AppCompatActivity() {
                                      .collection("bonus")
 
         if (bonusId == null){
-            val task = bonus.add(nuovoBonus).addOnSuccessListener { doc ->
+            bonus.add(nuovoBonus).addOnSuccessListener { doc ->
                 doc.update("id", doc.id)
             }
         } else {

@@ -1,10 +1,11 @@
 package com.example.progettopm.model
 
+import com.google.firebase.Timestamp
 import java.time.Instant
 
 data class Giornata(
     var id: String = "",
-    val inizio: Instant = Instant.EPOCH,
-    val fine: Instant = Instant.EPOCH,
+    val inizio: Timestamp = Timestamp.now(),
+    val fine: Timestamp = Timestamp.now(),
     val lega: String = ""
 )

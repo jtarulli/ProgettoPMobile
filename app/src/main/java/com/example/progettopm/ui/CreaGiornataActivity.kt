@@ -50,9 +50,9 @@ class CreaGiornataActivity : AppCompatActivity() {
         val legaId = FirebaseFirestore.getInstance().collection("leghe")
             .document(SessionManager.legaCorrenteId!!)
 
-        val nuovaGiornata = Giornata(inizio = inizio, fine = fine, lega = legaId.id)
+        //val nuovaGiornata = Giornata(inizio = inizio, fine = fine, lega = legaId.id)
 
-        FirebaseFirestore.getInstance().collection("giornate").add(nuovaGiornata)
+        //FirebaseFirestore.getInstance().collection("giornate").add(nuovaGiornata)
         finish()
     }
 
