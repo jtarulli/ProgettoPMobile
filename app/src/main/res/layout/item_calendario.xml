@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/numeroGiornata"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Numero Giornata"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/inizioGiornata_TV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Data Inizio"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/fineGiornata_TV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Data Fine"
+        android:textSize="16sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/eliminaGiornataButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/delete_icon" />
+
+        <ImageButton
+            android:id="@+id/modificaGiornataButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/edit_icon" />
+
+        <ImageButton
+            android:id="@+id/startStopGiornataButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/start_icon" />
+
+    </LinearLayout>
+</LinearLayout>
