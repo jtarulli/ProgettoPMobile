@@ -1,6 +1,7 @@
 package com.example.progettopm.fragments
 
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -25,6 +26,7 @@ class AdminLegaDashboardFragment : Fragment() {
         // Imposta il titolo della toolbar
         val toolbar = view.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)
         toolbar.title = "Admin Lega Dashboard"
+        toolbar.setTitleTextColor(Color.WHITE)
 
         // Bottone "Modifica Lega"
         val modificaLegaButton = view.findViewById<Button>(R.id.modificaLegaButton)
