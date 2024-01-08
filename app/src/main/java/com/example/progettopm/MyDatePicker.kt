@@ -3,6 +3,7 @@ package com.example.progettopm
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Context
+import android.util.Log
 import android.widget.DatePicker
 import java.time.Instant
 import java.time.LocalDateTime
@@ -31,14 +32,17 @@ class MyDatePicker(title : String, ctx: Context) : DatePicker(ctx) {
     fun mostraSceltaDate(data: Instant = Instant.now()) {
         val calendar = Calendar.getInstance()
         val yy = parseToDt(data).year
-        val mm = parseToDt(data).monthValue
+        val mm = parseToDt(data).monthValue - 1
         val dd = parseToDt(data).dayOfMonth
 
         val datePickerDialog = DatePickerDialog(
             context,
             { _, year, month, dayOfMonth ->
-                calendar.set(year, month, dayOfMonth)
+                Log.d("TEST DAY", "" + dayOfMonth)
                 timeLocal = LocalDateTime.of(year, month, dayOfMonth, 0,0)
+                calendar.set(Calendar.YEAR, year)
+                calendar.set(Calendar.MONTH, month)
+                calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
                 mostraSceltaOra(calendar)
             },
             calendar.get(Calendar.YEAR),
@@ -57,11 +61,11 @@ class MyDatePicker(title : String, ctx: Context) : DatePicker(ctx) {
                 calendar.set(Calendar.HOUR_OF_DAY, hourOfDay)
                 calendar.set(Calendar.MINUTE, minute)
                 timeLocal = LocalDateTime.of(timeLocal.year,
-                                             timeLocal.monthValue,
-                                             timeLocal.dayOfYear,
+                                             timeLocal.monthValue+1,
+                                             timeLocal.dayOfMonth,
                                              hourOfDay,
                                              minute)
-                this.updateDate(timeLocal.year, timeLocal.monthValue, timeLocal.dayOfYear)
+                this.updateDate(timeLocal.year, timeLocal.monthValue, timeLocal.dayOfMonth)
                 //val inizio = calendar.timeInMillis
             },
             calendar.get(Calendar.HOUR_OF_DAY),

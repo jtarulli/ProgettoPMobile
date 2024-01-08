@@ -94,9 +94,9 @@ class CalendarioActivity : AppCompatActivity() {
             )
             FirebaseFirestore.getInstance().collection("giornate")
                 .add(updateGiornata)
-                .addOnCompleteListener { doc ->
-                    doc.result.update("id", updateGiornata.id)
-                    doc.result.update("numeroGiornata", lastInsertData!!.numeroGiornata + 1)
+                .addOnCompleteListener {
+                    it.result.update("numeroGiornata", lastInsertData!!.numeroGiornata+1)
+                    it.result.update("id", it.result.id)
                 }
         } else {
             Toast.makeText(this, "La data non è accettabile", Toast.LENGTH_SHORT).show()

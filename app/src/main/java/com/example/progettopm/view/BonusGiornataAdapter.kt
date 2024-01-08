@@ -22,13 +22,13 @@ class BonusGiornataAdapter : ListAdapter<DocumentReference, BonusGiornataAdapter
                     val tipoBonus = tipoBonusSnapshot.toObject(Bonus::class.java)
                     if (tipoBonus != null) {
                         Log.d("BonusGiornataAdapter", "TipoBonus is not null")
-                        binding.nomeTipoBonusTextView.text = tipoBonus.nome ?: "Tipo Bonus non disponibile"
-                        binding.quantitaTextView.text = bonusGiornata.quantita.toString()
-                        binding.punteggioBonusTextView.text = calculateBonusScore(bonusGiornata, tipoBonus).toString()
+                        //binding.nomeTipoBonusTextView.text = tipoBonus.nome ?: "Tipo Bonus non disponibile"
+                        //binding.quantitaTextView.text = bonusGiornata.quantita.toString()
+                        //binding.punteggioBonusTextView.text = calculateBonusScore(bonusGiornata, tipoBonus).toString()
                     } else {
                         // Gestisci il caso in cui non riesci a ottenere l'oggetto Bonus
                         Log.d("BonusGiornataAdapter", "TipoBonus is null")
-                        binding.nomeTipoBonusTextView.text = "Tipo Bonus non disponibile"
+                        //binding.nomeTipoBonusTextView.text = "Tipo Bonus non disponibile"
                     }
                 }
             } else {

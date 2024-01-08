@@ -149,8 +149,8 @@ class StoricoAdapter(private val formazioni: List<Formazione>) : RecyclerView.Ad
                 fun bind(bonusGiornata: BonusGiornata) {
                     Log.d("BonusGiornataViewHolder", "Quantità: ${bonusGiornata.quantita}, TipoBonus: ${bonusGiornata.tipoBonus}")
 
-                    itemView.findViewById<TextView>(R.id.quantitaTextView)?.text = bonusGiornata.quantita.toString()
-                    itemView.findViewById<TextView>(R.id.nomeTipoBonusTextView)?.text = bonusGiornata.tipoBonus.toString()
+                    //itemView.findViewById<TextView>(R.id.quantitaTextView)?.text = bonusGiornata.quantita.toString()
+                    //itemView.findViewById<TextView>(R.id.nomeTipoBonusTextView)?.text = bonusGiornata.tipoBonus.toString()
                 }
             }
         }
