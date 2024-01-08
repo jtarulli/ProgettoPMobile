@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.progettopm.R
+import com.example.progettopm.SessionManager
 import com.example.progettopm.model.Squadra
 import com.example.progettopm.view.ClassificaAdapter
 import com.google.firebase.firestore.FirebaseFirestore
@@ -34,9 +35,10 @@ class ClassificaFragment : Fragment() {
         // Recupera i dati da Firestore e imposta l'adapter
         // Supponiamo di avere un'istanza di FirebaseFirestore chiamata "db"
         db = FirebaseFirestore.getInstance()
+        val legaCorrente = SessionManager.legaCorrenteId
         // Recupera i dati da Firestore e gestisci la deserializzazione
         val squadre = mutableListOf<Squadra>()
-        val squadreRef = db.collection("squadre")
+        val squadreRef = db.collection("squadre").whereEqualTo("lega", legaCorrente)
 
         squadreRef.get()
             .addOnSuccessListener { result ->
