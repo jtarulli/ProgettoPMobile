@@ -1,6 +1,7 @@
 package com.example.progettopm.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -15,6 +16,7 @@ import com.google.firebase.Timestamp
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
+import java.time.Instant
 import java.time.ZoneOffset
 
 class CalendarioActivity : AppCompatActivity() {
@@ -23,6 +25,7 @@ class CalendarioActivity : AppCompatActivity() {
     private lateinit var nuovoGiornoButton: Button
     private lateinit var inizioDate: Timestamp
     private lateinit var fineDate: Timestamp
+    private var lastInsertData: Giornata? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,16 +74,19 @@ class CalendarioActivity : AppCompatActivity() {
                 id = document["id"] as String,
                 inizio = document.getTimestamp("inizio")!!,
                 fine = document.getTimestamp("fine")!!,
+                numeroGiornata = document["numeroGiornata"] as Long,
                 lega = document["lega"].toString()
             )
             giornataList.add(giornata)
         }
         giornataList.sortBy { giornata -> giornata.inizio }
+        lastInsertData = giornataList.lastOrNull()
         giornateAdapter.submitList(giornataList)
     }
 
     private fun pushMod(inizio: Timestamp, fine: Timestamp) {
-        if (inizio < fine) {
+        if (inizio < fine &&
+            (lastInsertData?.fine ?: Timestamp(Instant.EPOCH.epochSecond, 0)) < inizio) {
             val updateGiornata = Giornata(
                 inizio = inizio,
                 fine = fine,
@@ -89,10 +95,11 @@ class CalendarioActivity : AppCompatActivity() {
             FirebaseFirestore.getInstance().collection("giornate")
                 .add(updateGiornata)
                 .addOnCompleteListener { doc ->
-                    doc.result.update("id", doc.result.id)
+                    doc.result.update("id", updateGiornata.id)
+                    doc.result.update("numeroGiornata", lastInsertData!!.numeroGiornata + 1)
                 }
         } else {
-            Toast.makeText(this, "La data di fine deve essere successiva a quella di inizio", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "La data non è accettabile", Toast.LENGTH_SHORT).show()
         }
     }
 }
